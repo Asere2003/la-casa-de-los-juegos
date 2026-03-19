@@ -1,26 +1,309 @@
 @import "tailwindcss";
+@config "../tailwind.config.ts";
+@plugin "@tailwindcss/forms";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================================
+   LA CASA DE LOS JUEGOS — Global Styles & Design Tokens
+   ============================================================ */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+/* ── Fuentes ── */
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --font-headline: 'Noto Serif', serif;
+    --font-body:     'Newsreader', serif;
+    --font-mono:     'JetBrains Mono', monospace;
+
+    /* Colores */
+    --color-primary:           #004317;
+    --color-primary-container: #1a5c2a;
+    --color-primary-light:     #2d7a3f;
+    --color-secondary:         #805533;
+    --color-tertiary:          #755b00;
+    --color-gold:              #c9a84c;
+    --color-gold-dim:          #e6c364;
+    --color-surface:           #fff8f6;
+    --color-surface-low:       #fff1ec;
+    --color-surface-container: #ffe9e2;
+    --color-on-surface:        #2a170f;
+    --color-on-surface-var:    #40493f;
+    --color-outline:           #717a6f;
+    --color-outline-var:       #c0c9bc;
+    --color-wood-dark:         #2c1810;
+    --color-error:             #ba1a1a;
+
+    /* Sombras cálidas */
+    --shadow-warm:    0 4px 16px rgba(42,23,15,.09);
+    --shadow-warm-lg: 0 20px 48px rgba(42,23,15,.18);
+  }
+
+  /* ── Reset base ── */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    font-family: var(--font-body);
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ── Tipografía base accesible ── */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-headline);
+    line-height: 1.1;
+  }
+
+  /* ── Focus visible — NUNCA quitar el outline ── */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* ── Selección de texto ── */
+  ::selection {
+    background-color: var(--color-gold);
+    color: var(--color-wood-dark);
+  }
+
+  /* ── Scrollbar custom ── */
+  ::-webkit-scrollbar       { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: var(--color-surface-low); }
+  ::-webkit-scrollbar-thumb { background: var(--color-gold); border-radius: 3px; }
+
+  /* ── Imágenes responsive por defecto ── */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ── Botones base ── */
+  button {
+    cursor: pointer;
+  }
+
+  /* ── Links ── */
+  a {
+    color: inherit;
+    text-decoration: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+
+@layer utilities {
+
+  /* Grain texture overlay */
+  .grain-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.032;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Sombras cálidas */
+  .shadow-warm    { box-shadow: var(--shadow-warm); }
+  .shadow-warm-lg { box-shadow: var(--shadow-warm-lg); }
+
+  /* Ocultar scrollbar visualmente */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Drop cap */
+  .drop-cap::first-letter {
+    font-family: var(--font-headline);
+    font-size: 4.8em;
+    font-weight: 700;
+    float: left;
+    line-height: 0.82;
+    margin-right: 0.07em;
+    margin-top: 0.06em;
+    color: var(--color-primary);
+  }
+
+  /* Polaroid foto */
+  .polaroid {
+    background: #f5f0e8;
+    padding: 10px 10px 32px;
+    box-shadow: 0 8px 28px rgba(42,23,15,.18);
+    transition: transform 0.4s ease;
+  }
+  .tilt-r { transform: rotate(1.8deg); }
+  .tilt-r:hover { transform: rotate(0); }
+  .tilt-l { transform: rotate(-1.8deg); }
+  .tilt-l:hover { transform: rotate(0); }
+
+  /* Animaciones */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  /* Stagger delays */
+  .delay-100 { animation-delay: 0.1s; }
+  .delay-200 { animation-delay: 0.2s; }
+  .delay-300 { animation-delay: 0.3s; }
+  .delay-400 { animation-delay: 0.4s; }
+  .delay-500 { animation-delay: 0.5s; }
+}
+
+/* ============================================================
+   ANIMACIONES
+   ============================================================ */
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+/* ============================================================
+   ACCESIBILIDAD
+   ============================================================ */
+
+/* Ocultar visualmente pero accesible para lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Reducir movimiento si el usuario lo prefiere */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .grain-overlay { display: none; }
+}
+
+/* Alto contraste */
+@media (forced-colors: active) {
+  .grain-overlay { display: none; }
+}
+
+/* ============================================================
+   COMPONENTES BASE
+   ============================================================ */
+
+@layer components {
+
+  /* Botón primario */
+  .btn-primary {
+    @apply bg-[#004317] text-white font-headline font-bold
+           px-8 py-4 inline-flex items-center gap-2
+           hover:bg-[#1a5c2a] hover:rotate-[-0.5deg]
+           active:scale-95 transition-all duration-200
+           focus-visible:ring-2 focus-visible:ring-[#c9a84c]
+           focus-visible:ring-offset-2;
+    border-radius: 2px;
+  }
+
+  /* Botón dorado */
+  .btn-gold {
+    @apply bg-[#c9a84c] text-[#2c1810] font-headline font-bold
+           px-8 py-4 inline-flex items-center gap-2
+           hover:rotate-[-0.5deg] hover:shadow-xl
+           active:scale-95 transition-all duration-200
+           focus-visible:ring-2 focus-visible:ring-[#004317]
+           focus-visible:ring-offset-2;
+    border-radius: 2px;
+  }
+
+  /* Botón outline */
+  .btn-outline {
+    @apply border border-[#c0c9bc]/60 text-[#2a170f]
+           font-headline italic px-8 py-4
+           inline-flex items-center gap-2
+           hover:border-[#004317] hover:text-[#004317]
+           hover:bg-[#fff1ec] transition-all duration-200
+           focus-visible:ring-2 focus-visible:ring-[#c9a84c];
+    border-radius: 2px;
+  }
+
+  /* Tarjeta producto */
+  .product-card {
+    @apply bg-white overflow-hidden
+           transition-all duration-500
+           hover:-translate-y-1.5;
+    box-shadow: var(--shadow-warm);
+    border-radius: 2px;
+  }
+  .product-card:hover {
+    box-shadow: var(--shadow-warm-lg);
+  }
+  .product-card img {
+    @apply transition-transform duration-700;
+  }
+  .product-card:hover img {
+    transform: scale(1.05);
+  }
+
+  /* Badge de categoría */
+  .badge {
+    @apply text-[8px] font-mono uppercase tracking-tighter px-2 py-0.5;
+    border-radius: 2px;
+  }
+  .badge-chess    { @apply bg-[#1c1c1c] text-white; }
+  .badge-puzzle   { @apply bg-[#1a3a5c] text-white; }
+  .badge-mesa     { @apply bg-[#1a5c2a] text-white; }
+  .badge-rol      { @apply bg-[#3d1a5c] text-white; }
+  .badge-clasico  { @apply bg-[#5c3d1a] text-white; }
+  .badge-mundo    { @apply bg-[#1a4a5c] text-white; }
+  .badge-cartas   { @apply bg-[#5c1a1a] text-white; }
+  .badge-gold     { @apply bg-[#c9a84c] text-[#2c1810] font-bold; }
+  .badge-error    { @apply bg-[#ba1a1a] text-white; }
+
+  /* Input base */
+  .input-base {
+    @apply w-full bg-white border border-[#c0c9bc]/50
+           text-[#2a170f] font-body italic text-sm
+           px-4 py-2.5 focus:outline-none
+           focus:border-[#c9a84c] focus:ring-1
+           focus:ring-[#c9a84c] transition-colors;
+    border-radius: 2px;
+  }
+
+  /* Sección label */
+  .section-label {
+    @apply font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533];
+  }
+
+  /* Gold rule */
+  .gold-rule {
+    @apply block w-12 h-0.5 bg-[#c9a84c] mt-3;
+  }
 }
