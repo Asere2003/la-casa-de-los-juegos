@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
+import { useState } from 'react'
 
 export default function Footer() {
   const [email, setEmail]         = useState('')
@@ -92,7 +92,7 @@ export default function Footer() {
                     autoComplete="email"
                     className="w-full bg-transparent border-b border-[#c9a84c]/25 py-2 font-body italic text-[#fff1ec] placeholder:text-[#c9a84c]/25 focus:outline-none focus:border-[#c9a84c] text-sm"
                   />
-                  <button type="submit" aria-label="Suscribirse" className="absolute right-0 bottom-2 text-[#c9a84c] hover:text-[#fff1ec] transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded">
+                  <button type="submit" aria-label="Suscribirse" className="absolute right-2 bottom-2 text-[#c9a84c] hover:text-[#fff1ec] transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                       <line x1="22" y1="2" x2="11" y2="13"/>
                       <polygon points="22 2 15 22 11 13 2 9 22 2"/>
