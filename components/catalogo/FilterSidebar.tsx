@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 
-import type { CatalogFilters } from '@/app/catalogo/page'
+import type { CatalogFilters } from '@/app/catalogo/CatalogoContent'
 
 const CATEGORIES = [
   { slug: 'ajedrez',    label: 'Ajedrez',        emoji: '♟',  count: 12 },
