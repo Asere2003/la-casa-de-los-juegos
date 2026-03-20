@@ -1,5 +1,9 @@
+// app/catalogo/page.tsx
+
 import CatalogoContent from './CatalogoContent'
 import { Suspense } from 'react'
+
+export const dynamic = 'force-dynamic'  // ← añade esta línea
 
 export default function CatalogoPage() {
   return (
