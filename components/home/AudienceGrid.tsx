@@ -1,0 +1,33 @@
+import type { AudienceGroupItem } from '@/types/home'
+import Link from 'next/link'
+import SectionHeading from '@/components/home/SectionHeading'
+
+type AudienceGridProps = {
+  items: AudienceGroupItem[]
+}
+
+export default function AudienceGrid({ items }: AudienceGridProps) {
+  return (
+    <section className="py-16 bg-[var(--color-surface-low)]" aria-labelledby="ages-title">
+      <div className="px-6 max-w-7xl mx-auto">
+        <SectionHeading eyebrow="Para cada momento" title="¿Para quién juegas?" centered className="mb-10" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          {items.map((group) => (
+            <Link
+              key={group.label}
+              href={`/catalogo?age=${group.label.toLowerCase()}`}
+              className="group bg-white p-6 md:p-8 flex flex-col items-center text-center shadow-warm hover:shadow-warm-lg hover:-translate-y-1 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]"
+              style={{ borderRadius: '2px', borderTop: `4px solid ${group.borderColor}` }}
+            >
+              <span className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300" aria-hidden="true">
+                {group.emoji}
+              </span>
+              <h3 className="font-headline italic text-lg text-[var(--color-on-surface)]">{group.label}</h3>
+              <p className="font-mono text-[9px] text-[var(--color-outline)] mt-1.5 uppercase tracking-wider">{group.sub}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
