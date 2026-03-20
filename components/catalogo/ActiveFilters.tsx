@@ -1,6 +1,6 @@
 'use client'
 
-import type { CatalogFilters } from '@/app/catalogo/page'
+import type { CatalogFilters } from '@/app/catalogo/CatalogoContent'
 
 interface Props {
   filters: CatalogFilters
