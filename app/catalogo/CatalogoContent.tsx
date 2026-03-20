@@ -20,16 +20,39 @@ export interface CatalogFilters {
   sort:       string
 }
 
+interface SearchParams {
+  category?: string
+  difficulty?: string
+  players?: string
+  search?: string
+  sort?: string
+  minPrice?: string
+  maxPrice?: string
+}
+
+interface Props {
+  initialSearchParams: SearchParams
+}
+
 const DEFAULT_FILTERS: CatalogFilters = {
   category: '', minPrice: 0, maxPrice: 500,
   difficulty: '', players: '', search: '', sort: 'newest',
 }
 
-export default function CatalogoContent() {
+export default function CatalogoContent({ initialSearchParams }: Props) {
   const searchParams = useSearchParams()
   const router       = useRouter()
+  const [filters, setFilters] = useState<CatalogFilters>({
+  category:   initialSearchParams.category   || '',
+  minPrice:   Number(initialSearchParams.minPrice)  || 0,
+  maxPrice:   Number(initialSearchParams.maxPrice)  || 500,
+  difficulty: initialSearchParams.difficulty || '',
+  players:    initialSearchParams.players    || '',
+  search:     initialSearchParams.search     || '',
+  sort:       initialSearchParams.sort       || 'newest',
+  })
 
-  const [filters, setFilters]         = useState<CatalogFilters>(DEFAULT_FILTERS)
+
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
