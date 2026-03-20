@@ -1,10 +1,12 @@
-import type { Metadata } from 'next'
-import { Noto_Serif, Newsreader } from 'next/font/google'
-import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
-import BottomNav from '@/components/layout/BottomNav'
-import CartDrawer from '@/components/cart/CartDrawer'
 import './globals.css'
+
+import { Newsreader, Noto_Serif } from 'next/font/google'
+
+import BottomNav from '@/components/layout/BottomNav'
+import CartDrawer from '@/components/carrito/CartDrawer'
+import Footer from '@/components/layout/Footer'
+import Header from '@/components/layout/Header'
+import type { Metadata } from 'next'
 
 const notoSerif = Noto_Serif({
   subsets: ['latin'],

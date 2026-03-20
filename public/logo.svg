@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 80" width="340" height="80">
+  <rect x="0" y="0" width="340" height="80" rx="3" fill="#1a5c2a"/>
+  <g transform="translate(14, 12)">
+    <rect x="0" y="36" width="32" height="5" rx="2" fill="#c9a84c"/>
+    <rect x="5" y="22" width="22" height="15" rx="2" fill="#c9a84c"/>
+    <rect x="9" y="17" width="14" height="7" rx="1" fill="#c9a84c"/>
+    <rect x="7" y="8" width="18" height="10" rx="3" fill="#c9a84c"/>
+    <rect x="14" y="5" width="4" height="14" rx="1" fill="#c9a84c"/>
+    <rect x="10" y="9" width="12" height="4" rx="1" fill="#c9a84c"/>
+  </g>
+  <text x="60" y="38" font-family="Georgia, 'Times New Roman', serif" font-size="22" font-style="italic" font-weight="700" fill="#c9a84c" letter-spacing="-0.3">La Casa de los Juegos</text>
+  <line x1="60" y1="48" x2="326" y2="48" stroke="#c9a84c" stroke-width="0.8" stroke-opacity="0.5"/>
+  <text x="60" y="62" font-family="monospace" font-size="8" fill="#c9a84c" fill-opacity="0.6" letter-spacing="3">GRANADA · EST. 2024</text>
+</svg>

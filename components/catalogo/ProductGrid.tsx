@@ -1,40 +1,222 @@
-import type { CatalogProduct } from '@/types/catalog'
-import ProductCard from '@/components/shared/ProductCard'
+'use client'
 
-type ProductGridProps = {
-  products: CatalogProduct[]
+import Image from 'next/image'
+import Link from 'next/link'
+import type { Product } from '@/types'
+import { useCartStore } from '@/store/cartStore'
+
+// ── ProductCard ──────────────────────────────────────────
+interface CardProps {
+  product: Product
+  index: number
 }
 
-export default function ProductGrid({ products }: ProductGridProps) {
-  if (!products.length) {
+function ProductCard({ product, index }: CardProps) {
+  const addItem = useCartStore(s => s.addItem)
+
+  const isLowStock  = product.stock > 0 && product.stock <= 3
+  const isOutOfStock = product.stock === 0
+  const hasDiscount  = product.compare_price && product.compare_price > product.price
+  const discountPct  = hasDiscount
+    ? Math.round((1 - product.price / product.compare_price!) * 100)
+    : 0
+
+  return (
+    <article
+      className="group flex flex-col bg-white overflow-hidden shadow-warm hover:shadow-warm-lg transition-all duration-500 hover:-translate-y-1.5"
+      style={{
+        borderRadius: '2px',
+        animationDelay: `${index * 0.05}s`,
+        animation: 'fadeInUp 0.5s ease forwards',
+        opacity: 0,
+      }}
+    >
+      {/* Imagen */}
+      <Link
+        href={`/producto/${product.slug}`}
+        className="relative aspect-[3/4] overflow-hidden block focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
+        aria-label={`Ver ${product.name}`}
+        tabIndex={0}
+      >
+        {product.images?.[0] ? (
+          <Image
+            src={product.images[0]}
+            alt={product.name}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className={`object-cover transition-transform duration-700 ${isOutOfStock ? 'grayscale' : 'group-hover:scale-105'}`}
+          />
+        ) : (
+          <div className="w-full h-full bg-[#fff1ec] flex items-center justify-center text-4xl">🎲</div>
+        )}
+
+        {/* Gradiente */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#2a170f]/20 to-transparent pointer-events-none" aria-hidden="true"/>
+
+        {/* Badge categoría */}
+        {product.category && (
+          <span
+            className="absolute top-3 left-3 text-white text-[8px] font-mono px-2 py-0.5 uppercase tracking-tighter"
+            style={{ background: product.category.color || '#1a5c2a', borderRadius: '2px' }}
+          >
+            {product.category.emoji} {product.category.name}
+          </span>
+        )}
+
+        {/* Badges estado */}
+        <div className="absolute top-3 right-3 flex flex-col gap-1 items-end">
+          {isOutOfStock && (
+            <span className="bg-[#717a6f] text-white text-[8px] font-mono px-2 py-0.5 uppercase tracking-tighter" style={{ borderRadius: '2px' }}>
+              Agotado
+            </span>
+          )}
+          {isLowStock && !isOutOfStock && (
+            <span className="bg-[#ba1a1a] text-white text-[8px] font-mono px-2 py-0.5 uppercase tracking-tighter" style={{ borderRadius: '2px' }}>
+              Últimas unidades
+            </span>
+          )}
+          {hasDiscount && !isOutOfStock && (
+            <span className="bg-[#c9a84c] text-[#2c1810] text-[8px] font-mono px-2 py-0.5 uppercase tracking-tighter font-bold" style={{ borderRadius: '2px' }}>
+              -{discountPct}%
+            </span>
+          )}
+        </div>
+      </Link>
+
+      {/* Info */}
+      <div className="p-4 flex flex-col flex-1 border-t border-[#c0c9bc]/15">
+
+        {/* SKU */}
+        {product.sku && (
+          <span className="font-mono text-[8px] text-[#717a6f] mb-1.5">{product.sku}</span>
+        )}
+
+        {/* Nombre */}
+        <Link
+          href={`/producto/${product.slug}`}
+          className="font-headline italic text-sm md:text-base leading-snug mb-1 group-hover:text-[#004317] transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded flex-1"
+        >
+          {product.name}
+        </Link>
+
+        {/* Descripción — solo desktop */}
+        {product.description && (
+          <p className="text-xs text-[#40493f] italic mb-3 line-clamp-2 hidden md:block">
+            {product.description}
+          </p>
+        )}
+
+        {/* Badges info — jugadores, dificultad */}
+        <div className="flex flex-wrap gap-1 mb-3">
+          {product.min_players && product.max_players && (
+            <span className="font-mono text-[8px] text-[#717a6f] bg-[#fff1ec] px-1.5 py-0.5" style={{ borderRadius: '2px' }}>
+              {product.min_players === product.max_players
+                ? `${product.min_players}👤`
+                : `${product.min_players}–${product.max_players}👤`
+              }
+            </span>
+          )}
+          {product.difficulty && (
+            <span className="font-mono text-[8px] text-[#717a6f] bg-[#fff1ec] px-1.5 py-0.5 capitalize" style={{ borderRadius: '2px' }}>
+              {product.difficulty}
+            </span>
+          )}
+        </div>
+
+        {/* Precio + botón */}
+        <div className="flex justify-between items-center mt-auto">
+          <div className="flex items-baseline gap-2">
+            <span className="font-mono text-sm font-bold text-[#004317]">
+              {product.price.toFixed(2).replace('.', ',')}€
+            </span>
+            {hasDiscount && (
+              <span className="font-mono text-[10px] text-[#717a6f] line-through">
+                {product.compare_price!.toFixed(2).replace('.', ',')}€
+              </span>
+            )}
+          </div>
+
+          {isOutOfStock ? (
+            <span className="font-mono text-[9px] text-[#717a6f] uppercase tracking-wide">Sin stock</span>
+          ) : (
+            <button
+              onClick={() => addItem(product, 1)}
+              aria-label={`Añadir ${product.name} al carrito`}
+              className="bg-[#004317] text-white p-1.5 hover:rotate-[-2deg] hover:bg-[#1a5c2a] transition-all active:scale-90 focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
+              style={{ borderRadius: '2px' }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 0 1-8 0"/>
+              </svg>
+            </button>
+          )}
+        </div>
+      </div>
+    </article>
+  )
+}
+
+// ── ProductGrid ──────────────────────────────────────────
+interface GridProps {
+  products: Product[]
+  loading: boolean
+}
+
+export default function ProductGrid({ products, loading }: GridProps) {
+
+  if (loading) {
     return (
-      <section className="bg-[var(--color-surface)] p-10 shadow-warm" style={{ borderRadius: '2px' }}>
-        <h2 className="font-headline text-2xl text-[var(--color-on-surface)] mb-3">
-          No hemos encontrado resultados
-        </h2>
-        <p className="text-[var(--color-on-surface-var)]">
-          Prueba con otra categoría o limpia los filtros.
+      <div className="grid grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="bg-white overflow-hidden shadow-warm animate-pulse" style={{ borderRadius: '2px' }}>
+            <div className="aspect-[3/4] bg-[#fff1ec]"/>
+            <div className="p-4 space-y-2">
+              <div className="h-3 bg-[#fff1ec] rounded w-1/2"/>
+              <div className="h-4 bg-[#fff1ec] rounded w-3/4"/>
+              <div className="h-3 bg-[#fff1ec] rounded w-full"/>
+              <div className="h-3 bg-[#fff1ec] rounded w-2/3"/>
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 text-center">
+        <span className="text-6xl mb-6" aria-hidden="true">🔍</span>
+        <h3 className="font-headline italic text-2xl text-[#2a170f] mb-2">
+          No encontramos nada
+        </h3>
+        <p className="font-body italic text-[#717a6f] text-lg">
+          Prueba a cambiar o quitar algunos filtros
         </p>
-      </section>
+      </div>
     )
   }
 
   return (
-    <section>
-      <p className="section-label mb-6">{products.length} productos encontrados</p>
-
-      <div className="grid grid-cols-2 xl:grid-cols-3 gap-5 md:gap-8">
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={{
-              ...product,
-              category: product.category,
-              badgeBg: product.badgeBg,
-            }}
-          />
+    <>
+      <style>{`
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+      <div
+        className="grid grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6"
+        role="list"
+        aria-label="Productos del catálogo"
+      >
+        {products.map((product, i) => (
+          <div key={product.id} role="listitem">
+            <ProductCard product={product} index={i}/>
+          </div>
         ))}
       </div>
-    </section>
+    </>
   )
 }

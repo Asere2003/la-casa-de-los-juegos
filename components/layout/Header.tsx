@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import { usePathname } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
+
 import Link from 'next/link'
 import { useCartStore } from '@/store/cartStore'
+import { usePathname } from 'next/navigation'
 
 const navLinks = [
   { href: '/catalogo', label: 'Catálogo' },
@@ -29,7 +30,9 @@ export default function Header() {
   const [scrolled, setScrolled]       = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
-  const totalItems = useCartStore(s => s.totalItems)
+  const items = useCartStore(s => s.items)
+  const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
+
   const toggleCart = useCartStore(s => s.toggleCart)
   const searchRef  = useRef<HTMLInputElement>(null)
 
@@ -129,7 +132,7 @@ export default function Header() {
 
           <button
             onClick={toggleCart}
-            aria-label={`Abrir carrito, ${totalItems()} artículos`}
+            aria-label={`Abrir carrito, ${totalItems} artículos`}
             className="relative text-[#fff8f6]/80 hover:text-[#c9a84c] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -137,9 +140,9 @@ export default function Header() {
               <line x1="3" y1="6" x2="21" y2="6"/>
               <path d="M16 10a4 4 0 0 1-8 0"/>
             </svg>
-            {totalItems() > 0 && (
+            {totalItems > 0 && (
               <span aria-hidden="true" className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#c9a84c] text-[#2c1810] text-[8px] font-bold rounded-full flex items-center justify-center font-mono leading-none">
-                {totalItems() > 9 ? '9+' : totalItems()}
+                {totalItems > 9 ? '9+' : totalItems}
               </span>
             )}
           </button>

@@ -8,11 +8,11 @@ import { useCartStore } from '@/store/cartStore'
 
 export default function CartDrawer() {
   const isOpen     = useCartStore(s => s.isOpen)
-  const items      = useCartStore(s => s.items)
   const closeCart  = useCartStore(s => s.closeCart)
   const removeItem = useCartStore(s => s.removeItem)
   const updateQty  = useCartStore(s => s.updateQuantity)
-  const totalItems = useCartStore(s => s.totalItems)
+  const items = useCartStore(s => s.items)
+  const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
   const totalPrice = useCartStore(s => s.totalPrice)
 
   const closeRef  = useRef<HTMLButtonElement>(null)
@@ -76,9 +76,9 @@ export default function CartDrawer() {
         <div className="flex items-center justify-between px-6 py-5 bg-gradient-to-b from-[#1a5c2a] to-[#004317]">
           <div>
             <h2 className="font-headline italic text-xl text-[#c9a84c]">Tu Carrito</h2>
-            {totalItems() > 0 && (
+            {totalItems > 0 && (
               <p className="font-mono text-[9px] uppercase tracking-widest text-[#c9a84c]/60 mt-0.5">
-                {totalItems()} {totalItems() === 1 ? 'artículo' : 'artículos'}
+                {totalItems} {totalItems === 1 ? 'artículo' : 'artículos'}
               </p>
             )}
           </div>

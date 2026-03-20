@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { useCartStore } from '@/store/cartStore'
+import { usePathname } from 'next/navigation'
 
 const links = [
   {
@@ -61,7 +61,8 @@ const links = [
 
 export default function BottomNav() {
   const pathname   = usePathname()
-  const totalItems = useCartStore(s => s.totalItems)
+  const items = useCartStore(s => s.items)
+  const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/'
@@ -76,7 +77,7 @@ export default function BottomNav() {
     >
       {links.map(link => {
         const active = isActive(link.href)
-        const count  = link.isCart ? totalItems() : 0
+        const count  = link.isCart ? totalItems : 0
         return (
           <Link
             key={link.href}

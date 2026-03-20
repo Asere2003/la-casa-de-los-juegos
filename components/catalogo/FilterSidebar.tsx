@@ -1,97 +1,225 @@
-import type { CatalogSearchParams } from '@/types/catalog'
-import Link from 'next/link'
-import { buildQueryString } from '@/lib/queryParams'
+'use client'
 
-type FilterSidebarProps = {
-  searchParams: CatalogSearchParams
+import { useEffect, useRef } from 'react'
+
+import type { CatalogFilters } from '@/app/catalogo/page'
+
+const CATEGORIES = [
+  { slug: 'ajedrez',    label: 'Ajedrez',        emoji: '♟',  count: 12 },
+  { slug: 'puzzles',    label: 'Puzzles',         emoji: '🧩', count: 38 },
+  { slug: 'juegos-mesa',label: 'Juegos de Mesa',  emoji: '🎲', count: 64 },
+  { slug: 'rol',        label: 'Rol & Estrategia',emoji: '🐉', count: 21 },
+  { slug: 'clasicos',   label: 'Clásicos',        emoji: '🎭', count: 29 },
+  { slug: 'del-mundo',  label: 'Del Mundo',       emoji: '🌍', count: 17 },
+  { slug: 'cartas',     label: 'Cartas',          emoji: '🃏', count: 45 },
+  { slug: 'habilidad',  label: 'Habilidad',       emoji: '🪀', count: 8  },
+]
+
+const DIFFICULTIES = [
+  { value: 'familiar', label: 'Familiar' },
+  { value: 'medio',    label: 'Medio'    },
+  { value: 'avanzado', label: 'Avanzado' },
+  { value: 'experto',  label: 'Experto'  },
+]
+
+const PLAYERS = [
+  { value: '1', label: '1' },
+  { value: '2', label: '2' },
+  { value: '4', label: '2–4' },
+  { value: '6', label: '4–8' },
+]
+
+interface Props {
+  filters: CatalogFilters
+  onChange: (f: Partial<CatalogFilters>) => void
+  onClear: () => void
+  isOpen: boolean
+  onClose: () => void
 }
 
-const categories = [
-  { label: 'Ajedrez', value: 'ajedrez' },
-  { label: 'Puzzles', value: 'puzzles' },
-  { label: 'Juegos de Mesa', value: 'juegos-mesa' },
-  { label: 'Rol', value: 'rol' },
-  { label: 'Clásicos', value: 'clasicos' },
-  { label: 'Cartas', value: 'cartas' },
-]
+export default function FilterSidebar({ filters, onChange, onClear, isOpen, onClose }: Props) {
+  const sheetRef = useRef<HTMLDivElement>(null)
 
-const ages = [
-  { label: 'Niños', value: 'ninos' },
-  { label: 'Familia', value: 'familia' },
-  { label: 'Adultos', value: 'adultos' },
-  { label: 'Expertos', value: 'expertos' },
-]
+  // Cerrar con Escape
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [onClose])
 
-export default function FilterSidebar({ searchParams }: FilterSidebarProps) {
-  return (
-    <aside className="hidden md:block">
-      <div className="sticky top-24 bg-[var(--color-surface)] p-6 shadow-warm" style={{ borderRadius: '2px' }}>
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="font-headline text-2xl text-[var(--color-on-surface)]">Filtros</h2>
-          <Link
-            href="/catalogo"
-            className="text-xs font-mono uppercase tracking-wide text-[var(--color-primary)]"
-          >
-            Limpiar
-          </Link>
+  // Bloquear scroll cuando sheet abierto
+  useEffect(() => {
+    if (isOpen) document.body.style.overflow = 'hidden'
+    else document.body.style.overflow = ''
+    return () => { document.body.style.overflow = '' }
+  }, [isOpen])
+
+  const FilterContent = () => (
+    <div className="space-y-0">
+
+      {/* Limpiar */}
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="font-headline text-lg text-[#2a170f] flex items-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <line x1="4" y1="6" x2="20" y2="6"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+            <line x1="11" y1="18" x2="13" y2="18"/>
+          </svg>
+          Filtros
+        </h2>
+        <button onClick={onClear}
+          className="font-mono text-[9px] uppercase tracking-wide text-[#717a6f] hover:text-[#004317] transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded">
+          Limpiar todo
+        </button>
+      </div>
+
+      {/* ── Categoría ── */}
+      <FilterSection title="Categoría">
+        <div className="space-y-2">
+          {CATEGORIES.map(cat => (
+            <label key={cat.slug} className="flex items-center gap-3 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={filters.category === cat.slug}
+                onChange={e => onChange({ category: e.target.checked ? cat.slug : '' })}
+                className="w-4 h-4 rounded-sm border-[#c0c9bc] text-[#004317] focus:ring-[#c9a84c] cursor-pointer"
+                aria-label={`Filtrar por ${cat.label}`}
+              />
+              <span className="flex-1 text-sm font-body group-hover:text-[#004317] transition-colors">
+                <span aria-hidden="true">{cat.emoji}</span> {cat.label}
+              </span>
+              <span className="font-mono text-[9px] text-[#717a6f]">{cat.count}</span>
+            </label>
+          ))}
         </div>
+      </FilterSection>
 
-        <div className="mb-8">
-          <h3 className="font-headline italic text-lg mb-4 text-[var(--color-primary)]">Categoría</h3>
-          <div className="space-y-2">
-            {categories.map((item) => {
-              const active = searchParams.category === item.value
-
-              return (
-                <Link
-                  key={item.value}
-                  href={buildQueryString(searchParams, {
-                    category: active ? null : item.value,
-                  })}
-                  className={[
-                    'flex items-center justify-between px-3 py-2 border transition-colors',
-                    active
-                      ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
-                      : 'bg-white text-[var(--color-on-surface)] border-[var(--color-outline-var)]/40 hover:border-[var(--color-primary)]',
-                  ].join(' ')}
-                  style={{ borderRadius: '2px' }}
-                >
-                  <span>{item.label}</span>
-                  {active ? <span>✓</span> : null}
-                </Link>
-              )
-            })}
+      {/* ── Precio ── */}
+      <FilterSection title="Precio máximo">
+        <div>
+          <input
+            type="range"
+            min={0} max={500} step={5}
+            value={filters.maxPrice}
+            onChange={e => onChange({ maxPrice: Number(e.target.value) })}
+            className="w-full accent-[#c9a84c] cursor-pointer"
+            aria-label={`Precio máximo: ${filters.maxPrice}€`}
+          />
+          <div className="flex justify-between font-mono text-[10px] text-[#717a6f] mt-1.5">
+            <span>0€</span>
+            <span className="font-bold text-[#004317]">{filters.maxPrice}€</span>
           </div>
         </div>
+      </FilterSection>
 
-        <div>
-          <h3 className="font-headline italic text-lg mb-4 text-[var(--color-primary)]">Edad / momento</h3>
-          <div className="space-y-2">
-            {ages.map((item) => {
-              const active = searchParams.age === item.value
+      {/* ── Dificultad ── */}
+      <FilterSection title="Dificultad">
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Filtrar por dificultad">
+          {DIFFICULTIES.map(d => (
+            <button
+              key={d.value}
+              onClick={() => onChange({ difficulty: filters.difficulty === d.value ? '' : d.value })}
+              aria-pressed={filters.difficulty === d.value}
+              className={`font-mono text-[9px] uppercase tracking-wide px-3 py-1.5 transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c] ${
+                filters.difficulty === d.value
+                  ? 'bg-[#004317] text-white'
+                  : 'border border-[#c0c9bc]/60 text-[#2a170f] hover:border-[#004317] hover:text-[#004317]'
+              }`}
+              style={{ borderRadius: '2px' }}
+            >
+              {d.label}
+            </button>
+          ))}
+        </div>
+      </FilterSection>
 
-              return (
-                <Link
-                  key={item.value}
-                  href={buildQueryString(searchParams, {
-                    age: active ? null : item.value,
-                  })}
-                  className={[
-                    'flex items-center justify-between px-3 py-2 border transition-colors',
-                    active
-                      ? 'bg-[var(--color-secondary)] text-white border-[var(--color-secondary)]'
-                      : 'bg-white text-[var(--color-on-surface)] border-[var(--color-outline-var)]/40 hover:border-[var(--color-secondary)]',
-                  ].join(' ')}
-                  style={{ borderRadius: '2px' }}
-                >
-                  <span>{item.label}</span>
-                  {active ? <span>✓</span> : null}
-                </Link>
-              )
-            })}
+      {/* ── Jugadores ── */}
+      <FilterSection title="Nº Jugadores">
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Filtrar por número de jugadores">
+          {PLAYERS.map(p => (
+            <button
+              key={p.value}
+              onClick={() => onChange({ players: filters.players === p.value ? '' : p.value })}
+              aria-pressed={filters.players === p.value}
+              className={`font-mono text-[9px] px-3 py-1.5 transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c] ${
+                filters.players === p.value
+                  ? 'bg-[#c9a84c] text-[#2c1810] font-bold'
+                  : 'border border-[#c0c9bc]/60 text-[#2a170f] hover:border-[#004317] hover:text-[#004317]'
+              }`}
+              style={{ borderRadius: '2px' }}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+      </FilterSection>
+    </div>
+  )
+
+  return (
+    <>
+      {/* ── Sidebar desktop ── */}
+      <aside className="hidden md:block w-56 shrink-0 sticky top-24 self-start max-h-[calc(100vh-6rem)] overflow-y-auto pr-2"
+        aria-label="Filtros de catálogo">
+        <FilterContent/>
+      </aside>
+
+      {/* ── Sheet móvil ── */}
+      <div aria-hidden={!isOpen}>
+        {/* Overlay */}
+        <div
+          aria-hidden="true"
+          onClick={onClose}
+          className={`fixed inset-0 z-[59] bg-[#2a170f]/60 backdrop-blur-sm transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        />
+
+        {/* Sheet */}
+        <div
+          ref={sheetRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Filtros de catálogo"
+          className={`fixed inset-x-0 bottom-0 z-[60] bg-[#fff8f6] rounded-t-2xl shadow-2xl transition-transform duration-400 max-h-[85dvh] overflow-y-auto ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
+        >
+          {/* Handle */}
+          <div className="sticky top-0 bg-[#fff8f6] border-b border-[#c0c9bc]/20 px-5 py-4 flex items-center justify-between z-10">
+            <h2 className="font-headline text-lg text-[#2a170f]">Filtros</h2>
+            <button onClick={onClose} aria-label="Cerrar filtros"
+              className="text-[#717a6f] hover:text-[#2a170f] p-1 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <path d="M18 6 6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+          <div className="px-5 py-4">
+            <FilterContent/>
+          </div>
+          <div className="sticky bottom-0 bg-[#fff8f6] border-t border-[#c0c9bc]/20 px-5 py-4">
+            <button onClick={onClose}
+              className="w-full bg-[#004317] text-white font-headline font-bold py-4 hover:bg-[#1a5c2a] transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
+              style={{ borderRadius: '2px' }}>
+              Ver resultados
+            </button>
           </div>
         </div>
       </div>
-    </aside>
+    </>
+  )
+}
+
+// Subcomponente sección colapsable
+function FilterSection({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <details className="group border-b border-[#c0c9bc]/25 py-4" open>
+      <summary className="flex items-center justify-between cursor-pointer font-headline text-sm text-[#004317] hover:text-[#1a5c2a] transition-colors list-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded">
+        {title}
+        <svg className="transition-transform group-open:rotate-180" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+          <path d="m6 9 6 6 6-6"/>
+        </svg>
+      </summary>
+      <div className="mt-3">
+        {children}
+      </div>
+    </details>
   )
 }

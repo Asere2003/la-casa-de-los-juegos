@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Fondo verde -->
+  <rect width="32" height="32" rx="6" fill="#1a5c2a"/>
+
+  <!-- Pieza de ajedrez (rey) centrada -->
+  <g transform="translate(7, 4)">
+    <!-- Base -->
+    <rect x="0" y="22" width="18" height="4" rx="2" fill="#c9a84c"/>
+    <!-- Cuerpo -->
+    <rect x="3" y="12" width="12" height="12" rx="2" fill="#c9a84c"/>
+    <!-- Cuello -->
+    <rect x="5" y="8" width="8" height="5" rx="1" fill="#c9a84c"/>
+    <!-- Cabeza -->
+    <rect x="3" y="2" width="12" height="8" rx="3" fill="#c9a84c"/>
+    <!-- Cruz vertical -->
+    <rect x="8" y="0" width="3" height="10" rx="1" fill="#c9a84c"/>
+    <!-- Cruz horizontal -->
+    <rect x="5" y="2" width="9" height="3" rx="1" fill="#c9a84c"/>
+  </g>
+</svg>
