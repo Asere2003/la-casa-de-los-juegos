@@ -1,7 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useCallback, useState } from 'react'
 
 import ActiveFilters from '@/components/catalogo/ActiveFilters'
 import CatalogHeader from '@/components/catalogo/CatalogHeader'
@@ -9,6 +8,7 @@ import FilterSidebar from '@/components/catalogo/FilterSidebar'
 import { MOCK_PRODUCTS } from '@/lib/mockData'
 import ProductGrid from '@/components/catalogo/ProductGrid'
 import SortSelect from '@/components/catalogo/SortSelect'
+import { useRouter } from 'next/navigation'
 
 export interface CatalogFilters {
   category:   string
@@ -40,32 +40,19 @@ const DEFAULT_FILTERS: CatalogFilters = {
 }
 
 export default function CatalogoContent({ initialSearchParams }: Props) {
-  const searchParams = useSearchParams()
-  const router       = useRouter()
+  const router = useRouter()
+
   const [filters, setFilters] = useState<CatalogFilters>({
-  category:   initialSearchParams.category   || '',
-  minPrice:   Number(initialSearchParams.minPrice)  || 0,
-  maxPrice:   Number(initialSearchParams.maxPrice)  || 500,
-  difficulty: initialSearchParams.difficulty || '',
-  players:    initialSearchParams.players    || '',
-  search:     initialSearchParams.search     || '',
-  sort:       initialSearchParams.sort       || 'newest',
+    category:   initialSearchParams.category   || '',
+    minPrice:   Number(initialSearchParams.minPrice)  || 0,
+    maxPrice:   Number(initialSearchParams.maxPrice)  || 500,
+    difficulty: initialSearchParams.difficulty || '',
+    players:    initialSearchParams.players    || '',
+    search:     initialSearchParams.search     || '',
+    sort:       initialSearchParams.sort       || 'newest',
   })
 
-
   const [sidebarOpen, setSidebarOpen] = useState(false)
-
-  useEffect(() => {
-    setFilters({
-      category:   searchParams.get('category')   || '',
-      minPrice:   Number(searchParams.get('minPrice'))  || 0,
-      maxPrice:   Number(searchParams.get('maxPrice'))  || 500,
-      difficulty: searchParams.get('difficulty') || '',
-      players:    searchParams.get('players')    || '',
-      search:     searchParams.get('search')     || '',
-      sort:       searchParams.get('sort')        || 'newest',
-    })
-  }, [searchParams])
 
   const updateFilters = useCallback((newFilters: Partial<CatalogFilters>) => {
     const updated = { ...filters, ...newFilters }
