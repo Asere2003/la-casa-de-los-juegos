@@ -16,7 +16,7 @@ export default function Footer() {
   }
 
   return (
-    <footer role="contentinfo" className="w-full pt-16 pb-8 px-6 md:px-10 bg-[#2c1810] relative overflow-hidden">
+    <footer role="contentinfo" className="w-full pt-16 pb-24 px-6 md:px-10 bg-[#2c1810] relative overflow-hidden">
       <div aria-hidden="true" className="absolute inset-0 opacity-[0.06]"
         style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/asfalt-dark.png')" }}
       />
