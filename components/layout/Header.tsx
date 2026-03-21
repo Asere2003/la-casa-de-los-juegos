@@ -124,7 +124,7 @@ export default function Header() {
                 alt="Logo de La Casa de los Juegos"
                 width={150}
                 height={50}
-                className="h-full w-auto object-contain"
+                className="h-full md:h-45 w-auto object-contain"
               />
               {/* <span className="text-[10px] md:text-xs tracking-normal">de los</span>
             </span>
