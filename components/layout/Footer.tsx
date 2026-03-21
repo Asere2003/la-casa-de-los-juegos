@@ -1,11 +1,14 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 export default function Footer() {
   const [email, setEmail]         = useState('')
   const [subscribed, setSubscribed] = useState(false)
+  const t = useTranslations('footer')
+  const tNav = useTranslations('nav')
 
   const handleNewsletter = (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,7 +32,7 @@ export default function Footer() {
               La Casa de los Juegos
             </Link>
             <p className="font-body text-sm leading-relaxed text-[#c9a84c]/55 max-w-xs mb-6">
-              Curadores de asombro y guardianes del juego. La tienda más especial de Granada, ahora en tu hogar.
+              {t('description')}
             </p>
             <div className="flex gap-3">
               <a href="#" aria-label="Instagram" className="text-[#c9a84c]/35 hover:text-[#c9a84c] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]">
@@ -50,14 +53,13 @@ export default function Footer() {
 
           {/* Links */}
           <div>
-            <h2 className="font-mono text-[9px] uppercase tracking-widest text-[#c9a84c] mb-5">Tienda</h2>
+            <h2 className="font-mono text-[9px] uppercase tracking-widest text-[#c9a84c] mb-5">{t('shop')}</h2>
             <ul className="space-y-2.5">
               {[
-                { href: '/catalogo',              label: 'Catálogo' },
-                { href: '/catalogo?sort=newest',  label: 'Novedades' },
-                { href: '/catalogo?sort=popular', label: 'Más Vendidos' },
-                { href: '/historia',              label: 'Nuestra Historia' },
-                { href: '/cuenta/pedidos',        label: 'Mis Pedidos' },
+                { href: '/catalogo' as const,              label: tNav('catalogue') },
+                { href: '/catalogo?sort=newest' as const,  label: tNav('catalogue') },
+                { href: '/catalogo?sort=popular' as const, label: tNav('catalogue') },
+                { href: '/historia' as const,              label: tNav('history') },
               ].map(link => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-[#c9a84c]/55 hover:text-[#fff1ec] transition-colors font-body text-sm focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded">
@@ -70,9 +72,9 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div>
-            <h2 className="font-mono text-[9px] uppercase tracking-widest text-[#c9a84c] mb-3">El Boletín del Escriba</h2>
+            <h2 className="font-mono text-[9px] uppercase tracking-widest text-[#c9a84c] mb-3">{t('newsletter_title')}</h2>
             <p className="text-[#c9a84c]/45 font-body italic text-sm mb-4">
-              Novedades y curiosidades directamente a tu correo.
+              {t('newsletter_desc')}
             </p>
             {subscribed ? (
               <p className="text-[#c9a84c] font-body italic text-sm" role="status" aria-live="polite">
@@ -87,7 +89,7 @@ export default function Footer() {
                     type="email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    placeholder="tu@correo.es"
+                    placeholder={t('newsletter_placeholder')}
                     required
                     autoComplete="email"
                     className="w-full bg-transparent border-b border-[#c9a84c]/25 py-2 font-body italic text-[#fff1ec] placeholder:text-[#c9a84c]/25 focus:outline-none focus:border-[#c9a84c] text-sm"
@@ -99,7 +101,7 @@ export default function Footer() {
                     </svg>
                   </button>
                 </div>
-                <p className="text-[9px] text-[#c9a84c]/25 mt-2 italic font-body">Prometemos no enviar cuervos innecesarios.</p>
+                <p className="text-[9px] text-[#c9a84c]/25 mt-2 italic font-body">{t('newsletter_note')}</p>
               </form>
             )}
           </div>
@@ -107,12 +109,12 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="border-t border-[#c9a84c]/10 pt-6 flex flex-col md:flex-row justify-between items-center gap-3">
-          <p className="font-mono text-[10px] text-[#c9a84c]/30">© 2024 La Casa de los Juegos · Granada, España</p>
+          <p className="font-mono text-[10px] text-[#c9a84c]/30">{t('rights')}</p>
           <nav aria-label="Links legales" className="flex gap-5">
             {[
-              { href: '/legal',      label: 'Aviso Legal' },
-              { href: '/privacidad', label: 'Privacidad' },
-              { href: '/cookies',    label: 'Cookies' },
+              { href: '/legal' as const,      label: t('legal') },
+              { href: '/privacidad' as const, label: t('privacy') },
+              { href: '/cookies' as const,    label: t('cookies') },
             ].map(link => (
               <Link key={link.href} href={link.href} className="font-mono text-[10px] text-[#c9a84c]/30 hover:text-[#c9a84c]/60 transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded">
                 {link.label}

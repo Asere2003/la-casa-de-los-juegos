@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from 'react'
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 
 interface Props {
   total: number
@@ -14,6 +15,9 @@ interface Props {
 
 export default function CatalogHeader({ total, search, onSearch, filterCount, onOpenFilters }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
+  const t = useTranslations('catalogue')
+  const tNav = useTranslations('nav')
+  const tA11y = useTranslations('accessibility')
 
   return (
     <div className="bg-[#fff1ec] border-b border-[#c0c9bc]/20">
@@ -22,18 +26,18 @@ export default function CatalogHeader({ total, search, onSearch, filterCount, on
         {/* Breadcrumbs */}
         <nav aria-label="Ruta de navegación" className="flex items-center gap-1.5 text-xs font-body italic text-[#717a6f] mb-5">
           <Link href="/" className="hover:text-[#004317] transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded">
-            Inicio
+            {tNav('home')}
           </Link>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
             <path d="m9 18 6-6-6-6"/>
           </svg>
-          <span className="text-[#2a170f] font-semibold">Catálogo</span>
+          <span className="text-[#2a170f] font-semibold">{tNav('catalogue')}</span>
         </nav>
 
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
           <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533] mb-2">Todo el archivo</p>
-            <h1 className="font-headline text-3xl md:text-4xl text-[#2a170f]">Catálogo de Juegos</h1>
+            <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533] mb-2">{t('label')}</p>
+            <h1 className="font-headline text-3xl md:text-4xl text-[#2a170f]">{t('title')}</h1>
           </div>
 
           {/* Búsqueda + botón filtros móvil */}
@@ -41,14 +45,14 @@ export default function CatalogHeader({ total, search, onSearch, filterCount, on
 
             {/* Buscador */}
             <div className="relative flex-1 md:w-64">
-              <label htmlFor="catalog-search" className="sr-only">Buscar productos</label>
+              <label htmlFor="catalog-search" className="sr-only">{tA11y('search')}</label>
               <input
                 ref={inputRef}
                 id="catalog-search"
                 type="search"
                 value={search}
                 onChange={e => onSearch(e.target.value)}
-                placeholder="Buscar juegos..."
+                placeholder={tNav('search') + '...'}
                 className="w-full bg-white border border-[#c0c9bc]/50 text-[#2a170f] font-body italic text-sm px-4 py-2.5 pr-10 focus:outline-none focus:border-[#c9a84c] focus:ring-1 focus:ring-[#c9a84c] transition-colors"
                 style={{ borderRadius: '2px' }}
               />
@@ -69,7 +73,7 @@ export default function CatalogHeader({ total, search, onSearch, filterCount, on
                 <line x1="8" y1="12" x2="16" y2="12"/>
                 <line x1="11" y1="18" x2="13" y2="18"/>
               </svg>
-              Filtros
+              {t('filters')}
               {filterCount > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#c9a84c] text-[#2c1810] text-[8px] font-bold rounded-full flex items-center justify-center leading-none">
                   {filterCount}
@@ -81,7 +85,7 @@ export default function CatalogHeader({ total, search, onSearch, filterCount, on
 
         {/* Contador de resultados */}
         <p className="font-mono text-[10px] uppercase tracking-wide text-[#717a6f] mt-4" aria-live="polite" aria-atomic="true">
-          {total} {total === 1 ? 'producto encontrado' : 'productos encontrados'}
+          {t('found', { count: total })}
         </p>
       </div>
     </div>

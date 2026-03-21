@@ -2,39 +2,48 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import Link from 'next/link'
+import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { useCartStore } from '@/store/cartStore'
-import { usePathname } from 'next/navigation'
+import { useLocale, useTranslations } from 'next-intl'
 
 const navLinks = [
-  { href: '/catalogo', label: 'Catálogo' },
-  { href: '/historia', label: 'Historia' },
+  { href: '/catalogo' as const, key: 'catalogue' },
+  { href: '/historia' as const, key: 'history' },
 ]
 
 const categories = [
-  { emoji: '♟', label: 'Ajedrez',        slug: 'ajedrez' },
-  { emoji: '🧩', label: 'Puzzles',        slug: 'puzzles' },
-  { emoji: '🎲', label: 'Juegos de Mesa', slug: 'juegos-mesa' },
-  { emoji: '🐉', label: 'Rol',            slug: 'rol' },
-  { emoji: '🎭', label: 'Clásicos',       slug: 'clasicos' },
-  { emoji: '🌍', label: 'Del Mundo',      slug: 'del-mundo' },
-  { emoji: '🃏', label: 'Cartas',         slug: 'cartas' },
-  { emoji: '🪀', label: 'Habilidad',      slug: 'habilidad' },
+  { emoji: '♟', key: 'chess',      slug: 'ajedrez' },
+  { emoji: '🧩', key: 'puzzles',    slug: 'puzzles' },
+  { emoji: '🎲', key: 'boardgames', slug: 'juegos-mesa' },
+  { emoji: '🐉', key: 'rpg',        slug: 'rol' },
+  { emoji: '🎭', key: 'classics',   slug: 'clasicos' },
+  { emoji: '🌍', key: 'world',      slug: 'del-mundo' },
+  { emoji: '🃏', key: 'cards',      slug: 'cartas' },
+  { emoji: '🪀', key: 'skill',      slug: 'habilidad' },
 ]
+
+const localeLabels: Record<string, string> = { es: 'ES', en: 'EN', cat: 'CAT' }
 
 export default function Header() {
   const pathname = usePathname()
+  const router = useRouter()
+  const locale = useLocale()
+  const t = useTranslations('nav')
+  const tCat = useTranslations('categories')
+  const tA11y = useTranslations('accessibility')
 
   const [drawerOpen, setDrawerOpen]   = useState(false)
   const [searchOpen, setSearchOpen]   = useState(false)
   const [scrolled, setScrolled]       = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [langOpen, setLangOpen]       = useState(false)
 
   const items = useCartStore(s => s.items)
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
 
   const toggleCart = useCartStore(s => s.toggleCart)
   const searchRef  = useRef<HTMLInputElement>(null)
+  const langRef    = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -51,11 +60,23 @@ export default function Header() {
       if (e.key === 'Escape') {
         setDrawerOpen(false)
         setSearchOpen(false)
+        setLangOpen(false)
       }
     }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   }, [])
+
+  useEffect(() => {
+    if (!langOpen) return
+    const onClick = (e: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', onClick)
+    return () => document.removeEventListener('mousedown', onClick)
+  }, [langOpen])
 
   useEffect(() => {
     document.body.style.overflow = drawerOpen ? 'hidden' : ''
@@ -78,7 +99,7 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setDrawerOpen(true)}
-            aria-label="Abrir menú"
+            aria-label={tA11y('open_menu')}
             aria-expanded={drawerOpen}
             aria-controls="nav-drawer"
             className="text-[#c9a84c] hover:rotate-[-2deg] transition-transform p-2 -ml-2 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
@@ -112,15 +133,47 @@ export default function Header() {
                 }
               `}
             >
-              {link.label}
+              {t(link.key)}
             </Link>
           ))}
         </nav>
 
         <div className="flex items-center gap-1">
+          {/* Language selector */}
+          <div ref={langRef} className="relative">
+            <button
+              onClick={() => setLangOpen(v => !v)}
+              aria-label={tA11y('change_language')}
+              aria-expanded={langOpen}
+              className="text-[#fff8f6]/80 hover:text-[#c9a84c] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c] font-mono text-xs font-bold"
+            >
+              {localeLabels[locale] || locale.toUpperCase()}
+            </button>
+            {langOpen && (
+              <div className="absolute right-0 top-full mt-1 bg-[#004317] border border-[#c9a84c]/30 shadow-lg rounded-sm overflow-hidden z-50">
+                {(['es', 'en', 'cat'] as const).map(l => (
+                  <button
+                    key={l}
+                    onClick={() => {
+                      router.replace(pathname, { locale: l })
+                      setLangOpen(false)
+                    }}
+                    className={`block w-full text-left px-4 py-2 font-mono text-xs transition-colors ${
+                      locale === l
+                        ? 'bg-[#c9a84c] text-[#2c1810] font-bold'
+                        : 'text-[#fff8f6]/80 hover:bg-[#1a5c2a] hover:text-[#c9a84c]'
+                    }`}
+                  >
+                    {localeLabels[l]}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           <button
             onClick={() => setSearchOpen(v => !v)}
-            aria-label="Buscar productos"
+            aria-label={tA11y('search')}
             aria-expanded={searchOpen}
             className="text-[#fff8f6]/80 hover:text-[#c9a84c] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
           >
@@ -132,7 +185,7 @@ export default function Header() {
 
           <button
             onClick={toggleCart}
-            aria-label={`Abrir carrito, ${totalItems} artículos`}
+            aria-label={tA11y('cart_count', { count: totalItems })}
             className="relative text-[#fff8f6]/80 hover:text-[#c9a84c] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -152,7 +205,7 @@ export default function Header() {
       {/* ══ BÚSQUEDA ══ */}
       <div
         role="search"
-        aria-label="Búsqueda de productos"
+        aria-label={tA11y('search')}
         className={`
           fixed top-16 left-0 w-full z-40 bg-[#004317]
           px-5 py-3 shadow-lg transition-all duration-300
@@ -160,14 +213,14 @@ export default function Header() {
         `}
       >
         <div className="max-w-2xl mx-auto relative">
-          <label htmlFor="search-input" className="sr-only">Buscar productos</label>
+          <label htmlFor="search-input" className="sr-only">{tA11y('search')}</label>
           <input
             ref={searchRef}
             id="search-input"
             type="search"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            placeholder="Buscar juegos, puzzles, ajedrez..."
+            placeholder={t('search') + '...'}
             className="w-full bg-[#1a5c2a] border border-[#c9a84c]/30 text-[#fff8f6] placeholder:text-[#fff8f6]/40 font-body italic px-4 py-2.5 pr-10 focus:outline-none focus:border-[#c9a84c] focus:ring-1 focus:ring-[#c9a84c] text-sm rounded-sm"
           />
           <svg className="absolute right-3 top-1/2 -translate-y-1/2 text-[#c9a84c]/60" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -197,7 +250,7 @@ export default function Header() {
       >
         <div className="p-5 bg-gradient-to-b from-[#1a5c2a] to-[#004317] flex items-center justify-between">
           <span className="font-headline italic text-xl text-[#c9a84c]">La Casa de los Juegos</span>
-          <button onClick={() => setDrawerOpen(false)} aria-label="Cerrar menú" className="text-[#c9a84c]/70 hover:text-[#c9a84c] p-1 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]">
+          <button onClick={() => setDrawerOpen(false)} aria-label={tA11y('close_menu')} className="text-[#c9a84c]/70 hover:text-[#c9a84c] p-1 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <path d="M18 6 6 18M6 6l12 12"/>
             </svg>
@@ -207,14 +260,14 @@ export default function Header() {
         <div className="flex-1 overflow-y-auto">
           <div className="divide-y divide-[#2a170f]/5">
             {[
-              { href: '/',         label: 'Inicio' },
-              { href: '/catalogo', label: 'Catálogo' },
-              { href: '/historia', label: 'Historia' },
-              { href: '/carrito',  label: 'Carrito' },
+              { href: '/' as const,         key: 'home' },
+              { href: '/catalogo' as const, key: 'catalogue' },
+              { href: '/historia' as const, key: 'history' },
+              { href: '/carrito' as const,  key: 'cart' },
             ].map(item => (
               <Link key={item.href} href={item.href} onClick={() => setDrawerOpen(false)}
                 className="flex items-center px-6 py-3.5 text-[#004317] hover:bg-[#fff1ec] font-headline italic text-lg transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#c9a84c]">
-                {item.label}
+                {t(item.key)}
               </Link>
             ))}
           </div>
@@ -225,7 +278,7 @@ export default function Header() {
               {categories.map(cat => (
                 <Link key={cat.slug} href={`/catalogo?category=${cat.slug}`} onClick={() => setDrawerOpen(false)}
                   className="py-1.5 px-1 text-sm font-body text-[#2a170f]/75 hover:text-[#004317] transition-colors rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]">
-                  {cat.emoji} {cat.label}
+                  {cat.emoji} {tCat(cat.key)}
                 </Link>
               ))}
             </div>

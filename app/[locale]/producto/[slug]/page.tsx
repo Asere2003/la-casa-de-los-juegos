@@ -8,6 +8,7 @@ import ProductGallery from '@/components/producto/ProductGallery'
 import ProductInfo from '@/components/producto/ProductInfo'
 import ProductMeta from '@/components/producto/ProductMeta'
 import RelatedProducts from '@/components/producto/RelatedProducts'
+import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
 export async function generateMetadata(
@@ -15,7 +16,8 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await params
   const product = getProductBySlug(slug)
-  if (!product) return { title: 'Producto no encontrado' }
+  const t = await getTranslations('common')
+  if (!product) return { title: t('error') }
   return {
     title: product.name,
     description: product.description?.split('\n')[0] || '',

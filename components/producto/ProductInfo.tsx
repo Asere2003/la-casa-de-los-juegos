@@ -2,6 +2,7 @@
 
 import type { Product } from '@/types'
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 interface Props {
   product: Product
@@ -9,6 +10,8 @@ interface Props {
 
 export default function ProductInfo({ product }: Props) {
   const [wishlisted, setWishlisted] = useState(false)
+  const t = useTranslations('product')
+  const tCommon = useTranslations('common')
 
   const isLowStock   = product.stock > 0 && product.stock <= 3
   const isOutOfStock = product.stock === 0
@@ -25,7 +28,7 @@ export default function ProductInfo({ product }: Props) {
         <div className="flex items-center gap-2">
           {isOutOfStock && (
             <span className="bg-[#717a6f] text-white font-mono text-[9px] uppercase tracking-wider px-3 py-1.5" style={{ borderRadius: '99px' }}>
-              Agotado
+              {tCommon('sold_out')}
             </span>
           )}
           {isLowStock && !isOutOfStock && (
@@ -34,7 +37,7 @@ export default function ProductInfo({ product }: Props) {
                 <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
                 <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
               </svg>
-              Solo {product.stock} {product.stock === 1 ? 'unidad' : 'unidades'}
+              {t('only_left', { count: product.stock })}
             </span>
           )}
           {!isOutOfStock && !isLowStock && (
@@ -42,7 +45,7 @@ export default function ProductInfo({ product }: Props) {
               <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <circle cx="12" cy="12" r="10"/>
               </svg>
-              En stock
+              {t('in_stock')}
             </span>
           )}
         </div>
@@ -50,7 +53,7 @@ export default function ProductInfo({ product }: Props) {
         {/* Wishlist */}
         <button
           onClick={() => setWishlisted(v => !v)}
-          aria-label={wishlisted ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+          aria-label={wishlisted ? t('remove_from_wishlist') : t('add_to_wishlist')}
           aria-pressed={wishlisted}
           className="text-[#717a6f] hover:text-[#ba1a1a] transition-colors p-2 focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded"
         >

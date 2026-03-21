@@ -1,13 +1,15 @@
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 
 type HeroSectionProps = {
   image: string
 }
 
 export default function HeroSection({ image }: HeroSectionProps) {
+  const t = useTranslations('home')
   return (
-    <section className="relative min-h-[90dvh] md:min-h-screen flex items-center overflow-hidden bg-[var(--color-primary-container)]" aria-label="Bienvenida">
+    <section className="relative min-h-[90dvh] md:min-h-screen flex items-center overflow-hidden bg-[var(--color-primary-container)]" aria-label={t('hero_title')}>
       <div className="absolute inset-0 z-0" aria-hidden="true">
         <Image src={image} alt="" fill priority className="object-cover opacity-40" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#002108]/95 via-[#004317]/75 to-transparent" />
@@ -18,22 +20,20 @@ export default function HeroSection({ image }: HeroSectionProps) {
         <div className="max-w-xl">
           <p className="font-mono text-[var(--color-gold)]/80 text-xs uppercase tracking-[0.3em] mb-5">Granada · Est. 2024</p>
           <h1 className="font-headline text-5xl md:text-7xl text-white leading-[1.05] tracking-tight mb-6">
-            Bienvenido a<br />
-            <em className="text-[var(--color-gold)]">la casa</em><br />
-            de los juegos
+            {t('hero_title')}
           </h1>
           <p className="font-body italic text-lg md:text-xl text-white/70 mb-10 leading-relaxed max-w-md">
-            Juegos de mesa, puzzles, ajedrez y mil curiosidades lúdicas de todo el mundo.
+            {t('hero_subtitle')}
           </p>
           <div className="flex flex-wrap gap-4">
             <Link href="/catalogo" className="btn-gold text-sm">
-              Explorar tienda
+              {t('hero_cta')}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
             <Link href="/historia" className="btn-outline border-[var(--color-gold)]/50 text-[var(--color-gold)] hover:bg-[var(--color-gold)]/10 hover:text-[var(--color-gold)] text-sm not-italic">
-              Nuestra Historia
+              {t('hero_secondary')}
             </Link>
           </div>
         </div>
@@ -41,7 +41,7 @@ export default function HeroSection({ image }: HeroSectionProps) {
 
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[var(--color-gold)]/50 z-10" aria-hidden="true">
         <div className="w-px h-8 bg-[var(--color-gold)]/30 animate-pulse" />
-        <span className="font-mono text-[9px] uppercase tracking-widest">Explorar</span>
+        <span className="font-mono text-[9px] uppercase tracking-widest">{t('hero_cta')}</span>
       </div>
     </section>
   )

@@ -1,13 +1,13 @@
 'use client'
 
-import Link from 'next/link'
+import { Link, usePathname } from '@/i18n/navigation'
 import { useCartStore } from '@/store/cartStore'
-import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 const links = [
   {
-    href: '/',
-    label: 'Inicio',
+    href: '/' as const,
+    key: 'home',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
         <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -16,8 +16,8 @@ const links = [
     ),
   },
   {
-    href: '/catalogo',
-    label: 'Catálogo',
+    href: '/catalogo' as const,
+    key: 'catalogue',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
         <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
@@ -26,8 +26,8 @@ const links = [
     ),
   },
   {
-    href: '/carrito',
-    label: 'Carrito',
+    href: '/carrito' as const,
+    key: 'cart',
     isCart: true,
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -38,8 +38,8 @@ const links = [
     ),
   },
   {
-    href: '/historia',
-    label: 'Historia',
+    href: '/historia' as const,
+    key: 'history',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
@@ -48,8 +48,8 @@ const links = [
     ),
   },
   {
-    href: '/cuenta',
-    label: 'Cuenta',
+    href: '/cuenta' as const,
+    key: 'account',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -63,6 +63,7 @@ export default function BottomNav() {
   const pathname   = usePathname()
   const items = useCartStore(s => s.items)
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
+  const t = useTranslations('nav')
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/'
@@ -78,11 +79,12 @@ export default function BottomNav() {
       {links.map(link => {
         const active = isActive(link.href)
         const count  = link.isCart ? totalItems : 0
+        const label = t(link.key)
         return (
           <Link
             key={link.href}
             href={link.href}
-            aria-label={link.label}
+            aria-label={label}
             aria-current={active ? 'page' : undefined}
             className={`
               relative flex flex-col items-center justify-center
@@ -102,7 +104,7 @@ export default function BottomNav() {
                 </span>
               )}
             </span>
-            <span className="font-mono text-[9px] uppercase tracking-wider mt-0.5">{link.label}</span>
+            <span className="font-mono text-[9px] uppercase tracking-wider mt-0.5">{label}</span>
           </Link>
         )
       })}

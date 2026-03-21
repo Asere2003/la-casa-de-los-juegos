@@ -1,6 +1,22 @@
 'use client'
 
-import type { CatalogFilters } from '@/app/catalogo/CatalogoContent'
+import type { CatalogFilters } from '@/types/catalog'
+import { useTranslations } from 'next-intl'
+
+const CATEGORY_EMOJI: Record<string, string> = {
+  ajedrez: '♟', puzzles: '🧩', 'juegos-mesa': '🎲', rol: '🐉',
+  clasicos: '🎭', 'del-mundo': '🌍', cartas: '🃏', habilidad: '🪀',
+}
+
+const CATEGORY_KEY: Record<string, string> = {
+  ajedrez: 'chess', puzzles: 'puzzles', 'juegos-mesa': 'boardgames', rol: 'rpg',
+  clasicos: 'classics', 'del-mundo': 'world', cartas: 'cards', habilidad: 'skill',
+}
+
+const DIFFICULTY_KEY: Record<string, string> = {
+  familiar: 'difficulty_family', medio: 'difficulty_medium',
+  avanzado: 'difficulty_advanced', experto: 'difficulty_expert',
+}
 
 interface Props {
   filters: CatalogFilters
@@ -8,38 +24,38 @@ interface Props {
   onClearAll: () => void
 }
 
-const LABELS: Record<string, string> = {
-  ajedrez:     '♟ Ajedrez',
-  puzzles:     '🧩 Puzzles',
-  'juegos-mesa':'🎲 Juegos de Mesa',
-  rol:         '🐉 Rol',
-  clasicos:    '🎭 Clásicos',
-  'del-mundo': '🌍 Del Mundo',
-  cartas:      '🃏 Cartas',
-  habilidad:   '🪀 Habilidad',
-  familiar:    'Familiar',
-  medio:       'Medio',
-  avanzado:    'Avanzado',
-  experto:     'Experto',
-  '1': '1 jugador',
-  '2': '2 jugadores',
-  '4': '2–4 jugadores',
-  '6': '4–8 jugadores',
-}
-
 export default function ActiveFilters({ filters, onRemove, onClearAll }: Props) {
+  const t = useTranslations('catalogue')
+  const tCat = useTranslations('categories')
+
+  function getLabel(key: keyof CatalogFilters, value: string | number): string {
+    if (key === 'category') {
+      const emoji = CATEGORY_EMOJI[value] || ''
+      const catKey = CATEGORY_KEY[value]
+      return catKey ? `${emoji} ${tCat(catKey)}` : String(value)
+    }
+    if (key === 'difficulty') {
+      const dKey = DIFFICULTY_KEY[value]
+      return dKey ? t(dKey) : String(value)
+    }
+    if (key === 'players') return t(`players_${value}`)
+    if (key === 'maxPrice') return t('price_up_to', { price: value })
+    if (key === 'search') return `"${value}"`
+    return String(value)
+  }
+
   const pills: { key: keyof CatalogFilters; label: string }[] = []
 
-  if (filters.category)   pills.push({ key: 'category',   label: LABELS[filters.category]   || filters.category })
-  if (filters.difficulty) pills.push({ key: 'difficulty', label: LABELS[filters.difficulty] || filters.difficulty })
-  if (filters.players)    pills.push({ key: 'players',    label: LABELS[filters.players]    || filters.players })
-  if (filters.search)     pills.push({ key: 'search',     label: `"${filters.search}"` })
-  if (filters.maxPrice < 500) pills.push({ key: 'maxPrice', label: `Hasta ${filters.maxPrice}€` })
+  if (filters.category)   pills.push({ key: 'category',   label: getLabel('category', filters.category) })
+  if (filters.difficulty) pills.push({ key: 'difficulty', label: getLabel('difficulty', filters.difficulty) })
+  if (filters.players)    pills.push({ key: 'players',    label: getLabel('players', filters.players) })
+  if (filters.search)     pills.push({ key: 'search',     label: getLabel('search', filters.search) })
+  if (filters.maxPrice < 500) pills.push({ key: 'maxPrice', label: getLabel('maxPrice', filters.maxPrice) })
 
   if (pills.length === 0) return null
 
   return (
-    <div className="flex flex-wrap items-center gap-2" role="list" aria-label="Filtros activos">
+    <div className="flex flex-wrap items-center gap-2" role="list" aria-label={t('active_filters')}>
       {pills.map(pill => (
         <span
           key={pill.key}
@@ -50,7 +66,7 @@ export default function ActiveFilters({ filters, onRemove, onClearAll }: Props) 
           {pill.label}
           <button
             onClick={() => onRemove(pill.key)}
-            aria-label={`Quitar filtro ${pill.label}`}
+            aria-label={t('remove_filter', { label: pill.label })}
             className="hover:text-[#c9a84c] transition-colors focus-visible:ring-1 focus-visible:ring-[#c9a84c] rounded-full ml-0.5"
           >
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden="true">
@@ -66,7 +82,7 @@ export default function ActiveFilters({ filters, onRemove, onClearAll }: Props) 
           className="inline-flex items-center gap-1 bg-[#fff8f6] text-[#2a170f] border border-[#c0c9bc]/50 font-mono text-[9px] uppercase tracking-wide px-3 py-1.5 hover:border-[#c9a84c] hover:text-[#004317] transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
           style={{ borderRadius: '99px' }}
         >
-          Limpiar todo
+          {t('clear_all')}
         </button>
       )}
     </div>

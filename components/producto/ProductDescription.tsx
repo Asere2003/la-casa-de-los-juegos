@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 interface Props {
   description?: string
@@ -8,6 +9,7 @@ interface Props {
 
 export default function ProductDescription({ description }: Props) {
   const [expanded, setExpanded] = useState(false)
+  const t = useTranslations('product')
 
   if (!description) return null
 
@@ -16,7 +18,7 @@ export default function ProductDescription({ description }: Props) {
 
   return (
     <div className="border-t border-[#c0c9bc]/20 pt-5">
-      <h2 className="font-headline italic text-lg text-[#2a170f] mb-3">Descripción</h2>
+      <h2 className="font-headline italic text-lg text-[#2a170f] mb-3">{t('description')}</h2>
 
       <div
         className={`relative overflow-hidden transition-all duration-500 ${
@@ -45,7 +47,7 @@ export default function ProductDescription({ description }: Props) {
           onClick={() => setExpanded(v => !v)}
           className="mt-2 font-body italic text-sm text-[#004317] hover:text-[#1a5c2a] transition-colors flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded"
         >
-          {expanded ? 'Ver menos' : 'Leer más'}
+          {expanded ? t('read_less') : t('read_more')}
           <svg
             width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
             className={`transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`}

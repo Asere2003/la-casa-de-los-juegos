@@ -1,9 +1,10 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import type { Product } from '@/types'
 import { useCartStore } from '@/store/cartStore'
+import { useTranslations } from 'next-intl'
 
 // ── ProductCard ──────────────────────────────────────────
 interface CardProps {
@@ -13,6 +14,10 @@ interface CardProps {
 
 function ProductCard({ product, index }: CardProps) {
   const addItem = useCartStore(s => s.addItem)
+  const t = useTranslations('catalogue')
+  const tCommon = useTranslations('common')
+  const tProduct = useTranslations('product')
+  const tA11y = useTranslations('accessibility')
 
   const isLowStock  = product.stock > 0 && product.stock <= 3
   const isOutOfStock = product.stock === 0
@@ -67,12 +72,12 @@ function ProductCard({ product, index }: CardProps) {
         <div className="absolute top-3 right-3 flex flex-col gap-1 items-end">
           {isOutOfStock && (
             <span className="bg-[#717a6f] text-white text-[8px] font-mono px-2 py-0.5 uppercase tracking-tighter" style={{ borderRadius: '2px' }}>
-              Agotado
+              {tCommon('sold_out')}
             </span>
           )}
           {isLowStock && !isOutOfStock && (
             <span className="bg-[#ba1a1a] text-white text-[8px] font-mono px-2 py-0.5 uppercase tracking-tighter" style={{ borderRadius: '2px' }}>
-              Últimas unidades
+              {t('last_units')}
             </span>
           )}
           {hasDiscount && !isOutOfStock && (
@@ -137,11 +142,11 @@ function ProductCard({ product, index }: CardProps) {
           </div>
 
           {isOutOfStock ? (
-            <span className="font-mono text-[9px] text-[#717a6f] uppercase tracking-wide">Sin stock</span>
+            <span className="font-mono text-[9px] text-[#717a6f] uppercase tracking-wide">{tProduct('out_of_stock')}</span>
           ) : (
             <button
               onClick={() => addItem(product, 1)}
-              aria-label={`Añadir ${product.name} al carrito`}
+              aria-label={tA11y('add_to_cart', { name: product.name })}
               className="bg-[#004317] text-white p-1.5 hover:rotate-[-2deg] hover:bg-[#1a5c2a] transition-all active:scale-90 focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
               style={{ borderRadius: '2px' }}
             >
@@ -165,6 +170,7 @@ interface GridProps {
 }
 
 export default function ProductGrid({ products, loading }: GridProps) {
+  const t = useTranslations('catalogue')
 
   if (loading) {
     return (
@@ -189,10 +195,10 @@ export default function ProductGrid({ products, loading }: GridProps) {
       <div className="flex flex-col items-center justify-center py-24 text-center">
         <span className="text-6xl mb-6" aria-hidden="true">🔍</span>
         <h3 className="font-headline italic text-2xl text-[#2a170f] mb-2">
-          No encontramos nada
+          {t('no_results')}
         </h3>
         <p className="font-body italic text-[#717a6f] text-lg">
-          Prueba a cambiar o quitar algunos filtros
+          {t('no_results_hint')}
         </p>
       </div>
     )
@@ -209,7 +215,7 @@ export default function ProductGrid({ products, loading }: GridProps) {
       <div
         className="grid grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6"
         role="list"
-        aria-label="Productos del catálogo"
+        aria-label={t('product_list')}
       >
         {products.map((product, i) => (
           <div key={product.id} role="listitem">

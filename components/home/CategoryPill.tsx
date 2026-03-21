@@ -1,5 +1,5 @@
 import type { CategoryItem } from '@/types/home'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 
 type CategoryPillProps = {
   item: CategoryItem

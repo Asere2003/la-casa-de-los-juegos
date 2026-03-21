@@ -4,6 +4,16 @@ export type CatalogSearchParams = {
   sort?: string
 }
 
+export interface CatalogFilters {
+  category:   string
+  minPrice:   number
+  maxPrice:   number
+  difficulty: string
+  players:    string
+  search:     string
+  sort:       string
+}
+
 export type CatalogProduct = {
   id: string
   name: string

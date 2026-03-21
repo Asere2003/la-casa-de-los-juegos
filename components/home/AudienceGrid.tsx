@@ -1,16 +1,18 @@
 import type { AudienceGroupItem } from '@/types/home'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import SectionHeading from '@/components/home/SectionHeading'
+import { useTranslations } from 'next-intl'
 
 type AudienceGridProps = {
   items: AudienceGroupItem[]
 }
 
 export default function AudienceGrid({ items }: AudienceGridProps) {
+  const t = useTranslations('home')
   return (
     <section className="py-16 bg-[var(--color-surface-low)]" aria-labelledby="ages-title">
       <div className="px-6 max-w-7xl mx-auto">
-        <SectionHeading eyebrow="Para cada momento" title="¿Para quién juegas?" centered className="mb-10" />
+        <SectionHeading eyebrow={t('ages_label')} title={t('ages_title')} centered className="mb-10" />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {items.map((group) => (
             <Link

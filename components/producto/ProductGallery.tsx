@@ -3,6 +3,7 @@
 import { useCallback, useState } from 'react'
 
 import CloudinaryImage from '@/components/shared/CloudinaryImage'
+import { useTranslations } from 'next-intl'
 
 interface Props {
   images: string[]
@@ -11,6 +12,8 @@ interface Props {
 
 export default function ProductGallery({ images, name }: Props) {
   const [current, setCurrent] = useState(0)
+  const t = useTranslations('product')
+  const tA11y = useTranslations('accessibility')
 
   const prev = useCallback(() => setCurrent(i => (i - 1 + images.length) % images.length), [images.length])
   const next = useCallback(() => setCurrent(i => (i + 1) % images.length), [images.length])
@@ -30,13 +33,13 @@ export default function ProductGallery({ images, name }: Props) {
         onKeyDown={handleKeyDown}
         tabIndex={0}
         role="region"
-        aria-label={`Galería de imágenes de ${name}`}
+        aria-label={t('gallery', { name })}
         aria-roledescription="carrusel"
       >
         <CloudinaryImage
           key={current}
           src={images[current]}
-          alt={`${name} — imagen ${current + 1} de ${images.length}`}
+          alt={t('image_n_of', { name, current: current + 1, total: images.length })}
           fill
           priority={current === 0}
           sizes="(max-width: 1024px) 100vw, 58vw"
@@ -51,7 +54,7 @@ export default function ProductGallery({ images, name }: Props) {
           <>
             <button
               onClick={prev}
-              aria-label="Imagen anterior"
+              aria-label={tA11y('prev_image')}
               className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#fff8f6]/80 backdrop-blur-sm flex items-center justify-center text-[#2a170f] opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#fff8f6] shadow-warm focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
               style={{ borderRadius: '2px' }}
             >
@@ -61,7 +64,7 @@ export default function ProductGallery({ images, name }: Props) {
             </button>
             <button
               onClick={next}
-              aria-label="Siguiente imagen"
+              aria-label={tA11y('next_image')}
               className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#fff8f6]/80 backdrop-blur-sm flex items-center justify-center text-[#2a170f] opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#fff8f6] shadow-warm focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
               style={{ borderRadius: '2px' }}
             >
@@ -74,13 +77,13 @@ export default function ProductGallery({ images, name }: Props) {
 
         {/* Dots navegación */}
         {images.length > 1 && (
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5" role="tablist" aria-label="Seleccionar imagen">
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5" role="tablist" aria-label={t('select_image')}>
             {images.map((_, i) => (
               <button
                 key={i}
                 role="tab"
                 aria-selected={i === current}
-                aria-label={`Imagen ${i + 1}`}
+                aria-label={t('image_n', { n: i + 1 })}
                 onClick={() => setCurrent(i)}
                 className={`transition-all duration-300 focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded-full ${
                   i === current
@@ -102,13 +105,13 @@ export default function ProductGallery({ images, name }: Props) {
 
       {/* Thumbnails */}
       {images.length > 1 && (
-        <div className="grid grid-cols-4 gap-3" role="list" aria-label="Miniaturas de imágenes">
+        <div className="grid grid-cols-4 gap-3" role="list" aria-label={t('select_image')}>
           {images.map((img, i) => (
             <button
               key={i}
               role="listitem"
               onClick={() => setCurrent(i)}
-              aria-label={`Ver imagen ${i + 1}`}
+              aria-label={t('view_image_n', { n: i + 1 })}
               aria-pressed={i === current}
               className={`relative aspect-square overflow-hidden transition-all focus-visible:ring-2 focus-visible:ring-[#c9a84c] ${
                 i === current

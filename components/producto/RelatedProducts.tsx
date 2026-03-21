@@ -1,6 +1,9 @@
+'use client'
+
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import type { Product } from '@/types'
+import { useTranslations } from 'next-intl'
 
 interface Props {
   products: Product[]
@@ -8,6 +11,9 @@ interface Props {
 }
 
 export default function RelatedProducts({ products, currentSlug }: Props) {
+  const t = useTranslations('product')
+  const tCommon = useTranslations('common')
+
   const filtered = products.filter(p => p.slug !== currentSlug).slice(0, 4)
   if (filtered.length === 0) return null
 
@@ -17,19 +23,19 @@ export default function RelatedProducts({ products, currentSlug }: Props) {
       {/* Header */}
       <div className="flex items-center gap-6 mb-10">
         <h2 id="related-title" className="font-headline text-2xl md:text-3xl italic text-[#2a170f] shrink-0">
-          También te puede gustar
+          {t('related')}
         </h2>
         <div className="flex-1 h-px bg-[#c0c9bc]/25" aria-hidden="true"/>
         <Link
           href="/catalogo"
           className="shrink-0 font-mono text-[9px] uppercase tracking-widest text-[#c9a84c] border-b border-[#c9a84c]/30 pb-0.5 hover:text-[#004317] hover:border-[#004317]/30 transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded"
         >
-          Ver todos
+          {tCommon('see_all')}
         </Link>
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7" role="list" aria-label="Productos relacionados">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7" role="list" aria-label={t('related_list')}>
         {filtered.map(product => (
           <article
             key={product.id}
@@ -40,7 +46,7 @@ export default function RelatedProducts({ products, currentSlug }: Props) {
             <Link
               href={`/producto/${product.slug}`}
               className="block relative aspect-[3/4] overflow-hidden focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
-              aria-label={`Ver ${product.name}`}
+              aria-label={product.name}
             >
               {product.images?.[0] ? (
                 <Image
@@ -77,7 +83,7 @@ export default function RelatedProducts({ products, currentSlug }: Props) {
                 </span>
                 <Link
                   href={`/producto/${product.slug}`}
-                  aria-label={`Ver ${product.name}`}
+                  aria-label={product.name}
                   className="text-[#004317] hover:scale-110 transition-transform focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded p-1"
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">

@@ -4,21 +4,12 @@ import { useCallback, useState } from 'react'
 
 import ActiveFilters from '@/components/catalogo/ActiveFilters'
 import CatalogHeader from '@/components/catalogo/CatalogHeader'
+import type { CatalogFilters } from '@/types/catalog'
 import FilterSidebar from '@/components/catalogo/FilterSidebar'
 import { MOCK_PRODUCTS } from '@/lib/mockData'
 import ProductGrid from '@/components/catalogo/ProductGrid'
 import SortSelect from '@/components/catalogo/SortSelect'
-import { useRouter } from 'next/navigation'
-
-export interface CatalogFilters {
-  category:   string
-  minPrice:   number
-  maxPrice:   number
-  difficulty: string
-  players:    string
-  search:     string
-  sort:       string
-}
+import { useRouter } from '@/i18n/navigation'
 
 interface SearchParams {
   category?: string

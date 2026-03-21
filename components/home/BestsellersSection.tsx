@@ -1,18 +1,20 @@
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import type { ProductCardItem } from '@/types/home'
 import SectionHeading from '@/components/home/SectionHeading'
 import { formatEuro } from '@/lib/format'
+import { useTranslations } from 'next-intl'
 
 type BestsellersSectionProps = {
   items: ProductCardItem[]
 }
 
 export default function BestsellersSection({ items }: BestsellersSectionProps) {
+  const t = useTranslations('home')
   return (
     <section className="py-20 bg-[var(--color-surface)]" aria-labelledby="bestsellers-title">
       <div className="px-6 md:px-10 max-w-7xl mx-auto">
-        <SectionHeading eyebrow="Los favoritos" title="Favoritos de la Casa" centered />
+        <SectionHeading eyebrow={t('bestsellers_label')} title={t('bestsellers_title')} centered />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-end">
           {items.map((product) => (

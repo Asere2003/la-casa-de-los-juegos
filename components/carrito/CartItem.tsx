@@ -1,9 +1,10 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import type { LocalCartItem } from '@/types'
 import { useCartStore } from '@/store/cartStore'
+import { useTranslations } from 'next-intl'
 
 interface Props {
   item: LocalCartItem
@@ -12,6 +13,8 @@ interface Props {
 export default function CartItem({ item }: Props) {
   const removeItem  = useCartStore(s => s.removeItem)
   const updateQty   = useCartStore(s => s.updateQuantity)
+  const t = useTranslations('cart')
+  const tA11y = useTranslations('accessibility')
   const { product, quantity } = item
 
   const isLowStock = product.stock > 0 && product.stock <= 3
@@ -24,7 +27,7 @@ export default function CartItem({ item }: Props) {
         href={`/producto/${product.slug}`}
         className="w-full sm:w-28 h-36 sm:h-28 shrink-0 overflow-hidden bg-[#fff1ec] focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
         style={{ borderRadius: '2px' }}
-        aria-label={`Ver ${product.name}`}
+        aria-label={tA11y('product_image', { name: product.name })}
       >
         {product.images?.[0] ? (
           <Image
@@ -68,7 +71,7 @@ export default function CartItem({ item }: Props) {
           {/* Botón eliminar */}
           <button
             onClick={() => removeItem(product.id)}
-            aria-label={`Eliminar ${product.name} del carrito`}
+            aria-label={tA11y('remove_from_cart', { name: product.name })}
             className="shrink-0 text-[#c0c9bc] hover:text-[#ba1a1a] transition-colors p-1.5 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -84,13 +87,13 @@ export default function CartItem({ item }: Props) {
           {/* Selector cantidad */}
           <div
             role="group"
-            aria-label={`Cantidad de ${product.name}`}
+            aria-label={`${product.name}`}
             className="flex items-center border border-[#c0c9bc]/40 bg-[#fff1ec]"
             style={{ borderRadius: '2px' }}
           >
             <button
               onClick={() => updateQty(product.id, quantity - 1)}
-              aria-label="Reducir cantidad"
+              aria-label={tA11y('decrease_qty')}
               className="w-9 h-9 flex items-center justify-center hover:bg-[#ffe9e2] transition-colors font-mono text-[#004317] text-lg focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
             >
               −
@@ -104,7 +107,7 @@ export default function CartItem({ item }: Props) {
             </span>
             <button
               onClick={() => updateQty(product.id, quantity + 1)}
-              aria-label="Aumentar cantidad"
+              aria-label={tA11y('increase_qty')}
               disabled={quantity >= product.stock}
               className="w-9 h-9 flex items-center justify-center hover:bg-[#ffe9e2] transition-colors font-mono text-[#004317] text-lg disabled:opacity-40 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
             >
@@ -116,7 +119,7 @@ export default function CartItem({ item }: Props) {
           <div className="text-right">
             {isLowStock && (
               <p className="font-mono text-[8px] text-[#ba1a1a] uppercase tracking-wide mb-1">
-                Solo {product.stock} disponibles
+                {t('only_available', { count: product.stock })}
               </p>
             )}
             <span className="font-mono text-lg font-bold text-[#2a170f]">

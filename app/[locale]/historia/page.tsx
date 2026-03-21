@@ -1,5 +1,5 @@
 import HeroHistoria from '@/components/historia/HeroHistoria'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import type { Metadata } from 'next'
 import Timeline from '@/components/historia/Timeline'
 import VintagePhoto from '@/components/historia/VintagePhoto'
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function HistoriaPage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       {/* Hero Section */}
       <HeroHistoria />
 

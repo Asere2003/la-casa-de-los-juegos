@@ -2,24 +2,25 @@
 
 import { useEffect, useRef } from 'react'
 
-import type { CatalogFilters } from '@/app/catalogo/CatalogoContent'
+import type { CatalogFilters } from '@/types/catalog'
+import { useTranslations } from 'next-intl'
 
 const CATEGORIES = [
-  { slug: 'ajedrez',    label: 'Ajedrez',        emoji: '♟',  count: 12 },
-  { slug: 'puzzles',    label: 'Puzzles',         emoji: '🧩', count: 38 },
-  { slug: 'juegos-mesa',label: 'Juegos de Mesa',  emoji: '🎲', count: 64 },
-  { slug: 'rol',        label: 'Rol & Estrategia',emoji: '🐉', count: 21 },
-  { slug: 'clasicos',   label: 'Clásicos',        emoji: '🎭', count: 29 },
-  { slug: 'del-mundo',  label: 'Del Mundo',       emoji: '🌍', count: 17 },
-  { slug: 'cartas',     label: 'Cartas',          emoji: '🃏', count: 45 },
-  { slug: 'habilidad',  label: 'Habilidad',       emoji: '🪀', count: 8  },
+  { slug: 'ajedrez',    key: 'chess' as const,      emoji: '♟',  count: 12 },
+  { slug: 'puzzles',    key: 'puzzles' as const,     emoji: '🧩', count: 38 },
+  { slug: 'juegos-mesa',key: 'boardgames' as const,  emoji: '🎲', count: 64 },
+  { slug: 'rol',        key: 'rpg' as const,         emoji: '🐉', count: 21 },
+  { slug: 'clasicos',   key: 'classics' as const,    emoji: '🎭', count: 29 },
+  { slug: 'del-mundo',  key: 'world' as const,       emoji: '🌍', count: 17 },
+  { slug: 'cartas',     key: 'cards' as const,       emoji: '🃏', count: 45 },
+  { slug: 'habilidad',  key: 'skill' as const,       emoji: '🪀', count: 8  },
 ]
 
 const DIFFICULTIES = [
-  { value: 'familiar', label: 'Familiar' },
-  { value: 'medio',    label: 'Medio'    },
-  { value: 'avanzado', label: 'Avanzado' },
-  { value: 'experto',  label: 'Experto'  },
+  { value: 'familiar', key: 'difficulty_family' as const },
+  { value: 'medio',    key: 'difficulty_medium' as const },
+  { value: 'avanzado', key: 'difficulty_advanced' as const },
+  { value: 'experto',  key: 'difficulty_expert' as const },
 ]
 
 const PLAYERS = [
@@ -39,6 +40,9 @@ interface Props {
 
 export default function FilterSidebar({ filters, onChange, onClear, isOpen, onClose }: Props) {
   const sheetRef = useRef<HTMLDivElement>(null)
+  const t = useTranslations('catalogue')
+  const tCat = useTranslations('categories')
+  const tA11y = useTranslations('accessibility')
 
   // Cerrar con Escape
   useEffect(() => {
@@ -65,16 +69,16 @@ export default function FilterSidebar({ filters, onChange, onClear, isOpen, onCl
             <line x1="8" y1="12" x2="16" y2="12"/>
             <line x1="11" y1="18" x2="13" y2="18"/>
           </svg>
-          Filtros
+          {t('filters')}
         </h2>
         <button onClick={onClear}
           className="font-mono text-[9px] uppercase tracking-wide text-[#717a6f] hover:text-[#004317] transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded">
-          Limpiar todo
+          {t('clear')}
         </button>
       </div>
 
       {/* ── Categoría ── */}
-      <FilterSection title="Categoría">
+      <FilterSection title={t('category')}>
         <div className="space-y-2">
           {CATEGORIES.map(cat => (
             <label key={cat.slug} className="flex items-center gap-3 cursor-pointer group">
@@ -83,10 +87,10 @@ export default function FilterSidebar({ filters, onChange, onClear, isOpen, onCl
                 checked={filters.category === cat.slug}
                 onChange={e => onChange({ category: e.target.checked ? cat.slug : '' })}
                 className="w-4 h-4 rounded-sm border-[#c0c9bc] text-[#004317] focus:ring-[#c9a84c] cursor-pointer"
-                aria-label={`Filtrar por ${cat.label}`}
+                aria-label={tCat(cat.key)}
               />
               <span className="flex-1 text-sm font-body group-hover:text-[#004317] transition-colors">
-                <span aria-hidden="true">{cat.emoji}</span> {cat.label}
+                <span aria-hidden="true">{cat.emoji}</span> {tCat(cat.key)}
               </span>
               <span className="font-mono text-[9px] text-[#717a6f]">{cat.count}</span>
             </label>
@@ -95,7 +99,7 @@ export default function FilterSidebar({ filters, onChange, onClear, isOpen, onCl
       </FilterSection>
 
       {/* ── Precio ── */}
-      <FilterSection title="Precio máximo">
+      <FilterSection title={t('price')}>
         <div>
           <input
             type="range"
@@ -103,7 +107,7 @@ export default function FilterSidebar({ filters, onChange, onClear, isOpen, onCl
             value={filters.maxPrice}
             onChange={e => onChange({ maxPrice: Number(e.target.value) })}
             className="w-full accent-[#c9a84c] cursor-pointer"
-            aria-label={`Precio máximo: ${filters.maxPrice}€`}
+            aria-label={`${t('price')}: ${filters.maxPrice}€`}
           />
           <div className="flex justify-between font-mono text-[10px] text-[#717a6f] mt-1.5">
             <span>0€</span>
@@ -113,8 +117,8 @@ export default function FilterSidebar({ filters, onChange, onClear, isOpen, onCl
       </FilterSection>
 
       {/* ── Dificultad ── */}
-      <FilterSection title="Dificultad">
-        <div className="flex flex-wrap gap-2" role="group" aria-label="Filtrar por dificultad">
+      <FilterSection title={t('difficulty')}>
+        <div className="flex flex-wrap gap-2" role="group" aria-label={t('difficulty')}>
           {DIFFICULTIES.map(d => (
             <button
               key={d.value}
@@ -127,15 +131,15 @@ export default function FilterSidebar({ filters, onChange, onClear, isOpen, onCl
               }`}
               style={{ borderRadius: '2px' }}
             >
-              {d.label}
+              {t(d.key)}
             </button>
           ))}
         </div>
       </FilterSection>
 
       {/* ── Jugadores ── */}
-      <FilterSection title="Nº Jugadores">
-        <div className="flex flex-wrap gap-2" role="group" aria-label="Filtrar por número de jugadores">
+      <FilterSection title={t('players')}>
+        <div className="flex flex-wrap gap-2" role="group" aria-label={t('players')}>
           {PLAYERS.map(p => (
             <button
               key={p.value}
@@ -160,7 +164,7 @@ export default function FilterSidebar({ filters, onChange, onClear, isOpen, onCl
     <>
       {/* ── Sidebar desktop ── */}
       <aside className="hidden md:block w-56 shrink-0 sticky top-24 self-start max-h-[calc(100vh-6rem)] overflow-y-auto pr-2"
-        aria-label="Filtros de catálogo">
+        aria-label={t('filters')}>
         <FilterContent/>
       </aside>
 
@@ -178,13 +182,13 @@ export default function FilterSidebar({ filters, onChange, onClear, isOpen, onCl
           ref={sheetRef}
           role="dialog"
           aria-modal="true"
-          aria-label="Filtros de catálogo"
+          aria-label={t('filters')}
           className={`fixed inset-x-0 bottom-0 z-[60] bg-[#fff8f6] rounded-t-2xl shadow-2xl transition-transform duration-400 max-h-[85dvh] overflow-y-auto ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
         >
           {/* Handle */}
           <div className="sticky top-0 bg-[#fff8f6] border-b border-[#c0c9bc]/20 px-5 py-4 flex items-center justify-between z-10">
-            <h2 className="font-headline text-lg text-[#2a170f]">Filtros</h2>
-            <button onClick={onClose} aria-label="Cerrar filtros"
+            <h2 className="font-headline text-lg text-[#2a170f]">{t('filters')}</h2>
+            <button onClick={onClose} aria-label={tA11y('close_menu')}
               className="text-[#717a6f] hover:text-[#2a170f] p-1 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                 <path d="M18 6 6 18M6 6l12 12"/>
@@ -198,7 +202,7 @@ export default function FilterSidebar({ filters, onChange, onClear, isOpen, onCl
             <button onClick={onClose}
               className="w-full bg-[#004317] text-white font-headline font-bold py-4 hover:bg-[#1a5c2a] transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
               style={{ borderRadius: '2px' }}>
-              Ver resultados
+              {t('view_results')}
             </button>
           </div>
         </div>

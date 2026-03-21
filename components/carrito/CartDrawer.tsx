@@ -3,8 +3,9 @@
 import { useEffect, useRef } from 'react'
 
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { useCartStore } from '@/store/cartStore'
+import { useTranslations } from 'next-intl'
 
 export default function CartDrawer() {
   const isOpen     = useCartStore(s => s.isOpen)
@@ -14,6 +15,8 @@ export default function CartDrawer() {
   const items = useCartStore(s => s.items)
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
   const totalPrice = useCartStore(s => s.totalPrice)
+  const t = useTranslations('cart')
+  const tA11y = useTranslations('accessibility')
 
   const closeRef  = useRef<HTMLButtonElement>(null)
   const drawerRef = useRef<HTMLDivElement>(null)
@@ -75,17 +78,17 @@ export default function CartDrawer() {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 bg-gradient-to-b from-[#1a5c2a] to-[#004317]">
           <div>
-            <h2 className="font-headline italic text-xl text-[#c9a84c]">Tu Carrito</h2>
+            <h2 className="font-headline italic text-xl text-[#c9a84c]">{t('title')}</h2>
             {totalItems > 0 && (
               <p className="font-mono text-[9px] uppercase tracking-widest text-[#c9a84c]/60 mt-0.5">
-                {totalItems} {totalItems === 1 ? 'artículo' : 'artículos'}
+                {t('items', { count: totalItems })}
               </p>
             )}
           </div>
           <button
             ref={closeRef}
             onClick={closeCart}
-            aria-label="Cerrar carrito"
+            aria-label={tA11y('close_menu')}
             className="text-[#c9a84c]/70 hover:text-[#c9a84c] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -106,13 +109,13 @@ export default function CartDrawer() {
                 </svg>
               </div>
               <div>
-                <p className="font-headline italic text-xl text-[#2a170f] mb-2">Tu carrito está vacío</p>
+                <p className="font-headline italic text-xl text-[#2a170f] mb-2">{t('empty')}</p>
                 <p className="font-body italic text-sm text-[#717a6f]">Explora nuestra colección y añade tus juegos favoritos</p>
               </div>
               <Link href="/catalogo" onClick={closeCart}
                 className="bg-[#004317] text-white font-headline font-bold px-8 py-3 hover:bg-[#1a5c2a] transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
                 style={{ borderRadius: '2px' }}>
-                Explorar catálogo
+                {t('empty_cta')}
               </Link>
             </div>
           ) : (
@@ -140,7 +143,7 @@ export default function CartDrawer() {
                         className="font-headline italic text-sm text-[#2a170f] hover:text-[#004317] transition-colors leading-tight focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded line-clamp-2">
                         {product.name}
                       </Link>
-                      <button onClick={() => removeItem(product.id)} aria-label={`Eliminar ${product.name}`}
+                      <button onClick={() => removeItem(product.id)} aria-label={tA11y('remove_from_cart', { name: product.name })}
                         className="shrink-0 text-[#c0c9bc] hover:text-[#ba1a1a] transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                           <polyline points="3 6 5 6 21 6"/>
@@ -152,11 +155,11 @@ export default function CartDrawer() {
                     <div className="flex justify-between items-center mt-2">
                       <div role="group" aria-label={`Cantidad de ${product.name}`}
                         className="flex items-center border border-[#c0c9bc]/40 bg-[#fff1ec] rounded-sm">
-                        <button onClick={() => updateQty(product.id, quantity - 1)} aria-label="Reducir cantidad"
+                        <button onClick={() => updateQty(product.id, quantity - 1)} aria-label={tA11y('decrease_qty')}
                           className="w-7 h-7 flex items-center justify-center hover:bg-[#ffe9e2] transition-colors font-mono text-[#004317] text-sm focus-visible:ring-2 focus-visible:ring-[#c9a84c]">−</button>
                         <span aria-live="polite" aria-label={`Cantidad: ${quantity}`}
                           className="w-8 text-center font-mono text-xs font-bold border-x border-[#c0c9bc]/40 py-1">{quantity}</span>
-                        <button onClick={() => updateQty(product.id, quantity + 1)} aria-label="Aumentar cantidad"
+                        <button onClick={() => updateQty(product.id, quantity + 1)} aria-label={tA11y('increase_qty')}
                           disabled={quantity >= product.stock}
                           className="w-7 h-7 flex items-center justify-center hover:bg-[#ffe9e2] transition-colors font-mono text-[#004317] text-sm focus-visible:ring-2 focus-visible:ring-[#c9a84c] disabled:opacity-40 disabled:cursor-not-allowed">+</button>
                       </div>
@@ -175,22 +178,22 @@ export default function CartDrawer() {
         {items.length > 0 && (
           <div className="border-t border-[#c0c9bc]/20 px-6 py-5 bg-[#fff1ec] space-y-4">
             <div className="flex justify-between items-center">
-              <span className="font-body italic text-base text-[#40493f]">Subtotal</span>
+              <span className="font-body italic text-base text-[#40493f]">{t('subtotal')}</span>
               <span className="font-mono font-bold text-[#2a170f]">{totalPrice().toFixed(2)}€</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="font-body italic text-base text-[#40493f]">Envío</span>
-              <span className="font-mono text-xs bg-[#aef3b1] text-[#004317] px-2 py-0.5 font-bold rounded-sm">GRATIS</span>
+              <span className="font-body italic text-base text-[#40493f]">{t('shipping')}</span>
+              <span className="font-mono text-xs bg-[#aef3b1] text-[#004317] px-2 py-0.5 font-bold rounded-sm">{t('free')}</span>
             </div>
             <div className="flex justify-between items-center pt-3 border-t-2 border-[#2a170f]">
-              <span className="font-headline text-lg font-bold text-[#2a170f]">Total</span>
+              <span className="font-headline text-lg font-bold text-[#2a170f]">{t('total')}</span>
               <span className="font-mono text-xl font-bold text-[#004317]">{totalPrice().toFixed(2)}€</span>
             </div>
             <div className="space-y-3 pt-1">
               <Link href="/carrito" onClick={closeCart}
                 className="w-full bg-[#004317] text-white font-headline font-bold py-4 flex items-center justify-center gap-2 hover:bg-[#1a5c2a] hover:rotate-[-0.5deg] active:scale-95 transition-all focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2"
                 style={{ borderRadius: '2px' }}>
-                Finalizar compra
+                {t('checkout')}
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
                   <polyline points="13 17 18 12 13 7"/>
                   <polyline points="6 17 11 12 6 7"/>
@@ -199,11 +202,11 @@ export default function CartDrawer() {
               <button onClick={closeCart}
                 className="w-full border border-[#c0c9bc]/60 text-[#2a170f] font-headline italic py-3 hover:border-[#004317] hover:text-[#004317] hover:bg-white transition-all focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
                 style={{ borderRadius: '2px' }}>
-                Continuar comprando
+                {t('continue')}
               </button>
             </div>
             <p className="text-center font-mono text-[9px] uppercase tracking-widest text-[#717a6f]">
-              Cada pieza empaquetada a mano con sello oficial
+              {t('packaging_note')}
             </p>
           </div>
         )}

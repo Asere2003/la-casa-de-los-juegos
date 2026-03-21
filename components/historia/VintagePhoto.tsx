@@ -72,7 +72,7 @@ export default function VintagePhoto({
         </p>
       </div>
       <div 
-        className="absolute -z-10 top-8 left-8 w-full h-full bg-tertiary/10 rounded-sm"
+        className="absolute -z-10 top-4 left-4 right-0 bottom-0 bg-tertiary/10 rounded-sm"
         aria-hidden="true"
       />
     </div>

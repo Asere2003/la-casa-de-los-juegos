@@ -5,26 +5,33 @@ import BestsellersSection from '@/components/home/BestsellersSection'
 import CategoryScroller from '@/components/home/CategoryScroller'
 import EditorialBanner from '@/components/home/EditorialBanner'
 import HeroSection from '@/components/home/HeroSection'
-import type { Metadata } from 'next'
 import NewArrivalsSection from '@/components/home/NewArrivalsSection'
+import { getTranslations } from 'next-intl/server'
 
-export const metadata: Metadata = {
-  title: 'La Casa de los Juegos — Granada',
-  description: 'Juegos de mesa, puzzles, ajedrez y curiosidades lúdicas de todo el mundo.',
+export async function generateMetadata() {
+  const t = await getTranslations('home')
+  return {
+    title: 'La Casa de los Juegos — Granada',
+    description: t('hero_subtitle'),
+  }
 }
 
-const categories: CategoryItem[] = [
-  { emoji: '♟', label: 'Ajedrez', slug: 'ajedrez' },
-  { emoji: '🧩', label: 'Puzzles', slug: 'puzzles' },
-  { emoji: '🎲', label: 'Juegos de Mesa', slug: 'juegos-mesa' },
-  { emoji: '🐉', label: 'Rol', slug: 'rol' },
-  { emoji: '🎭', label: 'Clásicos', slug: 'clasicos' },
-  { emoji: '🌍', label: 'Del Mundo', slug: 'del-mundo' },
-  { emoji: '🃏', label: 'Cartas', slug: 'cartas' },
-  { emoji: '🪀', label: 'Habilidad', slug: 'habilidad' },
-]
+export default async function HomePage() {
+  const tCat = await getTranslations('categories')
+  const tHome = await getTranslations('home')
 
-const newArrivals: ProductCardItem[] = [
+  const categories: CategoryItem[] = [
+    { emoji: '♟', label: tCat('chess'), slug: 'ajedrez' },
+    { emoji: '🧩', label: tCat('puzzles'), slug: 'puzzles' },
+    { emoji: '🎲', label: tCat('boardgames'), slug: 'juegos-mesa' },
+    { emoji: '🐉', label: tCat('rpg'), slug: 'rol' },
+    { emoji: '🎭', label: tCat('classics'), slug: 'clasicos' },
+    { emoji: '🌍', label: tCat('world'), slug: 'del-mundo' },
+    { emoji: '🃏', label: tCat('cards'), slug: 'cartas' },
+    { emoji: '🪀', label: tCat('skill'), slug: 'habilidad' },
+  ]
+
+  const newArrivals: ProductCardItem[] = [
   {
     id: '1',
     name: 'Tablero de Ajedrez de Lujo',
@@ -72,7 +79,7 @@ const newArrivals: ProductCardItem[] = [
   },
 ]
 
-const bestsellers: ProductCardItem[] = [
+  const bestsellers: ProductCardItem[] = [
   {
     id: '5',
     name: 'Tablero Go Tradicional',
@@ -106,14 +113,13 @@ const bestsellers: ProductCardItem[] = [
   },
 ]
 
-const audienceGroups: AudienceGroupItem[] = [
-  { label: 'Niños', sub: 'Mentes en Crecimiento', borderColor: '#755b00', emoji: '👶' },
-  { label: 'Familia', sub: 'Momentos Compartidos', borderColor: '#1a5c2a', emoji: '👨‍👩‍👧' },
-  { label: 'Adultos', sub: 'Estrategia y Reflexión', borderColor: '#805533', emoji: '🧠' },
-  { label: 'Expertos', sub: 'Desafíos Legendarios', borderColor: '#2c1810', emoji: '🏆' },
-]
+  const audienceGroups: AudienceGroupItem[] = [
+    { label: tHome('age_kids'), sub: tHome('age_kids_sub'), borderColor: '#755b00', emoji: '👶' },
+    { label: tHome('age_family'), sub: tHome('age_family_sub'), borderColor: '#1a5c2a', emoji: '👨‍👩‍👧' },
+    { label: tHome('age_adults'), sub: tHome('age_adults_sub'), borderColor: '#805533', emoji: '🧠' },
+    { label: tHome('age_expert'), sub: tHome('age_expert_sub'), borderColor: '#2c1810', emoji: '🏆' },
+  ]
 
-export default function HomePage() {
   return (
     <>
       <HeroSection image="https://lh3.googleusercontent.com/aida-public/AB6AXuABqfDQ7FIq-Rw5EulpIdYRnZPoJSC6oG3LCvFGO140UN8utxkyQG7ZmJe46QzBtErnf-44qDZz1oHapiOrzGOBI5trnDWCkHRoO36uuYsacYynXevH4-MZJFtkO1Gzw8tUhGIxj3D1QJrvC4oBLrNIsMBQPWjPJpocG2gwhJMZJLcsr9li-kPqIPbFsQY-PnKiSTw3LPc-eIa8O4_OL6Q0538LWbuLCQn5YqZt7tjjbpKgjJSweRqI78LJaYT4eEFKBtjs3V4uvw" />

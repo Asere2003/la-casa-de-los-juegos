@@ -3,6 +3,7 @@
 import type { Product } from '@/types'
 import { useCartStore } from '@/store/cartStore'
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 interface Props {
   product: Product
@@ -12,6 +13,8 @@ export default function ProductActions({ product }: Props) {
   const [qty, setQty]     = useState(1)
   const [added, setAdded] = useState(false)
   const addItem = useCartStore(s => s.addItem)
+  const t = useTranslations('product')
+  const tA11y = useTranslations('accessibility')
 
   const isOutOfStock = product.stock === 0
   const maxQty       = Math.min(product.stock, 10)
@@ -32,24 +35,24 @@ export default function ProductActions({ product }: Props) {
       {/* Cantidad */}
       {!isOutOfStock && (
         <div className="flex items-center gap-4">
-          <span className="font-body italic text-sm text-[#717a6f]">Cantidad:</span>
+          <span className="font-body italic text-sm text-[#717a6f]">{t('quantity')}:</span>
           <div
             role="group"
-            aria-label="Seleccionar cantidad"
+            aria-label={t('select_quantity')}
             className="flex items-center border border-[#c0c9bc]/40 bg-[#fff1ec]"
             style={{ borderRadius: '2px' }}
           >
             <button
               onClick={decrease}
               disabled={qty <= 1}
-              aria-label="Reducir cantidad"
+              aria-label={tA11y('decrease_qty')}
               className="w-10 h-10 flex items-center justify-center hover:bg-[#ffe9e2] transition-colors font-mono text-[#004317] text-lg disabled:opacity-40 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
             >
               −
             </button>
             <span
               aria-live="polite"
-              aria-label={`Cantidad: ${qty}`}
+              aria-label={`${t('quantity')}: ${qty}`}
               className="w-12 text-center font-mono text-sm font-bold border-x border-[#c0c9bc]/40 py-2.5"
             >
               {qty}
@@ -57,14 +60,14 @@ export default function ProductActions({ product }: Props) {
             <button
               onClick={increase}
               disabled={qty >= maxQty}
-              aria-label="Aumentar cantidad"
+              aria-label={tA11y('increase_qty')}
               className="w-10 h-10 flex items-center justify-center hover:bg-[#ffe9e2] transition-colors font-mono text-[#004317] text-lg disabled:opacity-40 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
             >
               +
             </button>
           </div>
           <span className="font-mono text-[9px] text-[#717a6f]">
-            {product.stock} disponibles
+            {t('available', { count: product.stock })}
           </span>
         </div>
       )}
@@ -73,7 +76,7 @@ export default function ProductActions({ product }: Props) {
       <button
         onClick={handleAddToCart}
         disabled={isOutOfStock}
-        aria-label={isOutOfStock ? 'Producto agotado' : `Añadir ${qty} ${qty === 1 ? 'unidad' : 'unidades'} al carrito`}
+        aria-label={isOutOfStock ? t('product_exhausted') : t('add_units', { qty })}
         className={`
           w-full font-headline font-bold py-5 flex items-center justify-center gap-3
           text-base transition-all duration-200 focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2
@@ -91,14 +94,14 @@ export default function ProductActions({ product }: Props) {
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
             </svg>
-            Agotado
+            {t('out_of_stock')}
           </>
         ) : added ? (
           <>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            ¡Añadido!
+            {t('added')}
           </>
         ) : (
           <>
@@ -107,7 +110,7 @@ export default function ProductActions({ product }: Props) {
               <line x1="3" y1="6" x2="21" y2="6"/>
               <path d="M16 10a4 4 0 0 1-8 0"/>
             </svg>
-            Añadir al carrito
+            {t('add_to_cart')}
           </>
         )}
       </button>
@@ -115,11 +118,11 @@ export default function ProductActions({ product }: Props) {
       {/* Trust badges */}
       <div className="grid grid-cols-1 gap-2">
         {[
-          { icon: '🚚', text: 'Envío gratuito a partir de 50€' },
-          { icon: '📦', text: 'Empaquetado a mano con papel de seda' },
-          { icon: '↩️', text: 'Devoluciones en 30 días' },
+          { icon: '🚚', text: t('trust_free_shipping') },
+          { icon: '📦', text: t('trust_packaging') },
+          { icon: '↩️', text: t('trust_returns') },
         ].map(badge => (
-          <div key={badge.text} className="flex items-center gap-2.5">
+          <div key={badge.icon} className="flex items-center gap-2.5">
             <span className="text-sm" aria-hidden="true">{badge.icon}</span>
             <span className="font-mono text-[9px] uppercase tracking-wide text-[#717a6f]">{badge.text}</span>
           </div>
