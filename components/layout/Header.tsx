@@ -97,7 +97,7 @@ export default function Header() {
           ${scrolled ? 'shadow-lg shadow-[#2a170f]/40' : 'shadow-md shadow-[#2a170f]/20'}
         `}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center">
           <button
             onClick={() => setDrawerOpen(true)}
             aria-label={tA11y('open_menu')}
@@ -117,18 +117,18 @@ export default function Header() {
             aria-label="La Casa de los Juegos — Inicio"
             className="flex items-baseline gap-1 hover:opacity-80 transition-opacity focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded font-headline italic text-xl md:text-2xl text-[#c9a84c] tracking-tight"
           >
-            <span>La Casa</span>
-            <span className="relative flex flex-col items-center leading-none">
+            {/* <span>La Casa</span>
+            <span className="relative flex flex-col items-center leading-none"> */}
               <CldImage
-                src="inicio/inicio-logo-dado"
+                src="inicio/logo1"
                 alt="Logo de La Casa de los Juegos"
-                width={100}
-                height={100}
-                className="absolute left-[calc(50%-1.7px)] -translate-x-1/2 top-0 -translate-y-[65%] w-13 h-13 md:w-20 md:h-20 rounded-full object-cover"
+                width={150}
+                height={50}
+                className="h-full w-auto object-contain"
               />
-              <span className="text-[10px] md:text-xs tracking-normal">de los</span>
+              {/* <span className="text-[10px] md:text-xs tracking-normal">de los</span>
             </span>
-            <span>Juegos</span>
+            <span>Juegos</span> */}
           </Link>
         </div>
 

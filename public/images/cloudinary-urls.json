@@ -128,5 +128,31 @@
     "format": "png",
     "bytes": 2170400,
     "localFallback": "public/images/inicio/inicio-logo-dado.png"
+  },
+  {
+    "localPath": "public/images/inicio/logo.png",
+    "cloudinaryId": "inicio/logo",
+    "description": "logo (inicio)",
+    "status": "success",
+    "cloudinaryUrl": "https://res.cloudinary.com/db3v04xc1/image/upload/v1774122709/inicio/logo.png",
+    "publicId": "inicio/logo",
+    "width": 612,
+    "height": 408,
+    "format": "png",
+    "bytes": 55645,
+    "localFallback": "public/images/inicio/logo.png"
+  },
+  {
+    "localPath": "public/images/inicio/logo1.png",
+    "cloudinaryId": "inicio/logo1",
+    "description": "logo1 (inicio)",
+    "status": "success",
+    "cloudinaryUrl": "https://res.cloudinary.com/db3v04xc1/image/upload/v1774122710/inicio/logo1.png",
+    "publicId": "inicio/logo1",
+    "width": 612,
+    "height": 408,
+    "format": "png",
+    "bytes": 51333,
+    "localFallback": "public/images/inicio/logo1.png"
   }
 ]
