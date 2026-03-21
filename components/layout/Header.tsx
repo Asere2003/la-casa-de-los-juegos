@@ -117,18 +117,13 @@ export default function Header() {
             aria-label="La Casa de los Juegos — Inicio"
             className="flex items-baseline gap-1 hover:opacity-80 transition-opacity focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded font-headline italic text-xl md:text-2xl text-[#c9a84c] tracking-tight"
           >
-            {/* <span>La Casa</span>
-            <span className="relative flex flex-col items-center leading-none"> */}
-              <CldImage
-                src="inicio/logo1"
-                alt="Logo de La Casa de los Juegos"
-                width={150}
-                height={50}
-                className="h-full md:h-45 w-auto object-contain"
-              />
-              {/* <span className="text-[10px] md:text-xs tracking-normal">de los</span>
-            </span>
-            <span>Juegos</span> */}
+            <CldImage
+              src="inicio/logo1"
+              alt="Logo de La Casa de los Juegos"
+              width={150}
+              height={50}
+              className="h-full md:h-45 w-auto object-contain"
+            />
           </Link>
         </div>
 
