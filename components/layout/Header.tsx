@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
-import { useCartStore } from '@/store/cartStore'
+import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
+
+import { CldImage } from 'next-cloudinary'
+import { useCartStore } from '@/store/cartStore'
 
 const navLinks = [
   { href: '/catalogo' as const, key: 'catalogue' },
@@ -110,12 +111,24 @@ export default function Header() {
               <line x1="3" y1="18" x2="21" y2="18"/>
             </svg>
           </button>
+
           <Link
             href="/"
             aria-label="La Casa de los Juegos — Inicio"
-            className="font-headline italic text-xl md:text-2xl text-[#c9a84c] tracking-tight hover:opacity-80 transition-opacity focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded"
+            className="flex items-baseline gap-1 hover:opacity-80 transition-opacity focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded font-headline italic text-xl md:text-2xl text-[#c9a84c] tracking-tight"
           >
-            La Casa de los Juegos
+            <span>La Casa</span>
+            <span className="relative flex flex-col items-center leading-none">
+              <CldImage
+                src="inicio/inicio-logo-dado"
+                alt="Logo de La Casa de los Juegos"
+                width={100}
+                height={100}
+                className="absolute left-[calc(50%-1.7px)] -translate-x-1/2 top-0 -translate-y-[65%] w-13 h-13 md:w-20 md:h-20 rounded-full object-cover"
+              />
+              <span className="text-[10px] md:text-xs tracking-normal">de los</span>
+            </span>
+            <span>Juegos</span>
           </Link>
         </div>
 
@@ -138,14 +151,14 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           {/* Language selector */}
           <div ref={langRef} className="relative">
             <button
               onClick={() => setLangOpen(v => !v)}
               aria-label={tA11y('change_language')}
               aria-expanded={langOpen}
-              className="text-[#fff8f6]/80 hover:text-[#c9a84c] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c] font-mono text-xs font-bold"
+              className="text-[#c9a84c] hover:text-[#c9a84c]/80 transition-colors p-1.5 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c] font-headline italic text-base tracking-wide"
             >
               {localeLabels[locale] || locale.toUpperCase()}
             </button>
@@ -171,30 +184,36 @@ export default function Header() {
             )}
           </div>
 
+          {/* Separador */}
+          <span className="text-[#c9a84c]/40 text-lg select-none" aria-hidden="true">|</span>
+
           <button
             onClick={() => setSearchOpen(v => !v)}
             aria-label={tA11y('search')}
             aria-expanded={searchOpen}
-            className="text-[#fff8f6]/80 hover:text-[#c9a84c] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
+            className="text-[#c9a84c] hover:text-[#c9a84c]/80 transition-colors p-1.5 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <circle cx="11" cy="11" r="8"/>
               <path d="m21 21-4.35-4.35"/>
             </svg>
           </button>
 
+          {/* Separador */}
+          <span className="text-[#c9a84c]/40 text-lg select-none" aria-hidden="true">|</span>
+
           <button
             onClick={toggleCart}
             aria-label={tA11y('cart_count', { count: totalItems })}
-            className="relative text-[#fff8f6]/80 hover:text-[#c9a84c] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
+            className="relative text-[#c9a84c] hover:text-[#c9a84c]/80 transition-colors p-1.5 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
               <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
               <line x1="3" y1="6" x2="21" y2="6"/>
               <path d="M16 10a4 4 0 0 1-8 0"/>
             </svg>
             {totalItems > 0 && (
-              <span aria-hidden="true" className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#c9a84c] text-[#2c1810] text-[8px] font-bold rounded-full flex items-center justify-center font-mono leading-none">
+              <span aria-hidden="true" className="absolute -top-1 -right-1 w-5 h-5 bg-[#e53935] text-white text-[10px] font-bold rounded-full flex items-center justify-center font-mono leading-none shadow-md">
                 {totalItems > 9 ? '9+' : totalItems}
               </span>
             )}

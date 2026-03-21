@@ -19,7 +19,8 @@
     "skill": "Skill Games"
   },
   "home": {
-    "hero_title": "Welcome to the house of games",
+    "hero_title": "Welcome to\n<highlight>the house</highlight>\nof games",
+    "hero_title_others": "Welcome to the house of games",
     "hero_subtitle": "Board games, puzzles, chess and playful curiosities from around the world.",
     "hero_cta": "Explore the shop",
     "hero_secondary": "Our Story",

@@ -19,7 +19,8 @@
     "skill": "Habilidad"
   },
   "home": {
-    "hero_title": "Bienvenido a la casa de los juegos",
+    "hero_title": "Bienvenido a\n<highlight>la casa</highlight>\nde los juegos",
+    "hero_title_others": "Bienvenido a la casa de los juegos",
     "hero_subtitle": "Juegos de mesa, puzzles, ajedrez y curiosidades lúdicas de todo el mundo.",
     "hero_cta": "Explorar tienda",
     "hero_secondary": "Nuestra Historia",

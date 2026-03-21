@@ -9,7 +9,7 @@ type HeroSectionProps = {
 export default function HeroSection({ image }: HeroSectionProps) {
   const t = useTranslations('home')
   return (
-    <section className="relative min-h-[90dvh] md:min-h-screen flex items-center overflow-hidden bg-[var(--color-primary-container)]" aria-label={t('hero_title')}>
+    <section className="relative min-h-[90dvh] md:min-h-screen flex items-center overflow-hidden bg-[var(--color-primary-container)]" aria-label={t('hero_title_others')}>
       <div className="absolute inset-0 z-0" aria-hidden="true">
         <Image src={image} alt="" fill priority className="object-cover opacity-40" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#002108]/95 via-[#004317]/75 to-transparent" />
@@ -19,8 +19,12 @@ export default function HeroSection({ image }: HeroSectionProps) {
       <div className="relative z-10 px-6 md:px-16 max-w-7xl mx-auto w-full pt-24 pb-16">
         <div className="max-w-xl">
           <p className="font-mono text-[var(--color-gold)]/80 text-xs uppercase tracking-[0.3em] mb-5">Granada · Est. 2024</p>
-          <h1 className="font-headline text-5xl md:text-7xl text-white leading-[1.05] tracking-tight mb-6">
-            {t('hero_title')}
+          <h1 className="font-headline text-5xl md:text-7xl text-white leading-[1.05] tracking-tight mb-6 whitespace-pre-line">
+            {t.rich('hero_title', {
+              highlight: (chunks) => (
+                <span className="italic text-[var(--color-gold)]">{chunks}</span>
+              ),
+            })}
           </h1>
           <p className="font-body italic text-lg md:text-xl text-white/70 mb-10 leading-relaxed max-w-md">
             {t('hero_subtitle')}

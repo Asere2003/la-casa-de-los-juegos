@@ -19,7 +19,8 @@
     "skill": "Jocs d'habilitat"
   },
   "home": {
-    "hero_title": "Benvingut a la casa dels jocs",
+    "hero_title": "Benvingut a\n<highlight>la casa</highlight>\ndels jocs",
+    "hero_title_others": "Benvingut a la casa dels jocs",
     "hero_subtitle": "Jocs de taula, trencaclosques, escacs i curiositats lúdiques d'arreu del món.",
     "hero_cta": "Explora la botiga",
     "hero_secondary": "La nostra història",

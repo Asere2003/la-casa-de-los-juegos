@@ -115,5 +115,18 @@
     "format": "png",
     "bytes": 2584487,
     "localFallback": "public/images/historia/puzzle-artesanal.png"
+  },
+  {
+    "localPath": "public/images/inicio/inicio-logo-dado.png",
+    "cloudinaryId": "inicio/inicio-logo-dado",
+    "description": "inicio-logo-dado (inicio)",
+    "status": "success",
+    "cloudinaryUrl": "https://res.cloudinary.com/db3v04xc1/image/upload/v1774111423/inicio/inicio-logo-dado.png",
+    "publicId": "inicio/inicio-logo-dado",
+    "width": 1536,
+    "height": 1024,
+    "format": "png",
+    "bytes": 2170400,
+    "localFallback": "public/images/inicio/inicio-logo-dado.png"
   }
 ]
