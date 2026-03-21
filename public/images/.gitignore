@@ -1,0 +1,12 @@
+# Ignorar imágenes grandes (están en Cloudinary)
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.gif
+
+# Pero NO ignorar el JSON de URLs
+!cloudinary-urls.json
+
+# Mantener .gitkeep
+!.gitkeep
