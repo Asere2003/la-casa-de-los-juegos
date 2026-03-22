@@ -3,6 +3,7 @@ import { Link } from '@/i18n/navigation'
 import type { Metadata } from 'next'
 import Timeline from '@/components/historia/Timeline'
 import VintagePhoto from '@/components/historia/VintagePhoto'
+import { useTranslations } from 'next-intl'
 
 export const metadata: Metadata = {
   title: 'Nuestra Historia — La Casa de los Juegos',
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 }
 
 export default function HistoriaPage() {
+  const t = useTranslations('home')
   return (
     <div className="min-h-screen overflow-x-hidden">
       {/* Hero Section */}
@@ -53,9 +55,9 @@ export default function HistoriaPage() {
       <section className="py-16 px-6 md:px-12 bg-surface-container-low border-y border-outline-variant/20">
         <div className="max-w-5xl mx-auto text-center">
           <blockquote>
-            <svg 
-              className="w-16 h-16 text-tertiary-container mx-auto mb-6" 
-              fill="currentColor" 
+            <svg
+              className="w-16 h-16 text-tertiary-container mx-auto mb-6"
+              fill="currentColor"
               viewBox="0 0 24 24"
               aria-hidden="true"
             >
@@ -120,9 +122,9 @@ export default function HistoriaPage() {
       <Timeline />
 
       {/* Galería de momentos */}
-      <section className="py-20 px-6 md:px-12 bg-surface" aria-labelledby="gallery-heading">
+      <section className="pb-10 px-6 md:px-12 bg-surface" aria-labelledby="gallery-heading">
         <div className="max-w-6xl mx-auto">
-          <h2 
+          <h2
             id="gallery-heading"
             className="font-headline text-4xl text-center text-primary mb-16 italic font-normal"
           >
@@ -160,38 +162,38 @@ export default function HistoriaPage() {
               height={800}
             />
           </div>
+                  <div className="mt-8 text-center md:hidden">
+          <Link href="/catalogo" className="inline-flex items-center gap-2 font-body italic text-sm text-[var(--color-primary)] border-b border-[var(--color-primary)]/30 pb-0.5">
+            {t('new_arrivals_link')}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
         </div>
       </section>
 
       {/* CTA Final */}
-      <section className="py-24 px-6 md:px-12 bg-gradient-to-b from-primary to-primary-container text-surface">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="font-headline text-4xl md:text-6xl mb-6 italic font-normal text-tertiary-container">
+      <section className="bg-[#002108] overflow-hidden">
+        <div className="md:col-span-6 flex flex-col justify-center px-10 md:px-14 py-16 text-[var(--color-surface)] relative z-10">
+          <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--color-gold)]/70 mb-4">{t('editorial_label')}</p>
+          <h2 className="font-headline text-3xl md:text-4xl text-[var(--color-surface)] leading-tight mb-6 italic">
             La Historia Continúa Contigo
           </h2>
 
-          <p className="font-body text-xl md:text-2xl mb-12 text-surface leading-relaxed">
+          <p className="font-body text-[var(--color-surface)]/65 text-lg leading-relaxed mb-8">
             Cada juego que encuentras en nuestra tienda lleva consigo más de un siglo de pasión, tradición y dedicación artesanal. Forma parte de esta historia.
           </p>
 
           <Link
             href="/catalogo"
-            className="
-              inline-flex items-center gap-3 
-              bg-tertiary-container text-on-tertiary-container 
-              px-10 py-5 rounded-lg 
-              font-headline text-lg font-semibold
-              hover:rotate-[-1deg] hover:scale-105
-              transition-all duration-300
-              shadow-2xl shadow-black/30
-              focus:outline-none focus:ring-4 focus:ring-tertiary-container/50
-            "
+            className="inline-flex items-center gap-2 text-[var(--color-gold)] font-headline font-bold text-sm hover:gap-4 transition-all border-b border-[var(--color-gold)]/30 pb-1 w-fit focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] rounded"
           >
             <span>Explorar el Catálogo</span>
-            <svg 
-              className="w-6 h-6" 
-              fill="none" 
-              stroke="currentColor" 
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
               viewBox="0 0 24 24"
               aria-hidden="true"
             >
@@ -199,7 +201,7 @@ export default function HistoriaPage() {
             </svg>
           </Link>
 
-          <p className="font-body text-sm text-surface/80 mt-8 italic">
+          <p className="font-body text-sm text-[var(--color-surface)]/65 mt-8 italic">
             Envío gratuito en pedidos superiores a 50€
           </p>
         </div>

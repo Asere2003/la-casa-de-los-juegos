@@ -11,9 +11,9 @@ type NewArrivalsSectionProps = {
 export default function NewArrivalsSection({ items }: NewArrivalsSectionProps) {
   const t = useTranslations('home')
   return (
-    <section className="py-20 bg-[var(--color-surface-low)]" aria-labelledby="novedades-title">
+    <section className="py-10 bg-[var(--color-surface-low)]" aria-labelledby="novedades-title">
       <div className="px-6 md:px-10 max-w-7xl mx-auto">
-        <SectionHeading
+        <SectionHeading 
           eyebrow={t('new_arrivals_label')}
           title={t('new_arrivals_title')}
           action={

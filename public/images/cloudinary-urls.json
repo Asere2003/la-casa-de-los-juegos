@@ -154,5 +154,31 @@
     "format": "png",
     "bytes": 51333,
     "localFallback": "public/images/inicio/logo1.png"
+  },
+  {
+    "localPath": "public/images/inicio/hero-tienda.png",
+    "cloudinaryId": "inicio/hero-tienda",
+    "description": "hero-tienda (inicio)",
+    "status": "success",
+    "cloudinaryUrl": "https://res.cloudinary.com/db3v04xc1/image/upload/v1774156502/inicio/hero-tienda.png",
+    "publicId": "inicio/hero-tienda",
+    "width": 512,
+    "height": 512,
+    "format": "png",
+    "bytes": 353073,
+    "localFallback": "public/images/inicio/hero-tienda.png"
+  },
+  {
+    "localPath": "public/images/inicio/hero-fondo-tiendapng.png",
+    "cloudinaryId": "inicio/hero-fondo-tiendapng",
+    "description": "hero-fondo-tiendapng (inicio)",
+    "status": "success",
+    "cloudinaryUrl": "https://res.cloudinary.com/db3v04xc1/image/upload/v1774156723/inicio/hero-fondo-tiendapng.png",
+    "publicId": "inicio/hero-fondo-tiendapng",
+    "width": 512,
+    "height": 512,
+    "format": "png",
+    "bytes": 416691,
+    "localFallback": "public/images/inicio/hero-fondo-tiendapng.png"
   }
 ]

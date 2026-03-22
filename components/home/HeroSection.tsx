@@ -1,4 +1,7 @@
-import Image from 'next/image'
+'use client'
+
+import { CldImage } from 'next-cloudinary'
+import HighlightGold from '@/components/shared/HighlightGold'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 
@@ -8,10 +11,18 @@ type HeroSectionProps = {
 
 export default function HeroSection({ image }: HeroSectionProps) {
   const t = useTranslations('home')
+  
   return (
     <section className="relative min-h-[90dvh] md:min-h-screen flex items-center overflow-hidden bg-[var(--color-primary-container)]" aria-label={t('hero_title_others')}>
       <div className="absolute inset-0 z-0" aria-hidden="true">
-        <Image src={image} alt="" fill priority className="object-cover opacity-40" />
+        <CldImage
+            src={image}
+            alt=""
+            width={1920}
+            height={1080}
+            className="w-full h-full object-cover"
+            sizes="100vw"
+          />
         <div className="absolute inset-0 bg-gradient-to-r from-[#002108]/95 via-[#004317]/75 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#002108]/70 via-transparent to-transparent" />
       </div>
@@ -21,9 +32,7 @@ export default function HeroSection({ image }: HeroSectionProps) {
           <p className="font-mono text-[var(--color-gold)]/80 text-xs uppercase tracking-[0.3em] mb-5">Granada · Est. 2024</p>
           <h1 className="font-headline text-5xl md:text-7xl text-white leading-[1.05] tracking-tight mb-6 whitespace-pre-line">
             {t.rich('hero_title', {
-              highlight: (chunks) => (
-                <span className="italic text-[var(--color-gold)]">{chunks}</span>
-              ),
+              highlight: (chunks) => <HighlightGold>{chunks}</HighlightGold>
             })}
           </h1>
           <p className="font-body italic text-lg md:text-xl text-white/70 mb-10 leading-relaxed max-w-md">

@@ -1,3 +1,6 @@
 {
-  "css.lint.unknownAtRules": "ignore",
+  "sonarlint.rules": {
+    "typescript:S4325": "off",
+    "typescript:S4656": "off"
+  }
 }

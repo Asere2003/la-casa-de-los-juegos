@@ -1,4 +1,6 @@
-import Image from 'next/image'
+'use client'
+
+import { CldImage } from 'next-cloudinary'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 
@@ -12,16 +14,17 @@ export default function EditorialBanner({ image }: EditorialBannerProps) {
     <section className="bg-[#002108] overflow-hidden" aria-label={t('editorial_label')}>
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 min-h-[500px]">
         <div className="md:col-span-6 relative overflow-hidden min-h-[280px]">
-          <Image
+          <CldImage
             src={image}
-            alt=""
-            fill
-            className="object-cover opacity-60 sepia-[20%]"
-            sizes="(max-width: 768px) 100vw, 50vw"
+            alt={t('editorial_label')}
+            width={1920}
+            height={1080}
+            className="w-full h-full object-cover opacity-60 sepia-[20%]"
+            sizes="100vw"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#002108] hidden md:block" aria-hidden="true" />
         </div>
-
+       {/* Aquí va el contenido editorial */}
         <div className="md:col-span-6 flex flex-col justify-center px-10 md:px-14 py-16 text-[var(--color-surface)] relative z-10">
           <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--color-gold)]/70 mb-4">{t('editorial_label')}</p>
           <h2 className="font-headline text-3xl md:text-4xl text-[var(--color-surface)] leading-tight mb-6 italic">

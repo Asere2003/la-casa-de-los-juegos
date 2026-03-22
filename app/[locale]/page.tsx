@@ -122,10 +122,10 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSection image="https://lh3.googleusercontent.com/aida-public/AB6AXuABqfDQ7FIq-Rw5EulpIdYRnZPoJSC6oG3LCvFGO140UN8utxkyQG7ZmJe46QzBtErnf-44qDZz1oHapiOrzGOBI5trnDWCkHRoO36uuYsacYynXevH4-MZJFtkO1Gzw8tUhGIxj3D1QJrvC4oBLrNIsMBQPWjPJpocG2gwhJMZJLcsr9li-kPqIPbFsQY-PnKiSTw3LPc-eIa8O4_OL6Q0538LWbuLCQn5YqZt7tjjbpKgjJSweRqI78LJaYT4eEFKBtjs3V4uvw" />
+      <HeroSection image="inicio/hero-fondo-tiendapng" />
       <CategoryScroller items={categories} />
       <NewArrivalsSection items={newArrivals} />
-      <EditorialBanner image="https://lh3.googleusercontent.com/aida-public/AB6AXuBdwjKdfMVRKzn2XD9SKJZXwfVI_jjaEMkKdQQUVHB4azA0Q-6UuNfkUgwwuz8mIzwWoNz2BtXcqTwy-sus9ILmoV9eClT3RAXYM2xZWYgu8DeRe-GhM8VY1iREOw_CK0cnJ1qx0TGfJAujqyob-kF_UQSLB45X32GhXRlVPo56wH3roPz7g18A8Rln4FwqoTHehQbaevi1zl6smgkfbCaMCaU7bEs0NWZlMvTS9FZEGRuGzpAjrKF62KCWAs-69BkAAVqmsZxE0g" />
+      <EditorialBanner image="inicio/hero-tienda" />
       <BestsellersSection items={bestsellers} />
       <AudienceGrid items={audienceGroups} />
     </>
