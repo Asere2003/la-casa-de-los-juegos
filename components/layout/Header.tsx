@@ -118,11 +118,11 @@ export default function Header() {
             className="flex items-baseline gap-1 hover:opacity-80 transition-opacity focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded font-headline italic text-xl md:text-2xl text-[#c9a84c] tracking-tight"
           >
             <CldImage
-              src="inicio/logo1"
+              src="inicio/logo2"
               alt="Logo de La Casa de los Juegos"
-              width={150}
+              width={120}
               height={50}
-              className="h-full md:h-45 w-auto object-contain"
+              className=" md:h-40 md:w-40  object-contain"
             />
           </Link>
         </div>

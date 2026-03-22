@@ -180,5 +180,18 @@
     "format": "png",
     "bytes": 416691,
     "localFallback": "public/images/inicio/hero-fondo-tiendapng.png"
+  },
+  {
+    "localPath": "public/images/inicio/logo2.png",
+    "cloudinaryId": "inicio/logo2",
+    "description": "logo2 (inicio)",
+    "status": "success",
+    "cloudinaryUrl": "https://res.cloudinary.com/db3v04xc1/image/upload/v1774207466/inicio/logo2.png",
+    "publicId": "inicio/logo2",
+    "width": 440,
+    "height": 140,
+    "format": "png",
+    "bytes": 38911,
+    "localFallback": "public/images/inicio/logo2.png"
   }
 ]
