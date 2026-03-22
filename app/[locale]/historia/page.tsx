@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 }
 
 export default function HistoriaPage() {
-  const t = useTranslations('home')
+  const t = useTranslations('history')
   return (
     <div className="min-h-screen overflow-x-hidden">
       {/* Hero Section */}
@@ -24,15 +24,15 @@ export default function HistoriaPage() {
             {/* Columna de texto principal */}
             <div className="md:col-span-7 space-y-8">
               <p className="font-body text-2xl md:text-3xl leading-relaxed first-letter:text-7xl first-letter:font-headline first-letter:text-primary first-letter:mr-3 first-letter:float-left first-letter:font-normal text-on-surface">
-                En el corazón de la Alcaicería de Granada, donde el aroma a sándalo y especias aún danza en las corrientes de aire fresco, nació hace más de un siglo un santuario para el intelecto y el ocio.
+                {t('intro_1')}
               </p>
 
               <p className="font-body text-xl leading-relaxed text-on-surface">
-                La Casa de los Juegos no fue concebida meramente como una tienda, sino como un puente entre civilizaciones, tallado en madera de nogal y marcado por el paso del tiempo. Cada tablero, cada pieza, cada carta que cruzaba nuestro umbral era tratada como un artefacto sagrado.
+                {t('intro_2')}
               </p>
 
               <p className="font-body text-xl leading-relaxed text-on-surface">
-                Durante tres generaciones, la familia Valdivia custodió los secretos de los juegos antiguos. Desde el Senet egipcio hasta los intrincados puzzles de la dinastía Qing, el taller situado en la trastienda era testigo del crujir constante de las gubias y el pulido meticuloso de los dados de hueso.
+                {t('intro_3')}
               </p>
             </div>
 
@@ -41,7 +41,7 @@ export default function HistoriaPage() {
               <VintagePhoto
                 src="historia/hero-taller-original"
                 alt="Taller artesanal con herramientas de carpintería vintage"
-                caption="El taller original, circa 1924"
+                caption={t('photo1_caption')}
                 rotate="right"
                 width={800}
                 height={600}
@@ -65,7 +65,7 @@ export default function HistoriaPage() {
             </svg>
 
             <p className="font-headline italic text-3xl md:text-5xl text-primary leading-tight font-normal">
-              El juego es la forma más elevada de investigación
+              {t('blockquote')}
             </p>
 
             <footer className="mt-6">
@@ -73,7 +73,7 @@ export default function HistoriaPage() {
                 — Albert Einstein
               </cite>
               <p className="font-body text-sm text-on-surface/70 mt-2 italic">
-                Citado frecuentemente por nuestro fundador, Don Aurelio Valdivia
+                {t('blockquote_cite')}
               </p>
             </footer>
           </blockquote>
@@ -89,7 +89,7 @@ export default function HistoriaPage() {
               <VintagePhoto
                 src="historia/hero-manos-tallando"
                 alt="Manos artesanas tallando pieza de madera"
-                caption="Don Aurelio en su último día de taller, 2023"
+                caption={t('photo2_caption')}
                 rotate="left"
                 width={800}
                 height={600}
@@ -99,19 +99,24 @@ export default function HistoriaPage() {
             {/* Texto */}
             <div className="md:col-span-7 space-y-6 order-1 md:order-2">
               <h2 className="font-headline text-4xl text-primary italic font-normal">
-                El Retiro de Don Aurelio
+                {t('section2_title')}
               </h2>
 
               <p className="font-body text-xl leading-relaxed text-on-surface">
-                Tras cincuenta años de servicio ininterrumpido, Don Aurelio Valdivia III decidió que sus manos, sabias pero cansadas, necesitaban reposo. El cierre de la tienda física en 2023 marcó el fin de una era para Granada, pero no para el espíritu de la marca.
+                {t('section2_p1')}
               </p>
 
               <p className="font-body text-xl leading-relaxed text-on-surface">
-                <span className="font-semibold text-primary italic">"Un juego no termina cuando se cierra la caja"</span>, decía siempre, <span className="font-semibold text-primary italic">"solo se guarda para la próxima sesión"</span>.
+                <span className="font-semibold text-primary italic">
+                  {t('section2_p2a')}</span>, 
+                    {t('section2_p2b')} <span className="font-semibold text-primary italic">
+                  {t('section2_p2c')}</span>.
               </p>
 
               <p className="font-body text-xl leading-relaxed text-on-surface">
-                La transición al mundo digital fue nuestra partida más desafiante. No buscábamos convertirnos en una corporación sin rostro, sino en un <strong className="text-primary">Archivo Digital</strong>. Cada píxel de este nuevo hogar ha sido diseñado con la misma reverencia con la que Aurelio tallaba un alfil de boj.
+                {t('section2_p3')}
+                <strong className="text-primary">{t('section2_p4')}</strong> 
+                {t('section2_p5')}
               </p>
             </div>
           </div>
@@ -128,14 +133,14 @@ export default function HistoriaPage() {
             id="gallery-heading"
             className="font-headline text-4xl text-center text-primary mb-16 italic font-normal"
           >
-            Momentos que nos Definen
+            {t('gallery_title')}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <VintagePhoto
               src="historia/hero-estanteria"
               alt="Estantería llena de juegos de mesa clásicos"
-              caption="La colección de clásicos, 1985"
+              caption={t('gallery1_caption')}
               rotate="left"
               size="small"
               width={600}
@@ -145,7 +150,7 @@ export default function HistoriaPage() {
             <VintagePhoto
               src="historia/hero-piezas-talladas"
               alt="Ajedrez artesanal con piezas talladas"
-              caption="Piezas únicas talladas a mano"
+              caption={t('gallery2_caption')}
               rotate="right"
               size="small"
               width={600}
@@ -155,7 +160,7 @@ export default function HistoriaPage() {
             <VintagePhoto
               src="historia/puzzle-artesanal"
               alt="Puzzle artístico en proceso"
-              caption="Puzzles de arte, nuestra especialidad"
+              caption={t('gallery3_caption')}
               rotate="none"
               size="small"
               width={600}
@@ -178,18 +183,18 @@ export default function HistoriaPage() {
         <div className="md:col-span-6 flex flex-col justify-center px-10 md:px-14 py-16 text-[var(--color-surface)] relative z-10">
           <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--color-gold)]/70 mb-4">{t('editorial_label')}</p>
           <h2 className="font-headline text-3xl md:text-4xl text-[var(--color-surface)] leading-tight mb-6 italic">
-            La Historia Continúa Contigo
+            {t('final_cta')}
           </h2>
 
           <p className="font-body text-[var(--color-surface)]/65 text-lg leading-relaxed mb-8">
-            Cada juego que encuentras en nuestra tienda lleva consigo más de un siglo de pasión, tradición y dedicación artesanal. Forma parte de esta historia.
+            {t('final_p')}
           </p>
 
           <Link
             href="/catalogo"
             className="inline-flex items-center gap-2 text-[var(--color-gold)] font-headline font-bold text-sm hover:gap-4 transition-all border-b border-[var(--color-gold)]/30 pb-1 w-fit focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] rounded"
           >
-            <span>Explorar el Catálogo</span>
+            <span>{t('final_cta')}</span>
             <svg
               className="w-6 h-6"
               fill="none"
@@ -202,7 +207,7 @@ export default function HistoriaPage() {
           </Link>
 
           <p className="font-body text-sm text-[var(--color-surface)]/65 mt-8 italic">
-            Envío gratuito en pedidos superiores a 50€
+            {t('final_note')}
           </p>
         </div>
       </section>

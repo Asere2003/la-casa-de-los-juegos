@@ -35,7 +35,7 @@ export default function EditorialBanner({ image }: EditorialBannerProps) {
           </p>
           <blockquote className="border-l-2 border-[var(--color-gold)] pl-5 mb-8">
             <p className="font-headline italic text-xl text-[var(--color-gold)] leading-relaxed">
-              &ldquo;El juego es la forma más elevada de investigación.&rdquo;
+              &ldquo;{t('editorial_quote')}&rdquo;
             </p>
             <footer className="font-mono text-xs text-[var(--color-surface)]/40 mt-2">— Albert Einstein</footer>
           </blockquote>

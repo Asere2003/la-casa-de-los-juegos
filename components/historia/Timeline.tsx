@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl"
+
 interface TimelineEvent {
   year: string
   title: string
@@ -5,47 +7,52 @@ interface TimelineEvent {
   highlight?: boolean
 }
 
+
+
+export default function Timeline() {
+
+const t = useTranslations('timeline')
+
 const events: TimelineEvent[] = [
   {
     year: '1892',
-    title: 'Los Inicios',
-    description: 'Don Aurelio Valdivia funda la primera Casa de los Juegos en la Alcaicería de Granada. Un pequeño taller que combinaba reparación de juguetes y venta de juegos artesanales.',
+    title: t('card_1_title'),
+    description: t('card_1_description'),
     highlight: true
   },
   {
     year: '1924',
-    title: 'El Taller Crece',
-    description: 'La familia Valdivia expande el negocio e incorpora un taller de carpintería especializado en tableros de ajedrez y piezas talladas a mano.'
+    title: t('card_2_title'),
+    description: t('card_2_description')
   },
   {
     year: '1958',
-    title: 'Segunda Generación',
-    description: 'Fernando Valdivia toma las riendas del negocio familiar y comienza a importar juegos de mesa de toda Europa y Asia, convirtiendo la tienda en referente cultural.'
+    title: t('card_3_title'),
+    description: t('card_3_description')
   },
   {
-    year: '1985',
-    title: 'La Edad Dorada',
-    description: 'Apertura del local emblemático en Calle Recogidas. Se convierte en punto de encuentro de ajedrecistas, coleccionistas y amantes de los puzzles.'
+    year: '1980',
+    title: t('card_4_title'),
+    description: t('card_4_description')
   },
   {
     year: '2010',
-    title: 'Reconocimiento',
-    description: 'La Casa de los Juegos recibe la Medalla de Oro de Granada por su contribución a la cultura lúdica de la ciudad durante más de un siglo.'
+    title: t('card_5_title'),
+    description: t('card_5_description')
   },
   {
     year: '2023',
-    title: 'El Retiro',
-    description: 'Don Aurelio Valdivia III se jubila tras 50 años de servicio. Cierra la tienda física pero el legado continúa.'
+    title: t('card_6_title'),
+    description: t('card_6_description')
   },
   {
     year: '2024',
-    title: 'Renacimiento Digital',
-    description: 'La Casa de los Juegos abre sus puertas en el mundo digital, llevando la magia de Granada a hogares de toda España.',
+    title: t('card_7_title'),
+    description: t('card_7_description'),
     highlight: true
   }
 ]
 
-export default function Timeline() {
   return (
     <section className="py-20 bg-surface-container-low" aria-labelledby="timeline-heading">
       <div className="container mx-auto px-6 md:px-12">
@@ -53,7 +60,7 @@ export default function Timeline() {
           id="timeline-heading"
           className="font-headline text-4xl md:text-5xl text-center text-primary mb-16 italic font-normal"
         >
-          Nuestra Línea del Tiempo
+          {t('title')}
         </h2>
 
         <div className="relative max-w-4xl mx-auto">
