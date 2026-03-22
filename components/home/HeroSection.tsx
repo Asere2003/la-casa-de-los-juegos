@@ -16,13 +16,14 @@ export default function HeroSection({ image }: HeroSectionProps) {
     <section className="relative min-h-[90dvh] md:min-h-screen flex items-center overflow-hidden bg-[var(--color-primary-container)]" aria-label={t('hero_title_others')}>
       <div className="absolute inset-0 z-0" aria-hidden="true">
         <CldImage
-            src={image}
-            alt=""
-            width={1920}
-            height={1080}
-            className="w-full h-full object-cover"
-            sizes="100vw"
-          />
+          src={image}
+          alt="Imagen de fondo del hero"
+          width={2560}
+          height={1440}
+          className="w-full h-full object-cover"
+          sizes="100vw"
+          quality={90}
+        />
         <div className="absolute inset-0 bg-gradient-to-r from-[#002108]/95 via-[#004317]/75 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#002108]/70 via-transparent to-transparent" />
       </div>

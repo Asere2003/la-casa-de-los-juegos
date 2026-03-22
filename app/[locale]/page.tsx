@@ -122,7 +122,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSection image="inicio/hero-fondo-tiendapng" />
+      <HeroSection image="inicio/hero-fondo-tienda-1" />
       <CategoryScroller items={categories} />
       <NewArrivalsSection items={newArrivals} />
       <EditorialBanner image="inicio/hero-tienda" />

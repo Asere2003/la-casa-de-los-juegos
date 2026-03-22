@@ -120,9 +120,11 @@ export default function Header() {
             <CldImage
               src="inicio/logo2"
               alt="Logo de La Casa de los Juegos"
-              width={120}
-              height={50}
-              className=" md:h-40 md:w-40  object-contain"
+              width={160}
+              height={160}
+              sizes="(min-width: 768px) 160px, 120px"
+              className="md:h-40 md:w-40 h-12 w-28 object-contain"
+              quality={90}
             />
           </Link>
         </div>
