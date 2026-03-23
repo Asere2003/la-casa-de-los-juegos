@@ -29,7 +29,7 @@ export default function CarritoPage() {
           </div>
         )}
       </main>
-
+        {/* goog */}
       <div className="h-20 md:h-0" aria-hidden="true" />
     </div>
   )
