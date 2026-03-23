@@ -71,13 +71,13 @@ export default function BottomNav() {
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
   const t = useTranslations('nav')
 
-  const isActive = (href: string) => {
-    if (href === '/') return pathname === '/'
-    if (href === '/login' || href === '/cuenta') {
-      return pathname.startsWith('/cuenta')
-    }
-    return pathname.startsWith(href)
+const isActive = (href: string) => {
+  if (href === '/') return pathname === '/'
+  if (href === '/login' || href === '/cuenta') {
+    return pathname.startsWith('/cuenta') || pathname.startsWith('/login')
   }
+  return pathname.startsWith(href)
+}
 
   useEffect(() => {
     const supabase = createClient()
