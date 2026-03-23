@@ -1,11 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ locale: string }> }
-) {
-  const { locale } = await params  // ← await aquí
+type Context = { params: Promise<{ locale: string }> }
+
+export async function GET(request: NextRequest, context: Context) {
+  const { locale } = await context.params
   const { searchParams } = new URL(request.url)
   const code  = searchParams.get('code')
   const error = searchParams.get('error')
