@@ -206,5 +206,18 @@
     "format": "png",
     "bytes": 2866940,
     "localFallback": "public/images/inicio/hero-fondo-tienda-1.png"
+  },
+  {
+    "localPath": "public/images/categorias-productos/world.png",
+    "cloudinaryId": "categorias-productos/world",
+    "description": "world (categorias-productos)",
+    "status": "success",
+    "cloudinaryUrl": "https://res.cloudinary.com/db3v04xc1/image/upload/v1774247245/categorias-productos/world.png",
+    "publicId": "categorias-productos/world",
+    "width": 280,
+    "height": 260,
+    "format": "png",
+    "bytes": 129758,
+    "localFallback": "public/images/categorias-productos/world.png"
   }
 ]

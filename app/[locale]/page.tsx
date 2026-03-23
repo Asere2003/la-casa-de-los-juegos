@@ -36,7 +36,6 @@ export default async function HomePage() {
     id: '1',
     name: 'Tablero de Ajedrez de Lujo',
     slug: 'tablero-ajedrez-lujo',
-
     price: 145,
     category: 'Ajedrez',
     badgeBg: '#1c1c1c',

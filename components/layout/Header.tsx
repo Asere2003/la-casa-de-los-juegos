@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 
 import { CldImage } from 'next-cloudinary'
+import type { User } from '@supabase/supabase-js'
+import { createClient } from '@/lib/supabase/client'
 import { useCartStore } from '@/store/cartStore'
 
 const navLinks = [
@@ -13,19 +15,21 @@ const navLinks = [
 ]
 
 const categories = [
-  { emoji: '♟', key: 'chess',      slug: 'ajedrez' },
-  { emoji: '🧩', key: 'puzzles',    slug: 'puzzles' },
+  { emoji: '♟', key: 'chess', slug: 'ajedrez' },
+  { emoji: '🧩', key: 'puzzles', slug: 'puzzles' },
   { emoji: '🎲', key: 'boardgames', slug: 'juegos-mesa' },
-  { emoji: '🐉', key: 'rpg',        slug: 'rol' },
-  { emoji: '🎭', key: 'classics',   slug: 'clasicos' },
-  { emoji: '🌍', key: 'world',      slug: 'del-mundo' },
-  { emoji: '🃏', key: 'cards',      slug: 'cartas' },
-  { emoji: '🪀', key: 'skill',      slug: 'habilidad' },
+  { emoji: '🐉', key: 'rpg', slug: 'rol' },
+  { emoji: '🎭', key: 'classics', slug: 'clasicos' },
+  { emoji: '🌍', key: 'world', slug: 'del-mundo' },
+  { emoji: '🃏', key: 'cards', slug: 'cartas' },
+  { emoji: '🪀', key: 'skill', slug: 'habilidad' },
 ]
 
 const localeLabels: Record<string, string> = { es: 'ES', en: 'EN', cat: 'CAT' }
 
 export default function Header() {
+  const [user, setUser] = useState<User | null>(null)
+
   const pathname = usePathname()
   const router = useRouter()
   const locale = useLocale()
@@ -33,18 +37,18 @@ export default function Header() {
   const tCat = useTranslations('categories')
   const tA11y = useTranslations('accessibility')
 
-  const [drawerOpen, setDrawerOpen]   = useState(false)
-  const [searchOpen, setSearchOpen]   = useState(false)
-  const [scrolled, setScrolled]       = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const [langOpen, setLangOpen]       = useState(false)
+  const [langOpen, setLangOpen] = useState(false)
 
   const items = useCartStore(s => s.items)
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
 
   const toggleCart = useCartStore(s => s.toggleCart)
-  const searchRef  = useRef<HTMLInputElement>(null)
-  const langRef    = useRef<HTMLDivElement>(null)
+  const searchRef = useRef<HTMLInputElement>(null)
+  const langRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -84,6 +88,30 @@ export default function Header() {
     return () => { document.body.style.overflow = '' }
   }, [drawerOpen])
 
+useEffect(() => {
+  const supabase = createClient()
+
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    setUser(session?.user ?? null)
+  })
+
+  const { data: { subscription } } = supabase.auth.onAuthStateChange(
+    (_event, session) => {
+      setUser(session?.user ?? null)
+    }
+  )
+
+  return () => subscription.unsubscribe()
+}, [pathname]) // 👈 clave: se re-ejecuta cada vez que cambia la ruta
+
+  // Función logout
+async function handleLogout() {
+  const supabase = createClient()
+  setUser(null)        // limpia el estado local inmediatamente
+  setDrawerOpen(false) // cierra el drawer inmediatamente
+  router.push('/')     // redirige inmediatamente
+  await supabase.auth.signOut() // esto se hace en segundo plano
+}
   return (
     <>
       {/* ══ HEADER ══ */}
@@ -106,9 +134,9 @@ export default function Header() {
             className="text-[#c9a84c] hover:rotate-[-2deg] transition-transform p-2 -ml-2 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <line x1="3" y1="6" x2="21" y2="6"/>
-              <line x1="3" y1="12" x2="21" y2="12"/>
-              <line x1="3" y1="18" x2="21" y2="18"/>
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
             </svg>
           </button>
 
@@ -168,11 +196,10 @@ export default function Header() {
                       router.replace(pathname, { locale: l })
                       setLangOpen(false)
                     }}
-                    className={`block w-full text-left px-4 py-2 font-mono text-xs transition-colors ${
-                      locale === l
-                        ? 'bg-[#c9a84c] text-[#2c1810] font-bold'
-                        : 'text-[#fff8f6]/80 hover:bg-[#1a5c2a] hover:text-[#c9a84c]'
-                    }`}
+                    className={`block w-full text-left px-4 py-2 font-mono text-xs transition-colors ${locale === l
+                      ? 'bg-[#c9a84c] text-[#2c1810] font-bold'
+                      : 'text-[#fff8f6]/80 hover:bg-[#1a5c2a] hover:text-[#c9a84c]'
+                      }`}
                   >
                     {localeLabels[l]}
                   </button>
@@ -191,8 +218,8 @@ export default function Header() {
             className="text-[#c9a84c] hover:text-[#c9a84c]/80 transition-colors p-1.5 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="m21 21-4.35-4.35"/>
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
             </svg>
           </button>
 
@@ -205,12 +232,12 @@ export default function Header() {
             className="relative text-[#c9a84c] hover:text-[#c9a84c]/80 transition-colors p-1.5 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-              <line x1="3" y1="6" x2="21" y2="6"/>
-              <path d="M16 10a4 4 0 0 1-8 0"/>
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
             </svg>
             {totalItems > 0 && (
-              <span aria-hidden="true" className="absolute -top-1 -right-1 w-5 h-5 bg-[#e53935] text-white text-[10px] font-bold rounded-full flex items-center justify-center font-mono leading-none shadow-md">
+              <span aria-hidden="true" className="absolute -top-1 -right-1 w-5 h-5 bg-[#c9a84c] text-[#2c1810] text-[10px] font-bold rounded-full flex items-center justify-center font-mono leading-none shadow-md">
                 {totalItems > 9 ? '9+' : totalItems}
               </span>
             )}
@@ -240,8 +267,8 @@ export default function Header() {
             className="w-full bg-[#1a5c2a] border border-[#c9a84c]/30 text-[#fff8f6] placeholder:text-[#fff8f6]/40 font-body italic px-4 py-2.5 pr-10 focus:outline-none focus:border-[#c9a84c] focus:ring-1 focus:ring-[#c9a84c] text-sm rounded-sm"
           />
           <svg className="absolute right-3 top-1/2 -translate-y-1/2 text-[#c9a84c]/60" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-            <circle cx="11" cy="11" r="8"/>
-            <path d="m21 21-4.35-4.35"/>
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
           </svg>
         </div>
       </div>
@@ -268,7 +295,7 @@ export default function Header() {
           <span className="font-headline italic text-xl text-[#c9a84c]">La Casa de los Juegos</span>
           <button onClick={() => setDrawerOpen(false)} aria-label={tA11y('close_menu')} className="text-[#c9a84c]/70 hover:text-[#c9a84c] p-1 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <path d="M18 6 6 18M6 6l12 12"/>
+              <path d="M18 6 6 18M6 6l12 12" />
             </svg>
           </button>
         </div>
@@ -276,16 +303,26 @@ export default function Header() {
         <div className="flex-1 overflow-y-auto">
           <div className="divide-y divide-[#2a170f]/5">
             {[
-              { href: '/' as const,         key: 'home' },
+              { href: '/' as const, key: 'home' },
               { href: '/catalogo' as const, key: 'catalogue' },
               { href: '/historia' as const, key: 'history' },
-              { href: '/carrito' as const,  key: 'cart' },
+              { href: '/carrito' as const, key: 'cart' },
             ].map(item => (
               <Link key={item.href} href={item.href} onClick={() => setDrawerOpen(false)}
                 className="flex items-center px-6 py-3.5 text-[#004317] hover:bg-[#fff1ec] font-headline italic text-lg transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#c9a84c]">
                 {t(item.key)}
               </Link>
             ))}
+            {user && (
+              <button
+                onClick={handleLogout}
+                className="flex items-center w-full px-6 py-3.5 text-[#004317] hover:bg-[#fff1ec]
+               font-headline italic text-lg transition-colors
+               focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#c9a84c]"
+              >
+                Cerrar sesión
+              </button>
+            )}
           </div>
 
           <div className="px-6 py-4 border-t border-[#c9a84c]/15">
