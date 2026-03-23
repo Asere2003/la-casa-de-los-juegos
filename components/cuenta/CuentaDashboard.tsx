@@ -34,7 +34,7 @@ export default function CuentaDashboard({ user, profile }: Props) {
     : user.email?.split('@')[0] ?? ''
 
   return (
-    <div className="min-h-screen bg-[#fff8f6] px-4 pt-24 pb-24">
+    <div className="min-h-screen bg-[#fff8f6] px-4">
       <div className="max-w-md mx-auto">
 
         {/* ── Cabecera ── */}
