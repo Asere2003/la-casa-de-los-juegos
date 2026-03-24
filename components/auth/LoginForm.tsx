@@ -37,7 +37,7 @@ function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 <div className="flex flex-col items-center mb-8">
   <span
     className="font-headline italic text-2xl text-[#004317]"
-    style={{ fontFamily: 'Noto Serif, serif' }}
+    style={{ fontFamily: 'var(--font-headline)' }}
   >
     La Casa de los Juegos
   </span>
@@ -60,13 +60,13 @@ function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
           <span className="block w-10 h-0.5 bg-[#c9a84c] mt-2 mb-4" />
           <h1
             className="text-2xl text-[#2a170f]"
-            style={{ fontFamily: 'Noto Serif, serif' }}
+            style={{ fontFamily: 'var(--font-headline)' }}
           >
             Iniciar sesión
           </h1>
           <p
             className="mt-2 text-sm text-[#717a6f]"
-            style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic' }}
+            style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic' }}
           >
             Accede a tu cuenta para gestionar tus pedidos.
           </p>
@@ -117,7 +117,7 @@ function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
               <Link
                 href="/recuperar-password"
                 className="text-xs text-[#1a5c2a] hover:text-[#c9a84c] transition-colors"
-                style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic' }}
+                style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic' }}
               >
                 ¿La olvidaste?
               </Link>
@@ -159,7 +159,7 @@ function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
           <div className="relative flex justify-center">
             <span
               className="px-3 bg-white text-xs text-[#717a6f]"
-              style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic' }}
+              style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic' }}
             >
               ¿aún no tienes cuenta?
             </span>

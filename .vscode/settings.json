@@ -1,6 +1,9 @@
 {
-  "sonarlint.rules": {
-    "typescript:S4325": "off",
-    "typescript:S4656": "off"
-  }
+  "css.customData": [],
+  "css.validate": false,
+  "scss.validate": false,
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "tailwindCSS.experimental.configFile": "./tailwind.config.ts"
 }

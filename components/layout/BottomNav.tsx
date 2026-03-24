@@ -71,13 +71,13 @@ export default function BottomNav() {
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
   const t = useTranslations('nav')
 
-const isActive = (href: string) => {
-  if (href === '/') return pathname === '/'
-  if (href === '/login' || href === '/cuenta') {
-    return pathname.startsWith('/cuenta') || pathname.startsWith('/login')
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/'
+    if (href === '/login' || href === '/cuenta') {
+      return pathname.startsWith('/cuenta') || pathname.startsWith('/login')
+    }
+    return pathname.startsWith(href)
   }
-  return pathname.startsWith(href)
-}
 
   useEffect(() => {
     const supabase = createClient()
@@ -132,8 +132,8 @@ const isActive = (href: string) => {
               )}
               {link.key === 'account' && isLoggedIn && (
                 <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5
-                                 bg-[#1a5c2a] border-2 border-[#805533]
-                                 rounded-full" />
+                   bg-[#c9a84c] border-2 border-[#805533]
+                   rounded-full" />
               )}
             </span>
             <span className="font-mono text-[9px] uppercase tracking-wider mt-0.5">{label}</span>

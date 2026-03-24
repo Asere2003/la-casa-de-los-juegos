@@ -59,8 +59,10 @@ export default async function RootLayout({
   const t = await getTranslations('accessibility')
 
   return (
-    <html lang={locale} className={`${notoSerif.variable} ${newsreader.variable}`}>
-      <body className="bg-[#fff8f6] text-[#2a170f] font-body antialiased">
+    <html lang={locale} data-scroll-behavior="smooth" className={`${notoSerif.variable} ${newsreader.variable}`}>
+      <body
+          suppressHydrationWarning 
+          className="bg-[#fff8f6] text-[#2a170f] font-body antialiased">
         <NextIntlClientProvider messages={messages}>
 
           {/* Skip link accesibilidad */}

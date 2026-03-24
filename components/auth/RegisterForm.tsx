@@ -39,19 +39,19 @@ export default function RegisterForm({ action }: RegisterFormProps) {
   return (
     <div className="w-full max-w-md">
 
-{/* Logo */}
-<div className="flex flex-col items-center mb-8">
-  <span
-    className="font-headline italic text-2xl text-[#004317]"
-    style={{ fontFamily: 'Noto Serif, serif' }}
-  >
-    La Casa de los Juegos
-  </span>
-  <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533] mt-1">
-    Granada · Est. 2024
-  </span>
-  <span className="block w-10 h-0.5 bg-[#c9a84c] mt-3" />
-</div>
+      {/* Logo */}
+      <div className="flex flex-col items-center mb-8" style={{ marginTop: '60px' }}>
+        <span
+          className="font-headline italic text-2xl text-[#004317]"
+          style={{ fontFamily: 'var(--font-headline)' }}
+        >
+          La Casa de los Juegos
+        </span>
+        <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533] mt-1">
+          Granada · Est. 2024
+        </span>
+        <span className="block w-10 h-0.5 bg-[#c9a84c] mt-3" />
+      </div>
 
       {/* Tarjeta */}
       <div
@@ -59,20 +59,20 @@ export default function RegisterForm({ action }: RegisterFormProps) {
         style={{ boxShadow: '0 4px 32px rgba(42,23,15,.10)', borderRadius: '2px' }}
       >
         {/* Cabecera */}
-        <div className="mb-5">
+        <div className="mb-3">
           <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533]">
             Nueva cuenta
           </span>
           <span className="block w-10 h-0.5 bg-[#c9a84c] mt-2 mb-4" />
           <h1
             className="text-2xl text-[#2a170f]"
-            style={{ fontFamily: 'Noto Serif, serif' }}
+            style={{ fontFamily: 'var(--font-headline)' }}
           >
             Crear cuenta
           </h1>
           <p
             className="mt-2 text-sm text-[#717a6f]"
-            style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic' }}
+            style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic' }}
           >
             Únete a nuestra comunidad de jugadores.
           </p>
@@ -174,7 +174,7 @@ export default function RegisterForm({ action }: RegisterFormProps) {
           {/* Aviso legal */}
           <p
             className="text-xs text-[#717a6f]"
-            style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic' }}
+            style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic' }}
           >
             Al crear una cuenta aceptas nuestra{' '}
             <Link href="/privacidad" className="text-[#1a5c2a] hover:text-[#c9a84c] transition-colors">
@@ -208,7 +208,7 @@ export default function RegisterForm({ action }: RegisterFormProps) {
           <div className="relative flex justify-center">
             <span
               className="px-3 bg-white text-xs text-[#717a6f]"
-              style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic' }}
+              style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic' }}
             >
               ¿ya tienes cuenta?
             </span>
