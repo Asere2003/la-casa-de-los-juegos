@@ -226,37 +226,37 @@ export default function Header() {
           {/* Separador */}
           <span className="text-[#c9a84c]/40 text-lg select-none" aria-hidden="true">|</span>
 
-          {/* ── Usuario ── */}
-          {user ? (
-            <button
-              onClick={() => router.push('/cuenta')}
-              aria-label="Mi cuenta"
-              className="relative text-[#c9a84c] hover:text-[#c9a84c]/80 transition-colors p-1.5 rounded
+{/* ── Usuario ── */}
+{user ? (
+  <Link
+    href="/cuenta"
+    aria-label="Mi cuenta"
+    className="relative text-[#c9a84c] hover:text-[#c9a84c]/80 transition-colors p-1.5 rounded
                focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
-            >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-              <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5
-                     bg-[#c9a84c] border-2 border-[#805533]
+  >
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+      <circle cx="12" cy="7" r="4"/>
+    </svg>
+    <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5
+                     bg-[#c9a84c] border-2 border-[#004317]
                      rounded-full" />
-            </button>
-          ) : (
-            <button
-              onClick={() => router.push('/login')}
-              aria-label="Iniciar sesión"
-              className="text-[#c9a84c]/60 hover:text-[#c9a84c] transition-colors p-1.5 rounded
+  </Link>
+) : (
+  <Link
+    href="/login"
+    aria-label="Iniciar sesión"
+    className="text-[#c9a84c]/60 hover:text-[#c9a84c] transition-colors p-1.5 rounded
                focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
-            >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-            </button>
-          )}
+  >
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+      <circle cx="12" cy="7" r="4"/>
+    </svg>
+  </Link>
+)}
 
           {/* Separador */}
           <span className="text-[#c9a84c]/40 text-lg select-none" aria-hidden="true">|</span>

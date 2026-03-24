@@ -6,10 +6,10 @@
 export interface Category {
   id: string
   name: string
+  name_en?: string
+  name_cat?: string
   slug: string
-  emoji: string
-  color: string
-  description?: string
+  emoji?: string
   created_at: string
 }
 
@@ -17,10 +17,14 @@ export interface Category {
 export interface Product {
   id: string
   name: string
+  name_en?: string
+  name_cat?: string
   slug: string
   description?: string
+  description_en?: string
+  description_cat?: string
   price: number
-  compare_price?: number       // precio tachado
+  compare_price?: number
   stock: number
   sku?: string
   category_id?: string
@@ -32,6 +36,8 @@ export interface Product {
   min_age?: number
   duration_min?: number
   material?: string
+  origin?: string
+  badge?: 'nuevo' | 'agotandose' | 'ultimas-unidades' | 'oferta'
   featured: boolean
   active: boolean
   created_at: string
@@ -41,40 +47,17 @@ export interface Product {
 // ── Perfil de usuario ──
 export interface Profile {
   id: string
-  full_name?: string
-  phone?: string
-  avatar_url?: string
+  nombre?: string
+  telefono?: string
+  direccion?: string
+  ciudad?: string
+  codigo_postal?: string
+  pais?: string
   created_at: string
   updated_at: string
 }
 
-// ── Dirección ──
-export interface Address {
-  id: string
-  user_id: string
-  name: string
-  full_name: string
-  line1: string
-  line2?: string
-  city: string
-  province: string
-  postal_code: string
-  country: string
-  is_default: boolean
-  created_at: string
-}
-
-// ── Carrito ──
-export interface CartItem {
-  id: string
-  user_id: string
-  product_id: string
-  product?: Product
-  quantity: number
-  created_at: string
-}
-
-// Carrito local (sin login)
+// ── Carrito local (sin login) ──
 export interface LocalCartItem {
   product: Product
   quantity: number
@@ -99,7 +82,13 @@ export interface Order {
   shipping_cost: number
   stripe_payment_id?: string
   stripe_session_id?: string
-  shipping_address: Address
+  shipping_address: {
+    nombre: string
+    direccion: string
+    ciudad: string
+    codigo_postal: string
+    pais: string
+  }
   notes?: string
   items?: OrderItem[]
   created_at: string

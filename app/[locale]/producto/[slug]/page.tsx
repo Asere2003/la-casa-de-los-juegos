@@ -1,4 +1,4 @@
-import { getProductBySlug, getRelatedProducts } from '@/lib/mockData'
+import { getProductBySlug, getRelatedProducts } from '@/lib/supabase/queries'
 
 import type { Metadata } from 'next'
 import ProductActions from '@/components/producto/ProductActions'
@@ -11,11 +11,13 @@ import RelatedProducts from '@/components/producto/RelatedProducts'
 import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params
-  const product = getProductBySlug(slug)
+  const product = await getProductBySlug(slug)
   const t = await getTranslations('common')
   if (!product) return { title: t('error') }
   return {
@@ -30,10 +32,12 @@ export async function generateMetadata(
 
 export default async function ProductoPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const product = getProductBySlug(slug)
+  const product = await getProductBySlug(slug)
   if (!product) notFound()
 
-  const related = getRelatedProducts(slug, 4)
+  const related = product.category_id
+    ? await getRelatedProducts(product.category_id, product.id, 4)
+    : []
 
   return (
     <div className="min-h-screen bg-[#fff8f6]">

@@ -77,7 +77,7 @@ export default function ProductInfo({ product }: Props) {
       {product.category && (
         <span
           className="inline-flex items-center gap-1.5 text-white font-mono text-[9px] uppercase tracking-wider px-3 py-1.5 w-fit"
-          style={{ background: product.category.color || '#1a5c2a', borderRadius: '2px' }}
+          style={{ background:  '#1a5c2a', borderRadius: '2px' }}
         >
           {product.category.emoji} {product.category.name}
         </span>

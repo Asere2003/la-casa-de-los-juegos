@@ -1,14 +1,15 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import ActiveFilters from '@/components/catalogo/ActiveFilters'
-import CatalogHeader from '@/components/catalogo/CatalogHeader'
 import type { CatalogFilters } from '@/types/catalog'
+import CatalogHeader from '@/components/catalogo/CatalogHeader'
 import FilterSidebar from '@/components/catalogo/FilterSidebar'
-import { MOCK_PRODUCTS } from '@/lib/mockData'
+import type { Product } from '@/types'
 import ProductGrid from '@/components/catalogo/ProductGrid'
 import SortSelect from '@/components/catalogo/SortSelect'
+import { getProducts } from '@/lib/supabase/queries'
 import { useRouter } from '@/i18n/navigation'
 
 interface SearchParams {
@@ -43,7 +44,28 @@ export default function CatalogoContent({ initialSearchParams }: Props) {
     sort:       initialSearchParams.sort       || 'newest',
   })
 
+  const [products, setProducts]   = useState<Product[]>([])
+  const [loading, setLoading]     = useState(true)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  // ── Carga productos desde Supabase ──
+  useEffect(() => {
+    async function fetchProducts() {
+      setLoading(true)
+      const data = await getProducts({
+        category:   filters.category   || undefined,
+        difficulty: filters.difficulty || undefined,
+        minPrice:   filters.minPrice   || undefined,
+        maxPrice:   filters.maxPrice < 500 ? filters.maxPrice : undefined,
+        players:    filters.players ? Number.parseInt(filters.players) : undefined,
+        search:     filters.search     || undefined,
+        sort:       filters.sort,
+      })
+      setProducts(data)
+      setLoading(false)
+    }
+    fetchProducts()
+  }, [filters])
 
   const updateFilters = useCallback((newFilters: Partial<CatalogFilters>) => {
     const updated = { ...filters, ...newFilters }
@@ -62,24 +84,6 @@ export default function CatalogoContent({ initialSearchParams }: Props) {
   const clearFilter = (key: keyof CatalogFilters) => updateFilters({ [key]: DEFAULT_FILTERS[key] })
   const clearAll    = () => { setFilters(DEFAULT_FILTERS); router.push('/catalogo', { scroll: false }) }
 
-  const filteredProducts = MOCK_PRODUCTS.filter(p => {
-    if (filters.category   && p.category?.slug !== filters.category) return false
-    if (filters.difficulty && p.difficulty !== filters.difficulty)    return false
-    if (filters.minPrice   && p.price < filters.minPrice)            return false
-    if (filters.maxPrice   && p.price > filters.maxPrice)            return false
-    if (filters.search     && !p.name.toLowerCase().includes(filters.search.toLowerCase())) return false
-    if (filters.players) {
-      const n = parseInt(filters.players)
-      if (p.min_players && p.max_players && (n < p.min_players || n > p.max_players)) return false
-    }
-    return true
-  }).sort((a, b) => {
-    if (filters.sort === 'price_asc')  return a.price - b.price
-    if (filters.sort === 'price_desc') return b.price - a.price
-    if (filters.sort === 'popular')    return (b.featured ? 1 : 0) - (a.featured ? 1 : 0)
-    return 0
-  })
-
   const activeFilterCount = [
     filters.category, filters.difficulty, filters.players, filters.search,
     filters.minPrice > 0 || filters.maxPrice < 500 ? 'price' : '',
@@ -88,7 +92,7 @@ export default function CatalogoContent({ initialSearchParams }: Props) {
   return (
     <div className="min-h-screen bg-[#fff8f6]">
       <CatalogHeader
-        total={filteredProducts.length}
+        total={products.length}
         search={filters.search}
         onSearch={val => updateFilters({ search: val })}
         filterCount={activeFilterCount}
@@ -107,8 +111,8 @@ export default function CatalogoContent({ initialSearchParams }: Props) {
             <ActiveFilters filters={filters} onRemove={clearFilter} onClearAll={clearAll} />
             <SortSelect value={filters.sort} onChange={val => updateFilters({ sort: val })} />
           </div>
-          <ProductGrid products={filteredProducts} loading={false} />
-          {filteredProducts.length > 0 && (
+          <ProductGrid products={products} loading={loading} />
+          {!loading && products.length > 0 && (
             <div className="mt-14 flex justify-center">
               <button
                 className="flex items-center gap-3 border border-[#c0c9bc]/60 text-[#2a170f] font-headline italic px-10 py-4 hover:border-[#004317] hover:text-[#004317] hover:bg-[#fff1ec] transition-all focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
