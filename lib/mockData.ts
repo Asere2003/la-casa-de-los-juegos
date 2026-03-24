@@ -17,7 +17,7 @@ export const MOCK_PRODUCTS: Product[] = [
     difficulty: 'experto', min_players: 2, max_players: 2, min_age: 12,
     duration_min: 60, material: 'Ébano, arce y nácar',
     featured: true, active: true, created_at: '', updated_at: '',
-    category: { id: 'ajedrez', name: 'Ajedrez', slug: 'ajedrez', emoji: '♟', color: '#1c1c1c', created_at: '' },
+    category: { id: 'ajedrez', name: 'Ajedrez', slug: 'ajedrez', emoji: '♟', created_at: '' },
   },
   {
     id: '2',
@@ -30,7 +30,7 @@ export const MOCK_PRODUCTS: Product[] = [
     difficulty: 'medio', min_players: 1, max_players: 6, min_age: 14,
     duration_min: 120, material: 'Resina y pan de oro',
     featured: false, active: true, created_at: '', updated_at: '',
-    category: { id: 'rol', name: 'Rol', slug: 'rol', emoji: '🐉', color: '#3d1a5c', created_at: '' },
+    category: { id: 'rol', name: 'Rol', slug: 'rol', emoji: '🐉',  created_at: '' },
   },
   {
     id: '3',
@@ -43,7 +43,7 @@ export const MOCK_PRODUCTS: Product[] = [
     difficulty: 'experto', min_players: 1, max_players: 1, min_age: 16,
     duration_min: 90, material: 'Nogal',
     featured: true, active: true, created_at: '', updated_at: '',
-    category: { id: 'puzzles', name: 'Puzzles', slug: 'puzzles', emoji: '🧩', color: '#1a3a5c', created_at: '' },
+    category: { id: 'puzzles', name: 'Puzzles', slug: 'puzzles', emoji: '🧩', created_at: '' },
   },
   {
     id: '4',
@@ -56,7 +56,7 @@ export const MOCK_PRODUCTS: Product[] = [
     difficulty: 'experto', min_players: 2, max_players: 2, min_age: 12,
     duration_min: 90, material: 'Hueso y ébano',
     featured: false, active: true, created_at: '', updated_at: '',
-    category: { id: 'ajedrez', name: 'Ajedrez', slug: 'ajedrez', emoji: '♟', color: '#1c1c1c', created_at: '' },
+    category: { id: 'ajedrez', name: 'Ajedrez', slug: 'ajedrez', emoji: '♟', created_at: '' },
   },
   {
     id: '5',
@@ -69,7 +69,7 @@ export const MOCK_PRODUCTS: Product[] = [
     difficulty: 'medio', min_players: 1, max_players: 8, min_age: 14,
     duration_min: 120, material: 'Cuarzo y plata',
     featured: false, active: true, created_at: '', updated_at: '',
-    category: { id: 'rol', name: 'Rol', slug: 'rol', emoji: '🐉', color: '#3d1a5c', created_at: '' },
+    category: { id: 'rol', name: 'Rol', slug: 'rol', emoji: '🐉', created_at: '' },
   },
   {
     id: '6',
@@ -82,7 +82,7 @@ export const MOCK_PRODUCTS: Product[] = [
     difficulty: 'medio', min_players: 2, max_players: 2, min_age: 10,
     duration_min: 30, material: 'Piel y madera',
     featured: false, active: true, created_at: '', updated_at: '',
-    category: { id: 'clasicos', name: 'Clásicos', slug: 'clasicos', emoji: '🎭', color: '#5c3d1a', created_at: '' },
+    category: { id: 'clasicos', name: 'Clásicos', slug: 'clasicos', emoji: '🎭', created_at: '' },
   },
   {
     id: '7',
@@ -95,7 +95,7 @@ export const MOCK_PRODUCTS: Product[] = [
     difficulty: 'avanzado', min_players: 2, max_players: 2, min_age: 8,
     duration_min: 60, material: 'Haya',
     featured: true, active: true, created_at: '', updated_at: '',
-    category: { id: 'del-mundo', name: 'Del Mundo', slug: 'del-mundo', emoji: '🌍', color: '#1a4a5c', created_at: '' },
+    category: { id: 'del-mundo', name: 'Del Mundo', slug: 'del-mundo', emoji: '🌍', created_at: '' },
   },
   {
     id: '8',
@@ -108,7 +108,7 @@ export const MOCK_PRODUCTS: Product[] = [
     difficulty: 'familiar', min_players: 1, max_players: 4, min_age: 16,
     duration_min: 30, material: 'Cartón premium',
     featured: false, active: true, created_at: '', updated_at: '',
-    category: { id: 'cartas', name: 'Cartas', slug: 'cartas', emoji: '🃏', color: '#5c1a1a', created_at: '' },
+    category: { id: 'cartas', name: 'Cartas', slug: 'cartas', emoji: '🃏', created_at: '' },
   },
 ]
 

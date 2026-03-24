@@ -29,7 +29,7 @@ export const MOCK_PRODUCTS: Product[] = [
     active: true,
     created_at: '',
     updated_at: '',
-    category: { id: 'ajedrez', name: 'Ajedrez', slug: 'ajedrez', emoji: '♟', color: '#1c1c1c', created_at: '' },
+    category: { id: 'ajedrez', name: 'Ajedrez', slug: 'ajedrez', emoji: '♟', created_at: '' },
   },
   {
     id: '2',
@@ -54,7 +54,7 @@ export const MOCK_PRODUCTS: Product[] = [
     active: true,
     created_at: '',
     updated_at: '',
-    category: { id: 'rol', name: 'Rol', slug: 'rol', emoji: '🐉', color: '#3d1a5c', created_at: '' },
+    category: { id: 'rol', name: 'Rol', slug: 'rol', emoji: '🐉', created_at: '' },
   },
   {
     id: '3',
@@ -79,7 +79,7 @@ export const MOCK_PRODUCTS: Product[] = [
     active: true,
     created_at: '',
     updated_at: '',
-    category: { id: 'puzzles', name: 'Puzzles', slug: 'puzzles', emoji: '🧩', color: '#1a3a5c', created_at: '' },
+    category: { id: 'puzzles', name: 'Puzzles', slug: 'puzzles', emoji: '🧩', created_at: '' },
   },
   {
     id: '4',
@@ -104,7 +104,7 @@ export const MOCK_PRODUCTS: Product[] = [
     active: true,
     created_at: '',
     updated_at: '',
-    category: { id: 'ajedrez', name: 'Ajedrez', slug: 'ajedrez', emoji: '♟', color: '#1c1c1c', created_at: '' },
+    category: { id: 'ajedrez', name: 'Ajedrez', slug: 'ajedrez', emoji: '♟', created_at: '' },
   },
   {
     id: '5',
@@ -129,7 +129,7 @@ export const MOCK_PRODUCTS: Product[] = [
     active: true,
     created_at: '',
     updated_at: '',
-    category: { id: 'rol', name: 'Rol', slug: 'rol', emoji: '🐉', color: '#3d1a5c', created_at: '' },
+    category: { id: 'rol', name: 'Rol', slug: 'rol', emoji: '🐉', created_at: '' },
   },
   {
     id: '6',
@@ -154,7 +154,7 @@ export const MOCK_PRODUCTS: Product[] = [
     active: true,
     created_at: '',
     updated_at: '',
-    category: { id: 'clasicos', name: 'Clásicos', slug: 'clasicos', emoji: '🎭', color: '#5c3d1a', created_at: '' },
+    category: { id: 'clasicos', name: 'Clásicos', slug: 'clasicos', emoji: '🎭', created_at: '' },
   },
   {
     id: '7',
@@ -179,7 +179,7 @@ export const MOCK_PRODUCTS: Product[] = [
     active: true,
     created_at: '',
     updated_at: '',
-    category: { id: 'del-mundo', name: 'Del Mundo', slug: 'del-mundo', emoji: '🌍', color: '#1a4a5c', created_at: '' },
+    category: { id: 'del-mundo', name: 'Del Mundo', slug: 'del-mundo', emoji: '🌍', created_at: '' },
   },
   {
     id: '8',
@@ -204,7 +204,7 @@ export const MOCK_PRODUCTS: Product[] = [
     active: true,
     created_at: '',
     updated_at: '',
-    category: { id: 'cartas', name: 'Cartas', slug: 'cartas', emoji: '🃏', color: '#5c1a1a', created_at: '' },
+    category: { id: 'cartas', name: 'Cartas', slug: 'cartas', emoji: '🃏', created_at: '' },
   },
 ]
 
