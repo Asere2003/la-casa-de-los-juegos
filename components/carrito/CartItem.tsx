@@ -50,7 +50,7 @@ export default function CartItem({ item }: Props) {
             {product.category && (
               <span
                 className="inline-block text-white text-[8px] font-mono px-2 py-0.5 uppercase tracking-tighter mb-1.5"
-                style={{ background: product.category.color || '#1a5c2a', borderRadius: '2px' }}
+                style={{ background: '#1a5c2a', borderRadius: '2px' }}
               >
                 {product.category.emoji} {product.category.name}
               </span>

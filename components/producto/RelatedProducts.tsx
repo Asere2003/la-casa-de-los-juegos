@@ -63,7 +63,7 @@ export default function RelatedProducts({ products, currentSlug }: Props) {
               {product.category && (
                 <span
                   className="absolute top-3 left-3 text-white text-[8px] font-mono px-2 py-0.5 uppercase tracking-tighter"
-                  style={{ background: product.category.color || '#1a5c2a', borderRadius: '2px' }}
+                  style={{ background: '#1a5c2a', borderRadius: '2px' }}
                 >
                   {product.category.emoji} {product.category.name}
                 </span>
