@@ -53,6 +53,7 @@ export interface Profile {
   ciudad?: string
   codigo_postal?: string
   pais?: string
+  role: string
   created_at: string
   updated_at: string
 }

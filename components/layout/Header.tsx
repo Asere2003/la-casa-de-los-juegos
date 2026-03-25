@@ -28,6 +28,7 @@ const categories = [
 const localeLabels: Record<string, string> = { es: 'ES', en: 'EN', cat: 'CAT' }
 
 export default function Header() {
+  const [isAdmin, setIsAdmin] = useState(false)
   const [user, setUser] = useState<User | null>(null)
 
   const pathname = usePathname()
@@ -88,21 +89,41 @@ export default function Header() {
     return () => { document.body.style.overflow = '' }
   }, [drawerOpen])
 
-  useEffect(() => {
-    const supabase = createClient()
+useEffect(() => {
+  const supabase = createClient()
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    setUser(session?.user ?? null)
+    if (session?.user) {
+      supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', session.user.id)
+        .single()
+        .then(({ data }) => setIsAdmin(data?.role === 'admin'))
+    } else {
+      setIsAdmin(false)
+    }
+  })
+
+  const { data: { subscription } } = supabase.auth.onAuthStateChange(
+    (_event, session) => {
       setUser(session?.user ?? null)
-    })
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null)
+      if (session?.user) {
+        supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', session.user.id)
+          .single()
+          .then(({ data }) => setIsAdmin(data?.role === 'admin'))
+      } else {
+        setIsAdmin(false)
       }
-    )
+    }
+  )
 
-    return () => subscription.unsubscribe()
-  }, [pathname]) // 👈 clave: se re-ejecuta cada vez que cambia la ruta
+  return () => subscription.unsubscribe()
+}, [pathname]) // 👈 clave: se re-ejecuta cada vez que cambia la ruta
 
   // Función logout
   async function handleLogout() {
@@ -174,6 +195,21 @@ export default function Header() {
               {t(link.key)}
             </Link>
           ))}
+          {isAdmin && (
+            <Link
+              href={`/admin`}
+              className={`
+                font-headline text-xs tracking-widest uppercase pb-0.5 border-b transition-colors
+                focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded
+                ${pathname.includes('/admin')
+                  ? 'text-[#c9a84c] border-[#c9a84c]'
+                  : 'text-[#c9a84c]/60 border-transparent hover:text-[#c9a84c] hover:border-[#c9a84c]'
+                }
+              `}
+            >
+              Admin
+            </Link>
+          )}
         </nav>
 
         <div className="flex items-center gap-2">
@@ -348,6 +384,17 @@ export default function Header() {
                 {t(item.key)}
               </Link>
             ))}
+            {user && isAdmin && (
+              <Link
+                onClick={() => setDrawerOpen(false)}
+                href={`/admin`}
+                className="flex items-center w-full px-6 py-3.5 text-[#004317] hover:bg-[#fff1ec]
+               font-headline italic text-lg transition-colors
+               focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#c9a84c]"
+              >
+                Panel de administración
+              </Link>
+            )}
             {user && (
               <button
                 onClick={handleLogout}
