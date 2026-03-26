@@ -4,8 +4,8 @@ import AjustesTab from './AjustesTab'
 import PedidosTab from './PedidosTab'
 import type { User } from '@supabase/supabase-js'
 import { useSearchParams } from 'next/navigation'
-import { useTranslations } from 'next-intl'
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 interface Profile {
   id: string

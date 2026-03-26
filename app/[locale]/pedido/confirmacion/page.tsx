@@ -22,17 +22,17 @@ export default async function ConfirmacionPage({
     return <Redirect locale={locale} />
   }
 
-  // Recuperar la sesión de Stripe
   const session = await stripe.checkout.sessions.retrieve(session_id)
 
   if (session.payment_status !== 'paid') {
     return <Redirect locale={locale} />
   }
 
-  // Esperar hasta 5 segundos a que el webhook procese el pedido
+  // Crear cliente Supabase y obtener usuario
   const supabase = await createClient()
-  let order = null
+  const { data: { user } } = await supabase.auth.getUser()
 
+  let order = null
   for (let i = 0; i < 5; i++) {
     const { data } = await supabase
       .from('orders')
@@ -95,12 +95,21 @@ export default async function ConfirmacionPage({
         </div>
 
         <div className="flex flex-col gap-3">
-          <Link
-            href={`/${locale}/cuenta?tab=pedidos`}
-            className="btn-primary px-8 py-3 text-center"
-          >
-            {t('view_orders')}
-          </Link>
+          {user ? (
+            <Link
+              href={`/${locale}/cuenta?tab=pedidos`}
+              className="btn-primary px-8 py-3 text-center"
+            >
+              {t('view_orders')}
+            </Link>
+          ) : (
+            <Link
+              href={`/${locale}/registro`}
+              className="btn-primary px-8 py-3 text-center"
+            >
+              Crear cuenta para ver tus pedidos
+            </Link>
+          )}
           <Link
             href={`/${locale}/catalogo`}
             className="btn-outline px-8 py-3 text-center"

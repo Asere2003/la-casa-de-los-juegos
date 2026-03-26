@@ -92,7 +92,7 @@ export default function Logo({
         fillOpacity="0.55"
         letterSpacing="3"
       >
-        GRANADA · EST. 2026
+        GRANADA · EST. 2024
       </text>
     </svg>
   )

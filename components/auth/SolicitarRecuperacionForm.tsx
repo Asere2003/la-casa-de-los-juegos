@@ -33,7 +33,10 @@ export default function SolicitarRecuperacionForm({ action, locale }: Props) {
 
       {/* Logo */}
       <div className="flex flex-col items-center mb-8">
-        <span className="font-headline italic text-2xl text-[#004317]">
+        <span
+          className="font-headline italic text-2xl text-[#004317]"
+          style={{ fontFamily: 'var(--font-headline)' }}
+        >
           La Casa de los Juegos
         </span>
         <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533] mt-1">
@@ -43,7 +46,7 @@ export default function SolicitarRecuperacionForm({ action, locale }: Props) {
       </div>
 
       <div
-        className="px-5 md:px-10 py-8 bg-white"
+        className="px-5 md:px-10 py-8"
         style={{ boxShadow: '0 4px 32px rgba(42,23,15,.10)', borderRadius: '2px' }}
       >
         <div className="mb-6">

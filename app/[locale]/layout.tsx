@@ -60,6 +60,9 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} data-scroll-behavior="smooth" className={`${notoSerif.variable} ${newsreader.variable}`}>
+      <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+      </head>
       <body
           suppressHydrationWarning 
           className="bg-[#fff8f6] text-[#2a170f] font-body antialiased">

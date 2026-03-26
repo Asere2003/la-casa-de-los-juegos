@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
 import CartEmpty from '@/components/carrito/CartEmpty'
 import CartHeader from '@/components/carrito/CartHeader'
 import CartItemList from '@/components/carrito/CartItemList'
@@ -8,10 +10,27 @@ import { useCartStore } from '@/store/cartStore'
 
 export default function CarritoPage() {
   const _hasHydrated = useCartStore(s => s._hasHydrated)
+const [forceShow, setForceShow] = useState(false)
+
+useEffect(() => {
+  const timer = setTimeout(() => setForceShow(true), 1500)
+  return () => clearTimeout(timer)
+}, [])
+
+useEffect(() => {
+  const handlePageShow = (e: PageTransitionEvent) => {
+    if (e.persisted) {
+      // Página restaurada del bfcache — forzar show
+      setForceShow(true)
+    }
+  }
+  window.addEventListener('pageshow', handlePageShow)
+  return () => window.removeEventListener('pageshow', handlePageShow)
+}, [])
   const items = useCartStore(s => s.items)
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
 
-  if (!_hasHydrated) return (
+  if (!_hasHydrated && !forceShow) return (
   <div className="min-h-screen bg-[#fff8f6]">
     <div className="max-w-6xl mx-auto px-5 md:px-10 py-10">
       <div className="h-8 w-48 bg-[#004317]/10 rounded animate-pulse mb-8" />

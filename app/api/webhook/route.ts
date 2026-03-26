@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import Stripe from 'stripe'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { sendConfirmacionPedido } from '@/lib/email/confirmacion-pedido'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
@@ -123,6 +124,29 @@ export async function POST(request: NextRequest) {
       }
 
       console.log('✅ Pedido creado:', order.id)
+
+      // Enviar email de confirmación
+      if (session.customer_details?.email) {
+        const emailItems = productItems.map(item => ({
+          product_name: item.description ?? '',
+          product_image: null,
+          quantity: item.quantity ?? 1,
+          price: (item.price?.unit_amount ?? 0) / 100,
+          subtotal: (item.amount_total ?? 0) / 100,
+        }))
+
+        await sendConfirmacionPedido({
+          to: session.customer_details.email,
+          orderNumber: order.id.slice(0, 8).toUpperCase(),
+          total: order.total,
+          shippingCost: order.shipping_cost,
+          items: emailItems,
+          shippingName: session.customer_details?.name ?? null,
+          shippingAddress: session.customer_details?.address?.line1 ?? null,
+          shippingCity: session.customer_details?.address?.city ?? null,
+          shippingPostalCode: session.customer_details?.address?.postal_code ?? null,
+        })
+      }
 
     } catch (error) {
       console.error('Error procesando webhook:', error)

@@ -4,11 +4,13 @@ export const metadata = {
   title: 'Verifica tu email — La Casa de los Juegos',
 }
 
-export default function VerificarEmailPage({
+export default async function VerificarEmailPage({
   searchParams,
 }: {
-  searchParams: { email?: string }
+  searchParams: Promise<{ email?: string }>
 }) {
+  const { email } = await searchParams
+
   return (
     <main className="min-h-screen bg-[#fff8f6] flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md text-center">
@@ -43,8 +45,8 @@ export default function VerificarEmailPage({
           style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic' }}
         >
           Te hemos enviado un enlace de confirmación
-          {searchParams.email ? (
-            <> a <strong className="text-[#2a170f] not-italic">{searchParams.email}</strong></>
+          {email ? (
+            <> a <strong className="text-[#2a170f] not-italic">{email}</strong></>
           ) : (
             ' a tu email'
           )}.

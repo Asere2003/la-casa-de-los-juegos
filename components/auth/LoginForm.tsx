@@ -1,8 +1,9 @@
 'use client'
 
 import { Link, useRouter } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
 import { useState, useTransition } from 'react'
+
+import { useTranslations } from 'next-intl'
 
 interface LoginFormProps {
   action: (formData: FormData) => Promise<{ error?: string } | void>
@@ -46,19 +47,19 @@ export default function LoginForm({ action, redirectTo }: LoginFormProps) {
   return (
     <div className="w-full max-w-md">
 
-{/* Logo */}
-<div className="flex flex-col items-center mb-8">
-  <span
-    className="font-headline italic text-2xl text-[#004317]"
-    style={{ fontFamily: 'var(--font-headline)' }}
-  >
-    La Casa de los Juegos
-  </span>
-  <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533] mt-1">
-    Granada · Est. 2024
-  </span>
-  <span className="block w-10 h-0.5 bg-[#c9a84c] mt-3" />
-</div>
+      {/* Logo */}
+      <div className="flex flex-col items-center mb-8">
+        <span
+          className="font-headline italic text-2xl text-[#004317]"
+          style={{ fontFamily: 'var(--font-headline)' }}
+        >
+          La Casa de los Juegos
+        </span>
+        <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533] mt-1">
+          Granada · Est. 2024
+        </span>
+        <span className="block w-10 h-0.5 bg-[#c9a84c] mt-3" />
+      </div>
 
       {/* Tarjeta */}
       <div

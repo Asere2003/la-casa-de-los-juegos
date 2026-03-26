@@ -15,10 +15,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Carrito vacío' }, { status: 400 })
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 
-      (process.env.NEXT_PUBLIC_VERCEL_URL 
-        ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` 
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ??
+      (process.env.NEXT_PUBLIC_VERCEL_URL
+        ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
         : 'http://localhost:3000')
+
+    // Obtener perfil del usuario si está logado
+    let userProfile = null
+    if (user) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('nombre, direccion, ciudad, codigo_postal, pais')
+        .eq('id', user.id)
+        .single()
+      userProfile = profile
+    }
+
+    const hasAddress = userProfile?.direccion && userProfile?.ciudad
 
     // Construir line_items para Stripe
     const lineItems = items.map((item: {
@@ -31,7 +44,7 @@ export async function POST(request: NextRequest) {
           name: item.product.name,
           images: item.product.images?.[0] ? [item.product.images[0]] : [],
         },
-        unit_amount: Math.round(item.product.price * 100), // Stripe usa céntimos
+        unit_amount: Math.round(item.product.price * 100),
       },
       quantity: item.quantity,
     }))
@@ -64,6 +77,12 @@ export async function POST(request: NextRequest) {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
+      // Solo pedir dirección si no la tenemos en el perfil
+      ...(hasAddress ? {} : {
+        shipping_address_collection: {
+          allowed_countries: ['ES', 'PT', 'FR', 'DE', 'IT', 'GB'],
+        },
+      }),
       success_url: `${siteUrl}/${locale}/pedido/confirmacion?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/${locale}/carrito`,
       customer_email: user?.email,

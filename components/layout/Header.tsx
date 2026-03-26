@@ -174,6 +174,7 @@ useEffect(() => {
               sizes="(min-width: 768px) 160px, 120px"
               className="md:h-40 md:w-40 h-12 w-28 object-contain"
               quality={90}
+              loading="eager"
             />
           </Link>
         </div>

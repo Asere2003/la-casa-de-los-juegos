@@ -20,7 +20,7 @@ export async function login(formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
-  
+
 }
 
 // ── REGISTRO ───────────────────────────────────────
@@ -36,14 +36,31 @@ export async function registro(formData: FormData) {
     email,
     password,
     options: {
-      data: {
-        nombre_completo: nombre,
-      },
+      data: { nombre_completo: nombre },
     },
   })
 
   if (error) {
     return { error: error.message }
+  }
+
+  // Asociar pedidos de invitado usando service role
+  try {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    const admin = createAdminClient()
+
+    const { data: users } = await admin.auth.admin.listUsers()
+    const matchUser = users?.users.find(u => u.email === email)
+
+    if (matchUser) {
+      await admin
+        .from('orders')
+        .update({ user_id: matchUser.id })
+        .eq('shipping_email', email)
+        .is('user_id', null)
+    }
+  } catch (e) {
+    console.error('Error asociando pedidos:', e)
   }
 
   revalidatePath('/', 'layout')
