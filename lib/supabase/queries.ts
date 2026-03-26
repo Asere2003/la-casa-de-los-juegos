@@ -14,8 +14,9 @@ export async function getCategories(): Promise<Category[]> {
     return data ?? []
 }
 
-// ── PRODUCTOS ───────────────────────────────────────────────
-export async function getProducts(filters?: {
+
+// Auxiliar para aplicar filtros y ordenación a queries de productos
+async function applyProductFilters(query: any, filters?: {
     category?: string
     difficulty?: string
     minPrice?: number
@@ -25,16 +26,7 @@ export async function getProducts(filters?: {
     sort?: string
     featured?: boolean
     limit?: number
-}): Promise<Product[]> {
-    const supabase = createClient()
-
-    let query = supabase
-    .from('products')
-    .select('*, category:categories(*)')
-    .eq('active', true)
-    .gt('stock', 0) // Solo productos con stock mayor a 0
-
-    // Filtros
+}) {
     if (filters?.category) {
         const supabase2 = createClient()
         const { data: cat } = await supabase2
@@ -63,11 +55,56 @@ export async function getProducts(filters?: {
         case 'popular': query = query.order('featured', { ascending: false }); break
         default: query = query.order('created_at', { ascending: false })
     }
+    return query
+}
 
+// ── PRODUCTOS ───────────────────────────────────────────────
+export async function getProducts(filters?: {
+    category?: string
+    difficulty?: string
+    minPrice?: number
+    maxPrice?: number
+    players?: number
+    search?: string
+    sort?: string
+    featured?: boolean
+    limit?: number
+}): Promise<Product[]> {
+    const supabase = createClient()
+    let query = supabase
+        .from('products')
+        .select('*, category:categories(*)')
+        .eq('active', true)
+    query = await applyProductFilters(query, filters)
     const { data, error } = await query
     if (error) { console.error('getProducts:', error); return [] }
     return data ?? []
 }
+
+// ── PRODUCTOS NUEVAS CURIOSIDADES ───────────────────────────────
+export async function getProductsNewCuriosities(filters?: {
+    category?: string
+    difficulty?: string
+    minPrice?: number
+    maxPrice?: number
+    players?: number
+    search?: string
+    sort?: string
+    featured?: boolean
+    limit?: number
+}): Promise<Product[]> {
+    const supabase = createClient()
+    let query = supabase
+        .from('products')
+        .select('*, category:categories(*)')
+        .eq('active', true)
+        .gt('stock', 0)
+    query = await applyProductFilters(query, filters)
+    const { data, error } = await query
+    if (error) { console.error('getProducts:', error); return [] }
+    return data ?? []
+}
+
 
 // ── PRODUCTO POR SLUG ───────────────────────────────────────
 export async function getProductBySlug(slug: string): Promise<Product | null> {

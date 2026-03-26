@@ -1,4 +1,4 @@
-import { getFeaturedProducts, getProducts } from '@/lib/supabase/queries'
+import { getFeaturedProducts, getProductsNewCuriosities } from '@/lib/supabase/queries'
 
 import AudienceGrid from '@/components/home/AudienceGrid'
 import BestsellersSection from '@/components/home/BestsellersSection'
@@ -23,7 +23,7 @@ export default async function HomePage() {
 
   // ── Datos desde Supabase ──
   const [newArrivalsRaw, bestsellersRaw] = await Promise.all([
-    getProducts({ sort: 'newest', limit: 4 }),
+    getProductsNewCuriosities({ sort: 'newest', limit: 4 }),
     getFeaturedProducts(3),
   ])
 
