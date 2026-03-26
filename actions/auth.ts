@@ -37,6 +37,7 @@ export async function registro(formData: FormData) {
     password,
     options: {
       data: { nombre_completo: nombre },
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/auth/callback`,
     },
   })
 
