@@ -21,9 +21,15 @@ export default async function CuentaPage({
     .eq('id', user.id)
     .single()
 
+  // Carga los pedidos de la BD
+  const { data: orders } = await supabase
+    .from('orders')
+    .select('*, order_items(*)')
+    .eq('user_id', user.id)
+
   return (
     <main className="min-h-screen bg-[#fff8f6] pt-20 pb-32">
-      <CuentaDashboard user={user} profile={profile} />
+      <CuentaDashboard user={user} profile={profile} orders={orders ?? []} />
     </main>
   )
 }

@@ -3,16 +3,29 @@
 import { useState, useTransition } from 'react'
 
 import { Link } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 
 interface RegisterFormProps {
   action: (formData: FormData) => Promise<{ error?: string } | void>
 }
 
+function getRegisterErrorKey(error: string): string {
+  const errorKeys: Record<string, string> = {
+    'User already registered': 'error_user_already_registered',
+    'Password should be at least 6 characters': 'error_password_too_short',
+    'Unable to validate email address: invalid format': 'error_invalid_email',
+    'Too many requests': 'error_too_many_requests',
+  }
+  return errorKeys[error] ?? 'error_generic'
+}
+
 export default function RegisterForm({ action }: RegisterFormProps) {
+  const t = useTranslations('auth')
+
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
     setError(null)
 
@@ -21,18 +34,18 @@ export default function RegisterForm({ action }: RegisterFormProps) {
     const confirmar = formData.get('confirmar_password') as string
 
     if (password !== confirmar) {
-      setError('Las contraseñas no coinciden.')
+      setError('error_passwords_mismatch')
       return
     }
 
     if (password.length < 8) {
-      setError('La contraseña debe tener al menos 8 caracteres.')
+      setError('error_password_too_short')
       return
     }
 
     startTransition(async () => {
       const result = await action(formData)
-      if (result?.error) setError(traducirError(result.error))
+      if (result?.error) setError(getRegisterErrorKey(result.error))
     })
   }
 
@@ -61,20 +74,20 @@ export default function RegisterForm({ action }: RegisterFormProps) {
         {/* Cabecera */}
         <div className="mb-3">
           <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533]">
-            Nueva cuenta
+            {t('register_label')}
           </span>
           <span className="block w-10 h-0.5 bg-[#c9a84c] mt-2 mb-4" />
           <h1
             className="text-2xl text-[#2a170f]"
             style={{ fontFamily: 'var(--font-headline)' }}
           >
-            Crear cuenta
+            {t('register')}
           </h1>
           <p
             className="mt-2 text-sm text-[#717a6f]"
             style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic' }}
           >
-            Únete a nuestra comunidad de jugadores.
+            {t('register_subtitle')}
           </p>
         </div>
 
@@ -84,7 +97,7 @@ export default function RegisterForm({ action }: RegisterFormProps) {
             className="mb-6 px-4 py-3 text-sm text-[#ba1a1a] bg-[#ba1a1a]/8 border border-[#ba1a1a]/20"
             style={{ borderRadius: '2px' }}
           >
-            {error}
+            {t(error)}
           </div>
         )}
 
@@ -97,7 +110,7 @@ export default function RegisterForm({ action }: RegisterFormProps) {
               htmlFor="nombre"
               className="block text-xs font-mono uppercase tracking-wider text-[#2a170f] mb-1.5"
             >
-              Nombre completo
+              {t('name')}
             </label>
             <input
               id="nombre"
@@ -107,7 +120,7 @@ export default function RegisterForm({ action }: RegisterFormProps) {
               required
               disabled={isPending}
               className="input-base disabled:opacity-50 disabled:cursor-not-allowed"
-              placeholder="Ana García"
+              placeholder={t('name_placeholder')}
             />
           </div>
 
@@ -117,7 +130,7 @@ export default function RegisterForm({ action }: RegisterFormProps) {
               htmlFor="email"
               className="block text-xs font-mono uppercase tracking-wider text-[#2a170f] mb-1.5"
             >
-              Email
+              {t('email_label')}
             </label>
             <input
               id="email"
@@ -127,7 +140,7 @@ export default function RegisterForm({ action }: RegisterFormProps) {
               required
               disabled={isPending}
               className="input-base disabled:opacity-50 disabled:cursor-not-allowed"
-              placeholder="tu@email.com"
+              placeholder={t('email_placeholder')}
             />
           </div>
 
@@ -137,7 +150,7 @@ export default function RegisterForm({ action }: RegisterFormProps) {
               htmlFor="password"
               className="block text-xs font-mono uppercase tracking-wider text-[#2a170f] mb-1.5"
             >
-              Contraseña
+              {t('password')}
             </label>
             <input
               id="password"
@@ -147,7 +160,7 @@ export default function RegisterForm({ action }: RegisterFormProps) {
               required
               disabled={isPending}
               className="input-base disabled:opacity-50 disabled:cursor-not-allowed"
-              placeholder="Mínimo 8 caracteres"
+              placeholder={t('password_placeholder')}
             />
           </div>
 
@@ -157,7 +170,7 @@ export default function RegisterForm({ action }: RegisterFormProps) {
               htmlFor="confirmar_password"
               className="block text-xs font-mono uppercase tracking-wider text-[#2a170f] mb-1.5"
             >
-              Confirmar contraseña
+              {t('confirm_password')}
             </label>
             <input
               id="confirmar_password"
@@ -176,9 +189,9 @@ export default function RegisterForm({ action }: RegisterFormProps) {
             className="text-xs text-[#717a6f]"
             style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic' }}
           >
-            Al crear una cuenta aceptas nuestra{' '}
+            {t('privacy_notice_before')}{' '}
             <Link href="/privacidad" className="text-[#1a5c2a] hover:text-[#c9a84c] transition-colors">
-              política de privacidad
+              {t('privacy_link')}
             </Link>
             .
           </p>
@@ -192,10 +205,10 @@ export default function RegisterForm({ action }: RegisterFormProps) {
             {isPending ? (
               <>
                 <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Creando cuenta…
+                {t('creating_account')}
               </>
             ) : (
-              'Crear cuenta →'
+              t('submit_register')
             )}
           </button>
         </form>
@@ -210,7 +223,7 @@ export default function RegisterForm({ action }: RegisterFormProps) {
               className="px-3 bg-white text-xs text-[#717a6f]"
               style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic' }}
             >
-              ¿ya tienes cuenta?
+              {t('has_account')}
             </span>
           </div>
         </div>
@@ -220,19 +233,9 @@ export default function RegisterForm({ action }: RegisterFormProps) {
           href="/login"
           className="w-full btn-outline justify-center block text-center"
         >
-          Iniciar sesión
+          {t('login')}
         </Link>
       </div>
     </div>
   )
-}
-
-function traducirError(error: string): string {
-  const errores: Record<string, string> = {
-    'User already registered': 'Ya existe una cuenta con ese email.',
-    'Password should be at least 6 characters': 'La contraseña debe tener al menos 8 caracteres.',
-    'Unable to validate email address: invalid format': 'El formato del email no es válido.',
-    'Too many requests': 'Demasiados intentos. Espera unos minutos.',
-  }
-  return errores[error] ?? 'Ha ocurrido un error. Inténtalo de nuevo.'
 }

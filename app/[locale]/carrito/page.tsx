@@ -7,8 +7,27 @@ import CartSummary from '@/components/carrito/CartSummary'
 import { useCartStore } from '@/store/cartStore'
 
 export default function CarritoPage() {
+  const _hasHydrated = useCartStore(s => s._hasHydrated)
   const items = useCartStore(s => s.items)
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
+
+  if (!_hasHydrated) return (
+  <div className="min-h-screen bg-[#fff8f6]">
+    <div className="max-w-6xl mx-auto px-5 md:px-10 py-10">
+      <div className="h-8 w-48 bg-[#004317]/10 rounded animate-pulse mb-8" />
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div className="lg:col-span-8 space-y-4">
+          {[1,2].map(i => (
+            <div key={i} className="h-24 bg-[#004317]/10 rounded animate-pulse" />
+          ))}
+        </div>
+        <div className="lg:col-span-4">
+          <div className="h-64 bg-[#004317]/10 rounded animate-pulse" />
+        </div>
+      </div>
+    </div>
+  </div>
+)
 
   return (
     <div className="min-h-screen bg-[#fff8f6]">

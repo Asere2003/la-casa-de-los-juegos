@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 
 import { Link } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 
 interface Props {
   action: (formData: FormData) => Promise<{ success?: boolean; error?: string }>
@@ -10,10 +11,13 @@ interface Props {
 }
 
 export default function SolicitarRecuperacionForm({ action, locale }: Props) {
+  const t = useTranslations('auth')
+  const tNav = useTranslations('nav')
+
   const [isPending, startTransition] = useTransition()
   const [sent, setSent] = useState(false)
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     formData.append('locale', locale)
@@ -44,14 +48,14 @@ export default function SolicitarRecuperacionForm({ action, locale }: Props) {
       >
         <div className="mb-6">
           <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533]">
-            Mi cuenta
+            {tNav('account')}
           </span>
           <span className="block w-10 h-0.5 bg-[#c9a84c] mt-2 mb-4" />
           <h1 className="font-headline text-2xl text-[#2a170f]">
-            Recuperar contraseña
+            {t('recover_password_title')}
           </h1>
           <p className="mt-2 text-sm text-[#717a6f] font-body italic">
-            Introduce tu email y te enviaremos un enlace para restablecer tu contraseña.
+            {t('recover_password_subtitle')}
           </p>
         </div>
 
@@ -59,16 +63,16 @@ export default function SolicitarRecuperacionForm({ action, locale }: Props) {
           <div className="text-center py-4">
             <div className="text-4xl mb-4">✉️</div>
             <p className="font-body italic text-[#2a170f] mb-2">
-              Si existe una cuenta con ese email, recibirás un enlace en breve.
+              {t('recover_password_sent')}
             </p>
             <p className="text-sm text-[#717a6f] font-body italic mb-6">
-              Revisa también tu carpeta de spam.
+              {t('recover_password_spam')}
             </p>
             <Link
               href="/login"
               className="text-sm text-[#1a5c2a] hover:text-[#c9a84c] transition-colors font-body italic"
             >
-              ← Volver al login
+              {t('back_to_login')}
             </Link>
           </div>
         ) : (
@@ -78,7 +82,7 @@ export default function SolicitarRecuperacionForm({ action, locale }: Props) {
                 htmlFor="email"
                 className="block text-xs font-mono uppercase tracking-wider text-[#2a170f] mb-1.5"
               >
-                Email
+                {t('email_label')}
               </label>
               <input
                 id="email"
@@ -87,7 +91,7 @@ export default function SolicitarRecuperacionForm({ action, locale }: Props) {
                 required
                 disabled={isPending}
                 className="input-base disabled:opacity-50"
-                placeholder="tu@email.com"
+                placeholder={t('email_placeholder')}
               />
             </div>
 
@@ -99,10 +103,10 @@ export default function SolicitarRecuperacionForm({ action, locale }: Props) {
               {isPending ? (
                 <>
                   <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Enviando…
+                  {t('sending')}
                 </>
               ) : (
-                'Enviar enlace →'
+                t('submit_recover')
               )}
             </button>
 
@@ -111,7 +115,7 @@ export default function SolicitarRecuperacionForm({ action, locale }: Props) {
                 href="/login"
                 className="text-sm text-[#1a5c2a] hover:text-[#c9a84c] transition-colors font-body italic"
               >
-                ← Volver al login
+                {t('back_to_login')}
               </Link>
             </div>
           </form>

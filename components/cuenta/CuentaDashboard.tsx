@@ -1,7 +1,10 @@
 'use client'
 
 import AjustesTab from './AjustesTab'
+import PedidosTab from './PedidosTab'
 import type { User } from '@supabase/supabase-js'
+import { useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 interface Profile {
@@ -13,21 +16,40 @@ interface Profile {
   codigo_postal: string | null
   pais: string | null
 }
+interface OrderItem {
+  id: string
+  product_name: string
+  product_image: string | null
+  quantity: number
+  price: number
+  subtotal: number
+}
+
+interface Order {
+  id: string
+  status: string
+  total: number
+  created_at: string
+  order_items: OrderItem[]
+}
 
 interface Props {
   user: User
   profile: Profile | null
+  orders: Order[]
 }
 
-const tabs = [
-  { key: 'ajustes',   label: 'Ajustes' },
-  { key: 'pedidos',   label: 'Pedidos' },
-  { key: 'favoritos', label: 'Favoritos' },
-  { key: 'resenas',   label: 'Reseñas' },
-]
+export default function CuentaDashboard({ user, profile, orders }: Props) {
+  const searchParams = useSearchParams()
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') ?? 'ajustes')
+  const t = useTranslations('cuenta')
 
-export default function CuentaDashboard({ user, profile }: Props) {
-  const [activeTab, setActiveTab] = useState('ajustes')
+  const tabs = [
+    { key: 'ajustes',   label: t('tabs.ajustes') },
+    { key: 'pedidos',   label: t('tabs.pedidos') },
+    { key: 'favoritos', label: t('tabs.favoritos') },
+    { key: 'resenas',   label: t('tabs.resenas') },
+  ]
 
   const nombreCorto = profile?.nombre
     ? profile.nombre.split(' ')[0]
@@ -40,14 +62,14 @@ export default function CuentaDashboard({ user, profile }: Props) {
         {/* ── Cabecera ── */}
         <div className="mb-8">
           <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533]">
-            Mi cuenta
+            {t('heading')}
           </span>
           <span className="block w-10 h-0.5 bg-[#c9a84c] mt-2 mb-5" />
           <h1
             className="text-3xl text-[#2a170f]"
             style={{ fontFamily: 'Noto Serif, serif' }}
           >
-            Hola,{' '}
+            {t('greeting')}{' '}
             <span className="italic text-[#1a5c2a]">{nombreCorto}</span>
           </h1>
           <p
@@ -84,9 +106,9 @@ export default function CuentaDashboard({ user, profile }: Props) {
         {activeTab === 'ajustes' && (
           <AjustesTab user={user} profile={profile} />
         )}
-        {activeTab === 'pedidos' && <Proximamente label="Pedidos" />}
-        {activeTab === 'favoritos' && <Proximamente label="Favoritos" />}
-        {activeTab === 'resenas' && <Proximamente label="Reseñas" />}
+        {activeTab === 'pedidos' && <PedidosTab orders={orders} />}
+        {activeTab === 'favoritos' && <Proximamente label={t('tabs.favoritos')} />}
+        {activeTab === 'resenas' && <Proximamente label={t('tabs.resenas')} />}
 
       </div>
     </div>
@@ -94,6 +116,7 @@ export default function CuentaDashboard({ user, profile }: Props) {
 }
 
 function Proximamente({ label }: { label: string }) {
+  const t = useTranslations('cuenta')
   return (
     <div className="text-center py-16">
       <span className="block w-10 h-0.5 bg-[#c9a84c] mx-auto mb-4" />
@@ -101,7 +124,7 @@ function Proximamente({ label }: { label: string }) {
         className="text-[#717a6f] text-sm"
         style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic' }}
       >
-        {label} — próximamente
+        {t('coming_soon', { label })}
       </p>
     </div>
   )

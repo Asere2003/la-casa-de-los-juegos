@@ -119,6 +119,7 @@
   },
   "cart": {
     "title": "Tu Carrito",
+    "payment_error": "Error al procesar el pago",
     "empty": "Tu carrito está vacío",
     "empty_cta": "Explorar el catálogo",
     "subtotal": "Subtotal",
@@ -156,18 +157,56 @@
     "method_transfer": "Transferencia",
     "free_shipping_note": "Envío gratis desde 50€ — te faltan {remaining}€",
     "trust_note": "Cada pieza empaquetada a mano en papel de seda y lacrada con nuestro sello oficial de Granada.",
-    "breadcrumb": "Ruta de navegación"
+    "breadcrumb": "Ruta de navegación",
+    "empty_hint": "Explora nuestra colección y añade tus juegos favoritos"
   },
   "auth": {
     "login": "Iniciar sesión",
     "register": "Crear cuenta",
     "email": "Correo electrónico",
+    "email_label": "Email",
+    "email_placeholder": "tu@email.com",
     "password": "Contraseña",
     "name": "Nombre completo",
     "forgot_password": "¿Olvidaste tu contraseña?",
     "no_account": "¿No tienes cuenta?",
     "has_account": "¿Ya tienes cuenta?",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "login_subtitle": "Accede a tu cuenta para gestionar tus pedidos.",
+    "submit_login": "Entrar →",
+    "logging_in": "Entrando…",
+    "register_label": "Nueva cuenta",
+    "register_subtitle": "Únete a nuestra comunidad de jugadores.",
+    "name_placeholder": "Ana García",
+    "password_placeholder": "Mínimo 8 caracteres",
+    "confirm_password": "Confirmar contraseña",
+    "privacy_notice_before": "Al crear una cuenta aceptas nuestra",
+    "privacy_link": "política de privacidad",
+    "submit_register": "Crear cuenta →",
+    "creating_account": "Creando cuenta…",
+    "error_invalid_credentials": "Email o contraseña incorrectos.",
+    "error_email_not_confirmed": "Confirma tu email antes de entrar. Revisa tu bandeja de entrada.",
+    "error_too_many_requests": "Demasiados intentos. Espera unos minutos.",
+    "error_user_not_found": "No existe ninguna cuenta con ese email.",
+    "error_generic": "Ha ocurrido un error. Inténtalo de nuevo.",
+    "error_passwords_mismatch": "Las contraseñas no coinciden.",
+    "error_password_too_short": "La contraseña debe tener al menos 8 caracteres.",
+    "error_password_min_6": "La contraseña debe tener al menos 6 caracteres.",
+    "error_user_already_registered": "Ya existe una cuenta con ese email.",
+    "error_invalid_email": "El formato del email no es válido.",
+    "new_password_title": "Nueva contraseña",
+    "new_password_subtitle": "Elige una contraseña segura para tu cuenta.",
+    "saving": "Guardando…",
+    "submit_new_password": "Guardar contraseña →",
+    "error_same_password": "La nueva contraseña debe ser distinta a la anterior.",
+    "error_session_missing": "La sesión ha expirado. Solicita un nuevo enlace de recuperación.",
+    "recover_password_title": "Recuperar contraseña",
+    "recover_password_subtitle": "Introduce tu email y te enviaremos un enlace para restablecer tu contraseña.",
+    "recover_password_sent": "Si existe una cuenta con ese email, recibirás un enlace en breve.",
+    "recover_password_spam": "Revisa también tu carpeta de spam.",
+    "back_to_login": "← Volver al login",
+    "sending": "Enviando…",
+    "submit_recover": "Enviar enlace →"
   },
   "footer": {
     "description": "Curadores de asombro y guardianes del juego. La tienda más especial de Granada, ahora en tu hogar.",
@@ -195,7 +234,10 @@
     "increase_qty": "Aumentar cantidad",
     "decrease_qty": "Disminuir cantidad",
     "cart_count": "{count} artículos en el carrito",
-    "product_image": "Imagen de {name}"
+    "product_image": "Imagen de {name}",
+    "view_product": "Ver {name}",
+    "product_quantity": "Cantidad de {name}",
+    "quantity_value": "Cantidad: {count}"
   },
   "common": {
     "loading": "Cargando...",
@@ -239,7 +281,50 @@
     "final_cta": "Explorar el Catálogo",
     "final_note": "Envío gratuito en pedidos superiores a 50€"
   },
- "timeline": {
+ "cuenta": {
+    "heading": "Mi cuenta",
+    "greeting": "Hola,",
+    "coming_soon": "{label} — próximamente",
+    "tabs": {
+      "ajustes": "Ajustes",
+      "pedidos": "Pedidos",
+      "favoritos": "Favoritos",
+      "resenas": "Reseñas"
+    },
+    "ajustes": {
+      "profile_label": "Datos personales",
+      "profile_desc": "Nombre y teléfono",
+      "address_label": "Dirección de envío",
+      "address_desc": "Donde recibir tus pedidos",
+      "security_label": "Seguridad",
+      "security_desc": "Email y contraseña"
+    },
+    "pedidos": {
+      "empty": "Aún no has realizado ningún pedido.",
+      "view_catalogue": "Ver catálogo",
+      "order_label": "Pedido",
+      "status_pending": "Pendiente",
+      "status_paid": "Pagado",
+      "status_processing": "Procesando",
+      "status_shipped": "Enviado",
+      "status_delivered": "Entregado",
+      "status_cancelled": "Cancelado"
+    }
+  },
+  "confirmacion": {
+    "label": "Pedido confirmado",
+    "title": "¡Gracias por tu compra!",
+    "subtitle": "Hemos recibido tu pedido correctamente. Recibirás un email de confirmación en breve.",
+    "summary_title": "Resumen",
+    "email": "Email",
+    "total_paid": "Total pagado",
+    "order_number": "Nº pedido",
+    "view_orders": "Ver mis pedidos",
+    "continue_shopping": "Seguir comprando",
+    "not_found": "Pedido no encontrado.",
+    "go_catalogue": "Ir al catálogo"
+  },
+  "timeline": {
     "card_1_title": "Los Inicios",
     "card_1_description": "Don Aurelio Valdivia funda la primera Casa de los Juegos en la Alcaicería de Granada. Un pequeño taller que combinaba la reparación de juguetes con la venta de juegos artesanales.",
     "card_2_title": "El Taller Crece",

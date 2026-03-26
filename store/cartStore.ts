@@ -11,6 +11,8 @@ import { persist } from 'zustand/middleware'
 interface CartStore {
   items: LocalCartItem[]
   isOpen: boolean
+  _hasHydrated: boolean
+  setHasHydrated: (v: boolean) => void
 
   // Acciones
   addItem: (product: Product, quantity?: number) => void
@@ -31,6 +33,8 @@ export const useCartStore = create<CartStore>()(
     (set, get) => ({
       items: [],
       isOpen: false,
+      _hasHydrated: false,
+      setHasHydrated: (v: boolean) => set({ _hasHydrated: v }),
 
       addItem: (product, quantity = 1) => {
         const items = get().items
@@ -83,6 +87,9 @@ export const useCartStore = create<CartStore>()(
     }),
     {
       name: 'lacasadelosjuegos-cart', // clave en localStorage
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true)
+  },
     }
   )
 )

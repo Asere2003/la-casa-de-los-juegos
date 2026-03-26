@@ -72,7 +72,7 @@ export default function CartDrawer() {
         ref={drawerRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Tu carrito"
+        aria-label={t('title')}
         className={`fixed inset-y-0 right-0 z-[70] flex flex-col w-full max-w-sm bg-[#fff8f6] shadow-2xl shadow-[#2a170f]/40 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         {/* Header */}
@@ -110,7 +110,7 @@ export default function CartDrawer() {
               </div>
               <div>
                 <p className="font-headline italic text-xl text-[#2a170f] mb-2">{t('empty')}</p>
-                <p className="font-body italic text-sm text-[#717a6f]">Explora nuestra colección y añade tus juegos favoritos</p>
+                <p className="font-body italic text-sm text-[#717a6f]">{t('empty_hint')}</p>
               </div>
               <Link href="/catalogo" onClick={closeCart}
                 className="bg-[#004317] text-white font-headline font-bold px-8 py-3 hover:bg-[#1a5c2a] transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
@@ -119,16 +119,16 @@ export default function CartDrawer() {
               </Link>
             </div>
           ) : (
-            <ul role="list" aria-label="Productos en el carrito" className="divide-y divide-[#c0c9bc]/20 px-5 py-4">
+            <ul aria-label={t('cart_products')} className="divide-y divide-[#c0c9bc]/20 px-5 py-4">
               {items.map(({ product, quantity }) => (
                 <li key={product.id} className="flex gap-4 py-4">
                   {/* Imagen */}
                   <Link href={`/producto/${product.slug}`} onClick={closeCart}
                     className="shrink-0 focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded"
-                    aria-label={`Ver ${product.name}`}>
+                    aria-label={tA11y('view_product', { name: product.name })}>
                     <div className="w-20 h-20 bg-[#fff1ec] overflow-hidden rounded-sm">
                       {product.images?.[0] ? (
-                        <Image src={product.images[0]} alt={`Imagen de ${product.name}`} width={80} height={80}
+                        <Image src={product.images[0]} alt={tA11y('product_image', { name: product.name })} width={80} height={80}
                           className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"/>
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-2xl">🎲</div>
@@ -153,11 +153,11 @@ export default function CartDrawer() {
                     </div>
 
                     <div className="flex justify-between items-center mt-2">
-                      <div role="group" aria-label={`Cantidad de ${product.name}`}
+                      <div role="group" aria-label={tA11y('product_quantity', { name: product.name })}
                         className="flex items-center border border-[#c0c9bc]/40 bg-[#fff1ec] rounded-sm">
                         <button onClick={() => updateQty(product.id, quantity - 1)} aria-label={tA11y('decrease_qty')}
                           className="w-7 h-7 flex items-center justify-center hover:bg-[#ffe9e2] transition-colors font-mono text-[#004317] text-sm focus-visible:ring-2 focus-visible:ring-[#c9a84c]">−</button>
-                        <span aria-live="polite" aria-label={`Cantidad: ${quantity}`}
+                        <span aria-live="polite" aria-label={tA11y('quantity_value', { count: quantity })}
                           className="w-8 text-center font-mono text-xs font-bold border-x border-[#c0c9bc]/40 py-1">{quantity}</span>
                         <button onClick={() => updateQty(product.id, quantity + 1)} aria-label={tA11y('increase_qty')}
                           disabled={quantity >= product.stock}

@@ -3,18 +3,37 @@
 import { useState, useTransition } from 'react'
 
 import { useRouter } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 
 interface Props {
   action: (formData: FormData) => Promise<{ success?: boolean; error?: string; locale?: string }>
   locale: string
 }
 
+function getNuevaPasswordErrorKey(error: string): string {
+  switch (error) {
+    case 'New password should be different from the old password.':
+      return 'error_same_password'
+    case 'Password should be at least 6 characters.':
+      return 'error_password_min_6'
+    case 'Too many requests':
+      return 'error_too_many_requests'
+    case 'Auth session missing!':
+      return 'error_session_missing'
+    default:
+      return 'error_generic'
+  }
+}
+
 export default function NuevaPasswordForm({ action, locale }: Props) {
   const router = useRouter()
+  const t = useTranslations('auth')
+  const tNav = useTranslations('nav')
+
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
     setError(null)
 
@@ -23,12 +42,12 @@ export default function NuevaPasswordForm({ action, locale }: Props) {
     const confirm = formData.get('confirm') as string
 
     if (password !== confirm) {
-      setError('Las contraseñas no coinciden.')
+      setError('error_passwords_mismatch')
       return
     }
 
     if (password.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres.')
+      setError('error_password_min_6')
       return
     }
 
@@ -37,7 +56,7 @@ export default function NuevaPasswordForm({ action, locale }: Props) {
     startTransition(async () => {
       const result = await action(formData)
       if (result.error) {
-        setError(result.error)
+        setError(getNuevaPasswordErrorKey(result.error))
       } else {
         router.push('/cuenta')
       }
@@ -64,14 +83,14 @@ export default function NuevaPasswordForm({ action, locale }: Props) {
       >
         <div className="mb-6">
           <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533]">
-            Mi cuenta
+            {tNav('account')}
           </span>
           <span className="block w-10 h-0.5 bg-[#c9a84c] mt-2 mb-4" />
           <h1 className="font-headline text-2xl text-[#2a170f]">
-            Nueva contraseña
+            {t('new_password_title')}
           </h1>
           <p className="mt-2 text-sm text-[#717a6f] font-body italic">
-            Elige una contraseña segura para tu cuenta.
+            {t('new_password_subtitle')}
           </p>
         </div>
 
@@ -80,7 +99,7 @@ export default function NuevaPasswordForm({ action, locale }: Props) {
             className="mb-6 px-4 py-3 text-sm text-[#ba1a1a] bg-[#ba1a1a]/8 border border-[#ba1a1a]/20"
             style={{ borderRadius: '2px' }}
           >
-            {error}
+            {t(error)}
           </div>
         )}
 
@@ -91,7 +110,7 @@ export default function NuevaPasswordForm({ action, locale }: Props) {
               htmlFor="password"
               className="block text-xs font-mono uppercase tracking-wider text-[#2a170f] mb-1.5"
             >
-              Nueva contraseña
+              {t('new_password_title')}
             </label>
             <input
               id="password"
@@ -109,7 +128,7 @@ export default function NuevaPasswordForm({ action, locale }: Props) {
               htmlFor="confirm"
               className="block text-xs font-mono uppercase tracking-wider text-[#2a170f] mb-1.5"
             >
-              Confirmar contraseña
+              {t('confirm_password')}
             </label>
             <input
               id="confirm"
@@ -130,10 +149,10 @@ export default function NuevaPasswordForm({ action, locale }: Props) {
             {isPending ? (
               <>
                 <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Guardando…
+                {t('saving')}
               </>
             ) : (
-              'Guardar contraseña →'
+              t('submit_new_password')
             )}
           </button>
 

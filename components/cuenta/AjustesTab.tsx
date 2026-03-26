@@ -4,6 +4,7 @@ import DatosPersonalesForm from './DatosPersonalesForm'
 import DireccionForm from './DireccionForm'
 import SeguridadForm from './SeguridadForm'
 import type { User } from '@supabase/supabase-js'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 interface Profile {
@@ -21,47 +22,48 @@ interface Props {
   profile: Profile | null
 }
 
-const secciones = [
-  {
-    key: 'perfil',
-    label: 'Datos personales',
-    desc: 'Nombre y teléfono',
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-        <circle cx="12" cy="7" r="4"/>
-      </svg>
-    ),
-  },
-  {
-    key: 'direccion',
-    label: 'Dirección de envío',
-    desc: 'Donde recibir tus pedidos',
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-        <circle cx="12" cy="10" r="3"/>
-      </svg>
-    ),
-  },
-  {
-    key: 'seguridad',
-    label: 'Seguridad',
-    desc: 'Email y contraseña',
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-      </svg>
-    ),
-  },
-]
-
 export default function AjustesTab({ user, profile }: Props) {
   const [abierta, setAbierta] = useState<string | null>('perfil')
+  const t = useTranslations('cuenta.ajustes')
+
+  const secciones = [
+    {
+      key: 'perfil',
+      label: t('profile_label'),
+      desc: t('profile_desc'),
+      icon: (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      ),
+    },
+    {
+      key: 'direccion',
+      label: t('address_label'),
+      desc: t('address_desc'),
+      icon: (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+      ),
+    },
+    {
+      key: 'seguridad',
+      label: t('security_label'),
+      desc: t('security_desc'),
+      icon: (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      ),
+    },
+  ]
 
   return (
     <div className="space-y-3 pb-8">

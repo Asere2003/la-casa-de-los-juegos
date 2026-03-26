@@ -119,6 +119,7 @@
   },
   "cart": {
     "title": "Your Cart",
+    "payment_error": "Error processing payment",
     "empty": "Your cart is empty",
     "empty_cta": "Explore the catalogue",
     "subtotal": "Subtotal",
@@ -156,18 +157,56 @@
     "method_transfer": "Transfer",
     "free_shipping_note": "Free shipping from 50€ — you need {remaining}€ more",
     "trust_note": "Each piece hand-wrapped in tissue paper and sealed with our official Granada seal.",
-    "breadcrumb": "Breadcrumb"
+    "breadcrumb": "Breadcrumb",
+    "empty_hint": "Explore our collection and add your favourite games"
   },
   "auth": {
     "login": "Sign in",
     "register": "Create account",
     "email": "Email address",
+    "email_label": "Email",
+    "email_placeholder": "your@email.com",
     "password": "Password",
     "name": "Full name",
     "forgot_password": "Forgot your password?",
     "no_account": "Don't have an account?",
     "has_account": "Already have an account?",
-    "logout": "Sign out"
+    "logout": "Sign out",
+    "login_subtitle": "Sign in to your account to manage your orders.",
+    "submit_login": "Sign in →",
+    "logging_in": "Signing in…",
+    "register_label": "New account",
+    "register_subtitle": "Join our community of players.",
+    "name_placeholder": "Ana García",
+    "password_placeholder": "Minimum 8 characters",
+    "confirm_password": "Confirm password",
+    "privacy_notice_before": "By creating an account you accept our",
+    "privacy_link": "privacy policy",
+    "submit_register": "Create account →",
+    "creating_account": "Creating account…",
+    "error_invalid_credentials": "Incorrect email or password.",
+    "error_email_not_confirmed": "Please confirm your email before signing in. Check your inbox.",
+    "error_too_many_requests": "Too many attempts. Please wait a few minutes.",
+    "error_user_not_found": "No account found with that email.",
+    "error_generic": "An error occurred. Please try again.",
+    "error_passwords_mismatch": "Passwords do not match.",
+    "error_password_too_short": "Password must be at least 8 characters.",
+    "error_password_min_6": "Password must be at least 6 characters.",
+    "error_user_already_registered": "An account with that email already exists.",
+    "error_invalid_email": "Invalid email format.",
+    "new_password_title": "New password",
+    "new_password_subtitle": "Choose a strong password for your account.",
+    "saving": "Saving…",
+    "submit_new_password": "Save password →",
+    "error_same_password": "The new password must be different from the previous one.",
+    "error_session_missing": "Your session has expired. Please request a new recovery link.",
+    "recover_password_title": "Recover password",
+    "recover_password_subtitle": "Enter your email and we will send you a link to reset your password.",
+    "recover_password_sent": "If an account with that email exists, you will receive a link shortly.",
+    "recover_password_spam": "Also check your spam folder.",
+    "back_to_login": "← Back to login",
+    "sending": "Sending…",
+    "submit_recover": "Send link →"
   },
   "footer": {
     "description": "Curators of wonder and guardians of play. Granada's most special shop, now in your home.",
@@ -195,7 +234,10 @@
     "increase_qty": "Increase quantity",
     "decrease_qty": "Decrease quantity",
     "cart_count": "{count} items in cart",
-    "product_image": "Image of {name}"
+    "product_image": "Image of {name}",
+    "view_product": "View {name}",
+    "product_quantity": "Quantity of {name}",
+    "quantity_value": "Quantity: {count}"
   },
   "common": {
     "loading": "Loading...",
@@ -238,6 +280,49 @@
     "final_p": "Every game you find in our shop carries over a century of passion, tradition and artisanal dedication. Be part of this story.",
     "final_cta": "Explore the Catalogue",
     "final_note": "Free shipping on orders over €50"
+  },
+  "cuenta": {
+    "heading": "My account",
+    "greeting": "Hello,",
+    "coming_soon": "{label} — coming soon",
+    "tabs": {
+      "ajustes": "Settings",
+      "pedidos": "Orders",
+      "favoritos": "Favourites",
+      "resenas": "Reviews"
+    },
+    "ajustes": {
+      "profile_label": "Personal details",
+      "profile_desc": "Name and phone number",
+      "address_label": "Shipping address",
+      "address_desc": "Where to receive your orders",
+      "security_label": "Security",
+      "security_desc": "Email and password"
+    },
+    "pedidos": {
+      "empty": "You haven't placed any orders yet.",
+      "view_catalogue": "View catalogue",
+      "order_label": "Order",
+      "status_pending": "Pending",
+      "status_paid": "Paid",
+      "status_processing": "Processing",
+      "status_shipped": "Shipped",
+      "status_delivered": "Delivered",
+      "status_cancelled": "Cancelled"
+    }
+  },
+  "confirmacion": {
+    "label": "Order confirmed",
+    "title": "Thank you for your purchase!",
+    "subtitle": "We have received your order. You will receive a confirmation email shortly.",
+    "summary_title": "Summary",
+    "email": "Email",
+    "total_paid": "Total paid",
+    "order_number": "Order no.",
+    "view_orders": "View my orders",
+    "continue_shopping": "Continue shopping",
+    "not_found": "Order not found.",
+    "go_catalogue": "Go to catalogue"
   },
   "timeline": {
     "card_1_title": "The Beginnings",

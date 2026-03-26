@@ -1,26 +1,28 @@
 'use client'
 
+import { useLocale, useTranslations } from 'next-intl'
+
 import { useCartStore } from '@/store/cartStore'
 import { useRouter } from '@/i18n/navigation'
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
 
 export default function CartSummary() {
+  const locale = useLocale()
   const totalPrice = useCartStore(s => s.totalPrice)
-  const items      = useCartStore(s => s.items)
+  const items = useCartStore(s => s.items)
   const t = useTranslations('cart')
 
-  const [coupon, setCoupon]       = useState('')
+  const [coupon, setCoupon] = useState('')
   const [couponApplied, setCouponApplied] = useState(false)
-  const [couponError, setCouponError]     = useState('')
-  const [loading, setLoading]     = useState(false)
+  const [couponError, setCouponError] = useState('')
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
 
-  const subtotal     = totalPrice()
+  const subtotal = totalPrice()
   const shippingFree = subtotal >= 50
   const shippingCost = shippingFree ? 0 : 4.95
-  const discount     = couponApplied ? subtotal * 0.1 : 0
-  const total        = subtotal + shippingCost - discount
+  const discount = couponApplied ? subtotal * 0.1 : 0
+  const total = subtotal + shippingCost - discount
 
   const handleCoupon = (e: React.FormEvent) => {
     e.preventDefault()
@@ -35,10 +37,34 @@ export default function CartSummary() {
 
   const handleCheckout = async () => {
     setLoading(true)
-    // TODO: conectar con /api/checkout (Stripe)
-    // Por ahora redirigimos a login si no hay sesión
-    router.push('/login?redirect=/carrito')
-    setLoading(false)
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items,
+          shippingCost,
+          discount,
+          locale
+        }),
+      })
+
+      const data = await res.json()
+
+      if (data.error) {
+        alert(data.error)
+        return
+      }
+
+      // Redirigir a Stripe
+      window.location.href = data.url
+
+    } catch (error) {
+      console.error(error)
+      alert(t('payment_error'))
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -143,7 +169,7 @@ export default function CartSummary() {
         {loading ? (
           <>
             <svg className="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+              <path d="M21 12a9 9 0 1 1-6.219-8.56" />
             </svg>
             {t('processing')}
           </>
@@ -151,8 +177,8 @@ export default function CartSummary() {
           <>
             {t('checkout')}
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
-              <polyline points="13 17 18 12 13 7"/>
-              <polyline points="6 17 11 12 6 7"/>
+              <polyline points="13 17 18 12 13 7" />
+              <polyline points="6 17 11 12 6 7" />
             </svg>
           </>
         )}
@@ -180,8 +206,8 @@ export default function CartSummary() {
       {/* Trust badge */}
       <div className="mt-5 p-3.5 bg-white border-l-2 border-[#c9a84c] flex gap-3 items-start" style={{ borderRadius: '2px' }}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#004317" strokeWidth="2" className="shrink-0 mt-0.5" aria-hidden="true">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          <polyline points="9 12 11 14 15 10"/>
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <polyline points="9 12 11 14 15 10" />
         </svg>
         <p className="font-body italic text-xs text-[#40493f] leading-relaxed">
           {t('trust_note')}

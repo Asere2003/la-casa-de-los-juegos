@@ -119,6 +119,7 @@
   },
   "cart": {
     "title": "El teu carret",
+    "payment_error": "Error en processar el pagament",
     "empty": "El teu carret està buit",
     "empty_cta": "Explora el catàleg",
     "subtotal": "Subtotal",
@@ -156,18 +157,56 @@
     "method_transfer": "Transferència",
     "free_shipping_note": "Enviament gratuït des de 50€ — et falten {remaining}€",
     "trust_note": "Cada peça empaquetada a mà en paper de seda i segellada amb el nostre segell oficial de Granada.",
-    "breadcrumb": "Ruta de navegació"
+    "breadcrumb": "Ruta de navegació",
+    "empty_hint": "Explora la nostra col·lecció i afegeix els teus jocs favorits"
   },
   "auth": {
     "login": "Inicia sessió",
     "register": "Crea un compte",
     "email": "Correu electrònic",
+    "email_label": "Email",
+    "email_placeholder": "el.teu@email.com",
     "password": "Contrasenya",
     "name": "Nom complet",
     "forgot_password": "Has oblidat la contrasenya?",
     "no_account": "No tens compte?",
     "has_account": "Ja tens compte?",
-    "logout": "Tanca sessió"
+    "logout": "Tanca sessió",
+    "login_subtitle": "Accedeix al teu compte per gestionar les teves comandes.",
+    "submit_login": "Entrar →",
+    "logging_in": "Entrant…",
+    "register_label": "Nou compte",
+    "register_subtitle": "Uneix-te a la nostra comunitat de jugadors.",
+    "name_placeholder": "Anna Garcia",
+    "password_placeholder": "Mínim 8 caràcters",
+    "confirm_password": "Confirmar contrasenya",
+    "privacy_notice_before": "En crear un compte acceptes la nostra",
+    "privacy_link": "política de privacitat",
+    "submit_register": "Crear compte →",
+    "creating_account": "Creant compte…",
+    "error_invalid_credentials": "Correu o contrasenya incorrectes.",
+    "error_email_not_confirmed": "Confirma el teu correu abans d'entrar. Revisa la teva bústia.",
+    "error_too_many_requests": "Massa intents. Espera uns minuts.",
+    "error_user_not_found": "No hi ha cap compte amb aquest correu.",
+    "error_generic": "S'ha produït un error. Torna-ho a intentar.",
+    "error_passwords_mismatch": "Les contrasenyes no coincideixen.",
+    "error_password_too_short": "La contrasenya ha de tenir almenys 8 caràcters.",
+    "error_password_min_6": "La contrasenya ha de tenir almenys 6 caràcters.",
+    "error_user_already_registered": "Ja existeix un compte amb aquest correu.",
+    "error_invalid_email": "El format del correu no és vàlid.",
+    "new_password_title": "Nova contrasenya",
+    "new_password_subtitle": "Tria una contrasenya segura per al teu compte.",
+    "saving": "Desant…",
+    "submit_new_password": "Desar contrasenya →",
+    "error_same_password": "La nova contrasenya ha de ser diferent de l'anterior.",
+    "error_session_missing": "La sessió ha expirat. Sol·licita un nou enllaç de recuperació.",
+    "recover_password_title": "Recuperar contrasenya",
+    "recover_password_subtitle": "Introdueix el teu correu i t'enviarem un enllaç per restablir la teva contrasenya.",
+    "recover_password_sent": "Si existeix un compte amb aquest correu, rebràs un enllaç en breu.",
+    "recover_password_spam": "Revisa també la teva carpeta de correu no desitjat.",
+    "back_to_login": "← Tornar al login",
+    "sending": "Enviant…",
+    "submit_recover": "Enviar enllaç →"
   },
   "footer": {
     "description": "Curadors de meravelles i guardians del joc. La botiga més especial de Granada, ara a casa teva.",
@@ -195,7 +234,10 @@
     "increase_qty": "Augmentar quantitat",
     "decrease_qty": "Reduir quantitat",
     "cart_count": "{count} articles al carret",
-    "product_image": "Imatge de {name}"
+    "product_image": "Imatge de {name}",
+    "view_product": "Veure {name}",
+    "product_quantity": "Quantitat de {name}",
+    "quantity_value": "Quantitat: {count}"
   },
   "common": {
     "loading": "Carregant...",
@@ -239,7 +281,50 @@
     "final_cta": "Explora el catàleg",
     "final_note": "Enviament gratuït en comandes superiors a 50€"
   },
- "timeline": {
+ "cuenta": {
+    "heading": "El meu compte",
+    "greeting": "Hola,",
+    "coming_soon": "{label} — pròximament",
+    "tabs": {
+      "ajustes": "Configuració",
+      "pedidos": "Comandes",
+      "favoritos": "Preferits",
+      "resenas": "Ressenyes"
+    },
+    "ajustes": {
+      "profile_label": "Dades personals",
+      "profile_desc": "Nom i telèfon",
+      "address_label": "Adreça d'enviament",
+      "address_desc": "On rebre les teves comandes",
+      "security_label": "Seguretat",
+      "security_desc": "Correu i contrasenya"
+    },
+    "pedidos": {
+      "empty": "Encara no has fet cap comanda.",
+      "view_catalogue": "Veure catàleg",
+      "order_label": "Comanda",
+      "status_pending": "Pendent",
+      "status_paid": "Pagat",
+      "status_processing": "Processant",
+      "status_shipped": "Enviat",
+      "status_delivered": "Entregat",
+      "status_cancelled": "Cancel·lat"
+    }
+  },
+  "confirmacion": {
+    "label": "Comanda confirmada",
+    "title": "Gràcies per la teva compra!",
+    "subtitle": "Hem rebut la teva comanda correctament. Rebràs un correu de confirmació en breu.",
+    "summary_title": "Resum",
+    "email": "Correu",
+    "total_paid": "Total pagat",
+    "order_number": "Núm. comanda",
+    "view_orders": "Veure les meves comandes",
+    "continue_shopping": "Continuar comprant",
+    "not_found": "Comanda no trobada.",
+    "go_catalogue": "Anar al catàleg"
+  },
+  "timeline": {
     "card_1_title": "Els Inicis",
     "card_1_description": "Don Aurelio Valdivia funda la primera Casa de los Juegos a l'Alcaicería de Granada. Un petit taller que combinava la reparació de joguines amb la venda de jocs artesanals.",
     "card_2_title": "El Taller Creix",
