@@ -29,9 +29,10 @@ export async function getProducts(filters?: {
     const supabase = createClient()
 
     let query = supabase
-        .from('products')
-        .select('*, category:categories(*)')
-        .eq('active', true)
+    .from('products')
+    .select('*, category:categories(*)')
+    .eq('active', true)
+    .gt('stock', 0) // Solo productos con stock mayor a 0
 
     // Filtros
     if (filters?.category) {
