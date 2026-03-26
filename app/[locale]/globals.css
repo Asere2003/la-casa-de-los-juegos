@@ -288,14 +288,14 @@
   .badge-error    { @apply bg-[#ba1a1a] text-white; }
 
   /* Input base */
- .input-base {
+.input-base {
   @apply w-full bg-white border border-[#c0c9bc]/50
          text-[#2a170f] font-body italic text-sm md:text-sm text-base
          px-4 py-2.5 focus:outline-none
          focus:border-[#c9a84c] focus:ring-1
          focus:ring-[#c9a84c] transition-colors;
-  border-radius: 2px;
-}
+    border-radius: 2px;
+  }
 
   /* Sección label */
   .section-label {
