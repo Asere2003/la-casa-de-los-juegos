@@ -24,8 +24,8 @@ export default async function AdminProductosPage({
   if (error) console.error(error)
 
   return (
-    <main className="min-h-screen bg-[#fff8f6] pt-20 pb-32">
-      <div className="max-w-7xl mx-auto px-4">
+
+      <div>
 
         {/* Cabecera */}
         <div className="flex items-center justify-between mb-8">
@@ -52,6 +52,6 @@ export default async function AdminProductosPage({
         />
 
       </div>
-    </main>
+
   )
 }

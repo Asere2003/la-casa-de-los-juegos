@@ -90,3 +90,49 @@ export async function cambiarPassword(formData: FormData) {
 
   revalidatePath('/cuenta')
 }
+
+// ── Solicitar devolución ────────────────────────────────────
+export async function solicitarDevolucion(orderId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'No autenticado' }
+
+  // Verificar que el pedido pertenece al usuario
+  const { data: order } = await supabase
+    .from('orders')
+    .select('id, status')
+    .eq('id', orderId)
+    .eq('user_id', user.id)
+    .single()
+
+  if (!order) return { error: 'Pedido no encontrado' }
+  if (order.status !== 'delivered') return { error: 'Solo se pueden devolver pedidos entregados' }
+
+  const { error } = await supabase
+    .from('orders')
+    .update({ status: 'return_requested', updated_at: new Date().toISOString() })
+    .eq('id', orderId)
+
+  if (error) return { error: error.message }
+
+  // Enviar email al admin
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 
+  (process.env.NEXT_PUBLIC_VERCEL_URL 
+    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` 
+    : 'http://localhost:3000')
+  const { Resend } = await import('resend')
+  const resend = new Resend(process.env.RESEND_API_KEY)
+  await resend.emails.send({
+    from: 'La Casa de los Juegos <info@lacasadelosjuegos.com>',
+    to: 'info@lacasadelosjuegos.com',
+    subject: `🔄 Solicitud de devolución — Pedido #${orderId.slice(0, 8).toUpperCase()}`,
+    html: `
+      <p>El cliente ha solicitado la devolución del pedido <strong>#${orderId.slice(0, 8).toUpperCase()}</strong>.</p>
+      <p>Accede al panel de admin para gestionar la devolución.</p>
+      <a href="${siteUrl}/es/admin/pedidos/${orderId}">Ver pedido</a>
+    `,
+  })
+
+  revalidatePath('/[locale]/cuenta', 'page')
+  return { success: true }
+}

@@ -1,5 +1,8 @@
 'use client'
 
+import { useState, useTransition } from 'react'
+
+import { solicitarDevolucion } from '@/actions/cuenta'
 import { useTranslations } from 'next-intl'
 
 interface OrderItem {
@@ -16,7 +19,9 @@ interface Order {
     status: string
     total: number
     created_at: string
+    delivered_at: string | null
     order_items: OrderItem[]
+
 }
 
 interface Props {
@@ -29,10 +34,13 @@ const STATUS_COLORS: Record<string, string> = {
     processing: 'bg-blue-100 text-blue-700',
     shipped: 'bg-purple-100 text-purple-700',
     delivered: 'bg-[#004317]/10 text-[#004317]',
+    return_requested: 'bg-orange-100 text-orange-700',
+    returned: 'bg-gray-100 text-gray-700',
     cancelled: 'bg-red-100 text-red-700',
 }
 
 export default function PedidosTab({ orders }: Props) {
+
     const t = useTranslations('cuenta.pedidos')
 
     const getStatusLabel = (status: string): string => {
@@ -45,6 +53,24 @@ export default function PedidosTab({ orders }: Props) {
             cancelled: t('status_cancelled'),
         }
         return labels[status] ?? status
+    }
+
+    const [loadingId, setLoadingId] = useState<string | null>(null)
+    const [isPending, startTransition] = useTransition()
+    const [devoluciones, setDevoluciones] = useState<Record<string, string>>({})
+
+    function handleDevolucion(orderId: string) {
+        if (!confirm('¿Confirmas que quieres solicitar la devolución de este pedido?')) return
+        setLoadingId(orderId)
+        startTransition(async () => {
+            const result = await solicitarDevolucion(orderId)
+            if (result.error) {
+                alert(result.error)
+            } else {
+                setDevoluciones(prev => ({ ...prev, [orderId]: 'return_requested' }))
+            }
+            setLoadingId(null)
+        })
     }
 
     if (!orders || orders.length === 0) {
@@ -141,6 +167,36 @@ export default function PedidosTab({ orders }: Props) {
                                 ))}
                             </div>
                         </div>
+                        {/* Botón devolución */}
+                        {(devoluciones[order.id] ?? order.status) === 'delivered' && (() => {
+                            if (!order.delivered_at) return false
+                            const days = Math.floor(
+                                (new Date().getTime() - new Date(order.delivered_at).getTime())
+                                / (1000 * 60 * 60 * 24)
+                            )
+                            return days <= 14
+                        })() && (
+                                <div className="border-t border-[#c0c9bc]/30 pt-4 mt-4 flex items-center justify-between">
+                                    <p className="text-xs text-[#717a6f] italic">
+                                        ¿Tienes algún problema con tu pedido?
+                                    </p>
+                                    <button
+                                        onClick={() => handleDevolucion(order.id)}
+                                        disabled={loadingId === order.id}
+                                        className="text-xs text-[#717a6f] underline hover:text-red-600 transition-colors disabled:opacity-50"
+                                    >
+                                        {loadingId === order.id ? 'Procesando...' : 'Solicitar devolución'}
+                                    </button>
+                                </div>
+                            )}
+
+                        {(devoluciones[order.id] ?? order.status) === 'return_requested' && (
+                            <div className="border-t border-[#c0c9bc]/30 pt-4 mt-4">
+                                <p className="text-xs text-orange-600 font-mono">
+                                    ✓ Devolución solicitada — nos pondremos en contacto contigo
+                                </p>
+                            </div>
+                        )}
                     </div>
                 )
             })}

@@ -1,3 +1,5 @@
+import AdminMobileNav from '@/components/admin/AdminMobileNav'
+import AdminSidebar from '@/components/admin/AdminSidebar'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
@@ -8,9 +10,9 @@ export default async function AdminLayout({
   params,
 }: {
   children: React.ReactNode
-  params: Promise<{ locale: string }>  // ← Promise
+  params: Promise<{ locale: string }>
 }) {
-  const { locale } = await params       // ← await
+  const { locale } = await params
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -25,5 +27,17 @@ export default async function AdminLayout({
 
   if (profile?.role !== 'admin') redirect(`/${locale}/`)
 
-  return <>{children}</>
+  return (
+    <div className="min-h-screen bg-[#fff8f6] pt-20">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-8">
+        <AdminMobileNav locale={locale} />
+        <div className="flex gap-8">
+          <AdminSidebar locale={locale} />
+          <main className="flex-1 min-w-0">
+            {children}
+          </main>
+        </div>
+      </div>
+    </div>
+  )
 }
