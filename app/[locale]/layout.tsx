@@ -28,16 +28,44 @@ const newsreader = Newsreader({
   display: 'swap',
 })
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL!
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'accessibility' })
+
+  const ogLocale: Record<string, string> = { es: 'es_ES', en: 'en_US', cat: 'ca_ES' }
+
+  const localeUrls: Record<string, string> = {
+    es: `${BASE_URL}/es`,
+    en: `${BASE_URL}/en`,
+    ca: `${BASE_URL}/cat`,
+  }
+
   return {
+    metadataBase: new URL(BASE_URL),
     title: {
       default: 'La Casa de los Juegos — Granada',
       template: '%s | La Casa de los Juegos',
     },
     description: 'Juegos de mesa, puzzles, ajedrez y curiosidades lúdicas de todo el mundo. La tienda más especial de Granada, ahora en tu hogar.',
     keywords: ['juegos de mesa', 'puzzles', 'ajedrez', 'juegos del mundo', 'Granada'],
+    robots: {
+      index: true,
+      follow: true,
+    },
+    alternates: {
+      canonical: `${BASE_URL}/${locale}`,
+      languages: localeUrls,
+    },
+    openGraph: {
+      siteName: 'La Casa de los Juegos',
+      locale: ogLocale[locale] ?? 'es_ES',
+      type: 'website',
+      url: `${BASE_URL}/${locale}`,
+      title: 'La Casa de los Juegos — Granada',
+      description: 'Juegos de mesa, puzzles, ajedrez y curiosidades lúdicas de todo el mundo. La tienda más especial de Granada, ahora en tu hogar.',
+    },
     other: { 'skip-label': t('skip_to_content') },
   }
 }

@@ -30,7 +30,8 @@ interface Order {
   id: string
   status: string
   total: number
-  created_at: string
+  created_at: string,
+  delivered_at: string | null
   order_items: OrderItem[]
 }
 
