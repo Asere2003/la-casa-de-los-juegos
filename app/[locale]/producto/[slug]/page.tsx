@@ -14,22 +14,53 @@ import { notFound } from 'next/navigation'
 export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ locale: string; slug: string }> }
 ): Promise<Metadata> {
-  const { slug } = await params
+  const { slug, locale } = await params
   const product = await getProductBySlug(slug)
   const t = await getTranslations('common')
+
   if (!product) return { title: t('error') }
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://lacasadelosjuegos.com'
+  const canonical = `${siteUrl}/${locale}/producto/${slug}`
+  const title = `${product.name} | La Casa de los Juegos`
+  const description = product.description?.slice(0, 160) ||
+    `Compra ${product.name} en La Casa de los Juegos. Envío rápido a España.`
+
   return {
-    title: product.name,
-    description: product.description?.split('\n')[0] || '',
+    title,
+    description,
+    alternates: {
+      canonical,
+      languages: {
+        'es': `${siteUrl}/es/producto/${slug}`,
+        'en': `${siteUrl}/en/producto/${slug}`,
+        'ca': `${siteUrl}/cat/producto/${slug}`,
+      }
+    },
     openGraph: {
-      title: product.name,
+      title,
+      description,
+      url: canonical,
+      siteName: 'La Casa de los Juegos',
+      images: product.images?.[0] ? [{
+        url: product.images[0],
+        width: 800,
+        height: 800,
+        alt: product.name,
+      }] : [],
+      type: 'website',
+      locale: locale === 'cat' ? 'ca_ES' : locale === 'en' ? 'en_GB' : 'es_ES',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
       images: product.images?.[0] ? [product.images[0]] : [],
     },
   }
 }
-
 export default async function ProductoPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const product = await getProductBySlug(slug)

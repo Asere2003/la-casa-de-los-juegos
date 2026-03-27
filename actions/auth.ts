@@ -4,6 +4,21 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 
+// ── HELPER — Asociar pedidos de invitado ───────────
+async function asociarPedidosInvitado(userId: string, email: string) {
+  try {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    const admin = createAdminClient()
+    await admin
+      .from('orders')
+      .update({ user_id: userId })
+      .eq('shipping_email', email)
+      .is('user_id', null)
+  } catch (e) {
+    console.error('Error asociando pedidos:', e)
+  }
+}
+
 // ── LOGIN ──────────────────────────────────────────
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -13,14 +28,15 @@ export async function login(formData: FormData) {
     password: formData.get('password') as string,
   }
 
-  const { error } = await supabase.auth.signInWithPassword(credentials)
+  const { data, error } = await supabase.auth.signInWithPassword(credentials)
 
-  if (error) {
-    return { error: error.message }
+  if (error) return { error: error.message }
+
+  if (data.user) {
+    await asociarPedidosInvitado(data.user.id, data.user.email!)
   }
 
   revalidatePath('/', 'layout')
-
 }
 
 // ── REGISTRO ───────────────────────────────────────
@@ -41,27 +57,19 @@ export async function registro(formData: FormData) {
     },
   })
 
-  if (error) {
-    return { error: error.message }
-  }
+  if (error) return { error: error.message }
 
-  // Asociar pedidos de invitado usando service role
+  // Buscar el usuario recién creado para asociar pedidos
   try {
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const admin = createAdminClient()
-
     const { data: users } = await admin.auth.admin.listUsers()
     const matchUser = users?.users.find(u => u.email === email)
-
     if (matchUser) {
-      await admin
-        .from('orders')
-        .update({ user_id: matchUser.id })
-        .eq('shipping_email', email)
-        .is('user_id', null)
+      await asociarPedidosInvitado(matchUser.id, email)
     }
   } catch (e) {
-    console.error('Error asociando pedidos:', e)
+    console.error('Error buscando usuario nuevo:', e)
   }
 
   revalidatePath('/', 'layout')
