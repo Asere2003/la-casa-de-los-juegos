@@ -3,6 +3,9 @@ import createNextIntlPlugin from 'next-intl/plugin'
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts')
 
+const legalPages = ['privacidad', 'terminos', 'devoluciones', 'legal', 'cookies']
+const locales = ['en', 'cat']
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -13,12 +16,21 @@ const nextConfig: NextConfig = {
     qualities: [75, 90],
   },
   async redirects() {
+    const legalRedirects = legalPages.flatMap(page =>
+      locales.map(locale => ({
+        source: `/${locale}/${page}`,
+        destination: `/es/${page}`,
+        permanent: false,
+      }))
+    )
+
     return [
       {
         source: '/',
         destination: '/es',
         permanent: false,
       },
+      ...legalRedirects,
     ]
   },
 }

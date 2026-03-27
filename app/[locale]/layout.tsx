@@ -5,7 +5,9 @@ import { getMessages, getTranslations } from 'next-intl/server'
 
 import BottomNav from '@/components/layout/BottomNav'
 import CartDrawer from '@/components/carrito/CartDrawer'
+import { CookieBanner } from '@/components/legal/CookieBanner'
 import Footer from '@/components/layout/Footer'
+import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics'
 import Header from '@/components/layout/Header'
 import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
@@ -118,6 +120,8 @@ export default async function RootLayout({
           <BottomNav />
 
         </NextIntlClientProvider>
+        <CookieBanner />
+        <GoogleAnalytics />
       </body>
     </html>
   )

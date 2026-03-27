@@ -208,7 +208,7 @@
     "sending": "Enviando…",
     "submit_recover": "Enviar enlace →"
   },
-  "footer": {
+ "footer": {
     "description": "Curadores de asombro y guardianes del juego. La tienda más especial de Granada, ahora en tu hogar.",
     "shop": "Tienda",
     "newsletter_title": "El Boletín del Escriba",
@@ -218,6 +218,9 @@
     "legal": "Aviso Legal",
     "privacy": "Privacidad",
     "cookies": "Cookies",
+    "terms": "Términos",
+    "returns": "Devoluciones",
+    "contact": "Contacto",
     "rights": "© 2024 La Casa de los Juegos · Granada, España"
   },
   "accessibility": {
