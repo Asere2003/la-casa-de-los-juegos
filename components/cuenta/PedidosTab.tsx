@@ -178,7 +178,7 @@ export default function PedidosTab({ orders }: Props) {
                         })() && (
                                 <div className="border-t border-[#c0c9bc]/30 pt-4 mt-4 flex items-center justify-between">
                                     <p className="text-xs text-[#717a6f] italic">
-                                        ¿Tienes algún problema con tu pedido?
+                                        {t('problem_with_order')}
                                     </p>
                                     <button
                                         onClick={() => handleDevolucion(order.id)}
@@ -193,7 +193,7 @@ export default function PedidosTab({ orders }: Props) {
                         {(devoluciones[order.id] ?? order.status) === 'return_requested' && (
                             <div className="border-t border-[#c0c9bc]/30 pt-4 mt-4">
                                 <p className="text-xs text-orange-600 font-mono">
-                                    ✓ Devolución solicitada — nos pondremos en contacto contigo
+                                    {t('return_requested')}
                                 </p>
                             </div>
                         )}

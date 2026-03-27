@@ -1,0 +1,326 @@
+Usa /claude/TESTING_AGENT.md y sigue esas instrucciones estrictamente. No analices otros archivos fuera del contexto actual.
+
+Usa /ai/i18n-refactor.md y sigue esas instrucciones estrictamente. No analices otros archivos fuera del contexto actual.
+
+1. Prompt para seguir archivo por archivo con tests
+
+Sigue estrictamente las instrucciones de /claude/TESTING_AGENT.md.
+
+Contexto actual:
+- Proyecto: LA CASA DE LOS JUEGOS
+- Stack: Next.js 15, TypeScript, Tailwind v4, Supabase, Stripe, Cloudinary, Resend, Zustand
+- Ya está testado: store/tests/cartStore.test.ts
+- No analices otros archivos fuera del contexto actual
+- Trabaja solo sobre el siguiente archivo objetivo
+
+Archivo objetivo:
+[PEGAR RUTA]
+
+Tu tarea:
+1. Analiza solo ese archivo
+2. Decide el tipo de test adecuado
+3. Escribe tests útiles, no redundantes
+4. Cubre happy path, errores y edge cases reales
+5. Usa mocks mínimos y precisos
+6. No cambies lógica de producción salvo que sea imprescindible para testabilidad
+7. Al terminar, dame:
+   - resumen corto
+   - número de tests añadidos
+   - casos cubiertos
+   - posibles riesgos no cubiertos todavía
+
+
+2. Prompt para elegir el siguiente mejor archivo a testear
+
+Sigue estrictamente las instrucciones de /claude/TESTING_AGENT.md.
+
+Ya está cubierto:
+- store/tests/cartStore.test.ts
+
+Con este contexto del proyecto:
+- ecommerce con auth, checkout, webhook, panel cuenta, admin y catálogo
+- prioridad de negocio: auth, checkout, webhook, asociación de pedidos invitado, stock, admin
+
+Quiero que elijas el siguiente archivo con mejor relación impacto/esfuerzo para testear ahora.
+
+Tu respuesta debe incluir solo:
+1. archivo recomendado
+2. por qué es el mejor siguiente paso
+3. qué riesgos cubre
+4. cuántos tests aproximados propones
+5. qué mocks harán falta
+6. orden recomendado de implementación dentro de ese archivo
+
+
+3. Prompt para generar tests de un archivo complejo sin sobre-testear
+
+Sigue estrictamente las instrucciones de /claude/TESTING_AGENT.md.
+
+Voy a trabajar este archivo:
+[PEGAR RUTA]
+
+Quiero que actúes como un senior test engineer.
+Tu objetivo no es maximizar coverage artificial, sino proteger comportamiento crítico de negocio.
+
+Haz esto:
+1. identifica qué sí merece test
+2. identifica qué NO merece test
+3. propón una lista priorizada de casos
+4. implementa solo los casos con mejor ROI
+5. evita tests frágiles o acoplados a implementación interna
+
+Al final, resume:
+- casos implementados
+- casos descartados
+- razones
+
+
+4. Prompt para endurecer un archivo ya testado
+
+Sigue estrictamente las instrucciones de /claude/TESTING_AGENT.md.
+
+Revisa este archivo de tests existente:
+[PEGAR TEST FILE]
+
+Y su archivo de producción relacionado:
+[PEGAR SOURCE FILE]
+
+Quiero una auditoría técnica centrada en calidad de tests.
+
+Haz esto:
+1. detecta tests redundantes
+2. detecta tests frágiles
+3. detecta gaps importantes
+4. mejora naming y estructura si hace falta
+5. añade solo los tests faltantes de alto valor
+6. no reescribas todo sin necesidad
+
+Entrega final:
+- qué mejoraste
+- qué eliminaste
+- qué añadiste
+- por qué ahora la suite es mejor
+
+
+5. Prompt para callbacks, auth y redirects
+
+Sigue estrictamente las instrucciones de /claude/TESTING_AGENT.md.
+
+Quiero testear un flujo sensible de autenticación.
+
+Archivo objetivo:
+[PEGAR RUTA]
+
+Ten especialmente en cuenta estas decisiones del proyecto:
+- login redirige desde cliente, no desde Server Action
+- getSession() para cliente, getUser() para servidor
+- callback existe en:
+  - app/auth/callback/route.ts
+  - app/[locale]/auth/callback/route.ts
+- páginas protegidas usan getUser() + force-dynamic
+
+Tu tarea:
+1. cubrir rutas felices
+2. cubrir errores de auth
+3. cubrir redirects esperados
+4. cubrir diferencias con/sin locale
+5. evitar mocks excesivos
+
+Añade tests y luego resume qué flujo de auth queda protegido.
+
+6. Prompt para webhook de Stripe
+
+
+Sigue estrictamente las instrucciones de /claude/TESTING_AGENT.md.
+
+Archivo objetivo:
+app/api/webhook/route.ts
+
+Este archivo es crítico de negocio.
+Quiero tests exhaustivos pero mantenibles.
+
+Debes cubrir como mínimo:
+- firma válida
+- firma inválida
+- checkout.session.completed
+- creación de order
+- creación de order_items
+- decremento de stock
+- envío de email
+- fallo al insertar pedido
+- fallo al insertar items
+- fallo al descontar stock
+- fallo al enviar email
+- evento irrelevante
+- reintento o duplicado si aplica
+
+Reglas:
+- usa mocks precisos de Stripe, Supabase admin y Resend
+- no cambies comportamiento de producción salvo necesidad real de testabilidad
+- valida comportamiento observable, no detalles internos irrelevantes
+
+Al final:
+- número de tests
+- riesgos cubiertos
+- riesgos pendientes
+
+
+7. Prompt para componentes con formularios
+
+Sigue estrictamente las instrucciones de /claude/TESTING_AGENT.md.
+
+Archivo objetivo:
+[PEGAR COMPONENTE]
+
+Quiero tests de integración de componente centrados en comportamiento del usuario.
+
+Cubre:
+- render inicial
+- interacción del usuario realista
+- validaciones
+- loading state
+- submit correcto
+- error de backend/action
+- success path
+- evitar doble submit si aplica
+
+Usa Testing Library y user-event.
+No compruebes estilos ni detalles visuales irrelevantes.
+No testees implementación interna.
+
+8. Prompt para revisar huecos de cobertura
+
+Sigue estrictamente las instrucciones de /claude/TESTING_AGENT.md.
+
+Con el contexto actual del proyecto y los tests ya escritos, quiero que identifiques gaps reales de cobertura.
+
+No quiero cobertura por porcentaje.
+Quiero cobertura por riesgo.
+
+Tu tarea:
+1. enumera los archivos críticos aún sin test
+2. enumera los flujos críticos parcialmente cubiertos
+3. detecta falsos positivos posibles en la suite actual
+4. propone los próximos 5 archivos en orden de prioridad
+5. explica por qué ese orden es el correcto
+
+9. Prompt para preparar fixtures y mocks reutilizables
+
+Sigue estrictamente las instrucciones de /claude/TESTING_AGENT.md.
+
+Quiero preparar infraestructura de testing reutilizable para este proyecto sin sobreingeniería.
+
+Analiza solo lo necesario para proponer:
+- factories
+- fixtures
+- helpers de mock
+- utilidades comunes de render o setup
+
+Prioriza reutilización para:
+- Supabase
+- Stripe
+- usuario
+- perfil
+- productos
+- pedidos
+- carrito
+
+Tu objetivo:
+1. identificar qué helpers merece la pena extraer ya
+2. crear solo los que realmente reduzcan duplicación
+3. no montar una arquitectura de testing innecesariamente compleja
+
+
+
+10. Prompt para pasar de plan a ejecución en checklist
+
+Sigue estrictamente las instrucciones de /claude/TESTING_AGENT.md.
+
+Con base en el plan de testing existente del proyecto, conviértelo en una checklist operativa y ejecutable.
+
+Formato por cada archivo:
+- archivo
+- prioridad
+- tipo de test
+- mocks necesarios
+- casos mínimos obligatorios
+- edge cases recomendados
+- estado: pendiente
+
+Ordénalo por mejor ROI técnico y de negocio.
+No escribas tests todavía.
+Solo deja el plan listo para ejecución.
+
+11. Prompt para detectar si un archivo necesita refactor para ser testeable
+
+Sigue estrictamente las instrucciones de /claude/TESTING_AGENT.md.
+
+Archivo objetivo:
+[PEGAR RUTA]
+
+Antes de escribir tests, evalúa si este archivo tiene problemas de testabilidad.
+
+Quiero que determines:
+1. si se puede testear tal como está
+2. si necesita refactor pequeño
+3. si necesita extraer helpers
+4. si mezcla demasiadas responsabilidades
+5. cuál es el refactor mínimo aceptable sin reescribir el archivo
+
+Si hace falta refactor:
+- haz solo el mínimo imprescindible
+- mantén el comportamiento intacto
+- explica por qué mejora la testabilidad
+Luego escribe los tests.
+
+
+12. Prompt para modo “avance automático”
+
+Sigue estrictamente las instrucciones de /claude/TESTING_AGENT.md.
+
+Quiero avanzar en la suite de tests de forma incremental y segura.
+
+Reglas de trabajo:
+- elige el siguiente archivo con mayor ROI
+- crea los tests
+- ejecuta la suite relevante
+- corrige fallos
+- resume lo hecho
+- propón el siguiente archivo
+
+No saltes a otro dominio sin cerrar el actual.
+No analices archivos fuera del contexto necesario.
+Prioriza:
+1. auth
+2. checkout
+3. webhook
+4. cuenta
+5. admin
+
+
+Prompt extra corto, listo para pegar ya
+
+
+Sigue estrictamente las instrucciones de /claude/TESTING_AGENT.md.
+
+Archivo objetivo:
+actions/auth.ts
+
+Reglas:
+- analiza solo este archivo y lo mínimo imprescindible relacionado
+- escribe tests útiles, no redundantes
+- cubre happy path, errores y edge cases reales
+- usa mocks mínimos
+- no cambies producción salvo necesidad de testabilidad
+
+Al terminar:
+- resume qué cubriste
+- di cuántos tests pasaron
+- indica el siguiente mejor archivo a testear
+
+
+
+
+
+
+

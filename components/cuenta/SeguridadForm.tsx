@@ -4,6 +4,7 @@ import { cambiarEmail, cambiarPassword } from '@/actions/cuenta'
 import { useState, useTransition } from 'react'
 
 import type { User } from '@supabase/supabase-js'
+import { useTranslations } from 'next-intl'
 
 interface Props {
   user: User
@@ -21,6 +22,7 @@ export default function SeguridadForm({ user }: Props) {
 
 // ── Cambiar Email ──────────────────────────────────
 function CambiarEmailSection({ user }: { user: User }) {
+  const t = useTranslations('seguridad')
   const [isPending, startTransition] = useTransition()
   const [success, setSuccess]        = useState(false)
   const [error, setError]            = useState<string | null>(null)
@@ -42,7 +44,7 @@ function CambiarEmailSection({ user }: { user: User }) {
     <div>
       <p className="font-mono text-[9px] uppercase tracking-widest
                     text-[#805533] mb-3">
-        Cambiar email
+        {t('change_email_title')}
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -50,7 +52,7 @@ function CambiarEmailSection({ user }: { user: User }) {
         <div>
           <label className="block text-xs font-mono uppercase tracking-wider
                             text-[#2a170f] mb-1.5">
-            Email actual
+            {t('current_email_label')}
           </label>
           <input
             type="email"
@@ -64,7 +66,7 @@ function CambiarEmailSection({ user }: { user: User }) {
         <div>
           <label className="block text-xs font-mono uppercase tracking-wider
                             text-[#2a170f] mb-1.5">
-            Nuevo email
+            {t('new_email_label')}
           </label>
           <input
             name="email"
@@ -72,7 +74,7 @@ function CambiarEmailSection({ user }: { user: User }) {
             required
             disabled={isPending}
             className="input-base disabled:opacity-50"
-            placeholder="nuevo@email.com"
+            placeholder={t('new_email_placeholder')}
           />
         </div>
 
@@ -81,7 +83,7 @@ function CambiarEmailSection({ user }: { user: User }) {
         )}
         {success && (
           <p className="text-xs text-[#1a5c2a] font-mono">
-            ✓ Te hemos enviado un enlace de confirmación al nuevo email
+            {t('email_success')}
           </p>
         )}
 
@@ -95,10 +97,10 @@ function CambiarEmailSection({ user }: { user: User }) {
             <>
               <span className="inline-block w-4 h-4 border-2 border-white/30
                                border-t-white rounded-full animate-spin" />
-              Enviando…
+              {t('sending')}
             </>
           ) : (
-            'Cambiar email →'
+            t('change_email_button')
           )}
         </button>
       </form>
@@ -108,6 +110,7 @@ function CambiarEmailSection({ user }: { user: User }) {
 
 // ── Cambiar Contraseña ─────────────────────────────
 function CambiarPasswordSection() {
+  const t = useTranslations('seguridad')
   const [isPending, startTransition] = useTransition()
   const [success, setSuccess]        = useState(false)
   const [error, setError]            = useState<string | null>(null)
@@ -122,11 +125,11 @@ function CambiarPasswordSection() {
     const confirmar = formData.get('confirmar') as string
 
     if (nueva !== confirmar) {
-      setError('Las contraseñas no coinciden.')
+      setError(t('error_passwords_mismatch'))
       return
     }
     if (nueva.length < 8) {
-      setError('La contraseña debe tener al menos 8 caracteres.')
+      setError(t('error_password_too_short'))
       return
     }
 
@@ -144,14 +147,14 @@ function CambiarPasswordSection() {
     <div>
       <p className="font-mono text-[9px] uppercase tracking-widest
                     text-[#805533] mb-3">
-        Cambiar contraseña
+        {t('change_password_title')}
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-xs font-mono uppercase tracking-wider
                             text-[#2a170f] mb-1.5">
-            Nueva contraseña
+            {t('new_password_label')}
           </label>
           <input
             name="password"
@@ -159,14 +162,14 @@ function CambiarPasswordSection() {
             required
             disabled={isPending}
             className="input-base disabled:opacity-50"
-            placeholder="Mínimo 8 caracteres"
+            placeholder={t('password_placeholder')}
           />
         </div>
 
         <div>
           <label className="block text-xs font-mono uppercase tracking-wider
                             text-[#2a170f] mb-1.5">
-            Confirmar contraseña
+            {t('confirm_password_label')}
           </label>
           <input
             name="confirmar"
@@ -174,7 +177,7 @@ function CambiarPasswordSection() {
             required
             disabled={isPending}
             className="input-base disabled:opacity-50"
-            placeholder="••••••••"
+            placeholder={t('confirm_password_placeholder')}
           />
         </div>
 
@@ -183,7 +186,7 @@ function CambiarPasswordSection() {
         )}
         {success && (
           <p className="text-xs text-[#1a5c2a] font-mono">
-            ✓ Contraseña actualizada correctamente
+            {t('password_success')}
           </p>
         )}
 
@@ -197,10 +200,10 @@ function CambiarPasswordSection() {
             <>
               <span className="inline-block w-4 h-4 border-2 border-white/30
                                border-t-white rounded-full animate-spin" />
-              Guardando…
+              {t('saving')}
             </>
           ) : (
-            'Cambiar contraseña →'
+            t('change_password_button')
           )}
         </button>
       </form>

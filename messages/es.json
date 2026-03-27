@@ -308,7 +308,11 @@
       "status_processing": "Procesando",
       "status_shipped": "Enviado",
       "status_delivered": "Entregado",
-      "status_cancelled": "Cancelado"
+      "status_cancelled": "Cancelado",
+      "problem_with_order": "¿Algún problema con tu pedido?",
+      "processing": "Procesando...",
+      "request_return": "Solicitar devolución",
+      "return_requested": "✓ Devolución solicitada — nos pondremos en contacto contigo pronto"
     }
   },
   "confirmacion": {
@@ -323,6 +327,25 @@
     "continue_shopping": "Seguir comprando",
     "not_found": "Pedido no encontrado.",
     "go_catalogue": "Ir al catálogo"
+  },
+  "seguridad": {
+    "change_email_title": "Cambiar email",
+    "current_email_label": "Email actual",
+    "new_email_label": "Nuevo email",
+    "new_email_placeholder": "nuevo@email.com",
+    "email_success": "✓ Te hemos enviado un enlace de confirmación al nuevo email",
+    "sending": "Enviando…",
+    "change_email_button": "Cambiar email →",
+    "change_password_title": "Cambiar contraseña",
+    "new_password_label": "Nueva contraseña",
+    "password_placeholder": "Mínimo 8 caracteres",
+    "confirm_password_label": "Confirmar contraseña",
+    "confirm_password_placeholder": "••••••••",
+    "error_passwords_mismatch": "Las contraseñas no coinciden.",
+    "error_password_too_short": "La contraseña debe tener al menos 8 caracteres.",
+    "password_success": "✓ Contraseña actualizada correctamente",
+    "saving": "Guardando…",
+    "change_password_button": "Cambiar contraseña →"
   },
   "timeline": {
     "card_1_title": "Los Inicios",

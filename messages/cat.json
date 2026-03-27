@@ -324,6 +324,25 @@
     "not_found": "Comanda no trobada.",
     "go_catalogue": "Anar al catàleg"
   },
+  "seguridad": {
+    "change_email_title": "Canviar correu",
+    "current_email_label": "Correu actual",
+    "new_email_label": "Nou correu",
+    "new_email_placeholder": "nou@correu.com",
+    "email_success": "✓ T'hem enviat un enllaç de confirmació al nou correu",
+    "sending": "Enviant…",
+    "change_email_button": "Canviar correu →",
+    "change_password_title": "Canviar contrasenya",
+    "new_password_label": "Nova contrasenya",
+    "password_placeholder": "Mínim 8 caràcters",
+    "confirm_password_label": "Confirmar contrasenya",
+    "confirm_password_placeholder": "••••••••",
+    "error_passwords_mismatch": "Les contrasenyes no coincideixen.",
+    "error_password_too_short": "La contrasenya ha de tenir almenys 8 caràcters.",
+    "password_success": "✓ Contrasenya actualitzada correctament",
+    "saving": "Desant…",
+    "change_password_button": "Canviar contrasenya →"
+  },
   "timeline": {
     "card_1_title": "Els Inicis",
     "card_1_description": "Don Aurelio Valdivia funda la primera Casa de los Juegos a l'Alcaicería de Granada. Un petit taller que combinava la reparació de joguines amb la venda de jocs artesanals.",
