@@ -123,8 +123,8 @@ export async function solicitarDevolucion(orderId: string) {
   const { Resend } = await import('resend')
   const resend = new Resend(process.env.RESEND_API_KEY)
   await resend.emails.send({
-    from: 'La Casa de los Juegos <info@lacasadelosjuegos.com>',
-    to: 'info@lacasadelosjuegos.com',
+    from: `La Casa de los Juegos <${process.env.NEXT_PUBLIC_CONTACT_EMAIL}>`,
+    to: process.env.NEXT_PUBLIC_CONTACT_EMAIL!,
     subject: `🔄 Solicitud de devolución — Pedido #${orderId.slice(0, 8).toUpperCase()}`,
     html: `
       <p>El cliente ha solicitado la devolución del pedido <strong>#${orderId.slice(0, 8).toUpperCase()}</strong>.</p>

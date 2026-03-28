@@ -98,9 +98,9 @@ export default async function ConfirmacionPage({
           {user ? (
             <Link
               href={`/${locale}/cuenta?tab=pedidos`}
-              className="btn-primary px-8 py-3 text-center"
+              className="w-full btn-primary justify-center mt-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:rotate-0"
             >
-              {t('view_orders')}
+              {t('view_orders')} →
             </Link>
           ) : (
             <Link
@@ -112,7 +112,7 @@ export default async function ConfirmacionPage({
           )}
           <Link
             href={`/${locale}/catalogo`}
-            className="btn-outline px-8 py-3 text-center"
+            className="w-full btn-outline justify-center mt-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:rotate-0"
           >
             {t('continue_shopping')}
           </Link>

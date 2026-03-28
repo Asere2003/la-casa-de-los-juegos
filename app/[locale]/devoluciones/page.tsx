@@ -21,7 +21,7 @@ export default function DevolucionesPage() {
       <h2>2. Cómo solicitar una devolución</h2>
       <p>Para iniciar una devolución:</p>
       <ol>
-        <li>Escríbenos a <a href="mailto:info@lacasadelosjuegos.com">info@lacasadelosjuegos.com</a> indicando tu número de pedido y el motivo.</li>
+        <li>Escríbenos a <a href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`}>{process.env.NEXT_PUBLIC_CONTACT_EMAIL}</a> indicando tu número de pedido y el motivo.</li>
         <li>Te confirmaremos la devolución en un plazo máximo de 48 horas.</li>
         <li>Envía el producto en su embalaje original al domicilio que te indicaremos.</li>
         <li>Una vez recibido y verificado el producto, procesaremos el reembolso.</li>
@@ -55,7 +55,7 @@ export default function DevolucionesPage() {
       <p>
         Si recibes un producto defectuoso o dañado durante el transporte, contáctanos
         en las primeras <strong>48 horas</strong> tras la recepción enviando fotos del
-        daño a <a href="mailto:info@lacasadelosjuegos.com">info@lacasadelosjuegos.com</a>.
+        daño a <a href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`}>{process.env.NEXT_PUBLIC_CONTACT_EMAIL}</a>.
         Gestionaremos el cambio o reembolso sin coste alguno para ti.
       </p>
 
