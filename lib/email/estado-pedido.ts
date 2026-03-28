@@ -121,7 +121,7 @@ export async function sendEstadoPedido({ to, orderNumber, status }: SendEstadoPe
   `
 
   const { error } = await resend.emails.send({
-    from: 'La Casa de los Juegos <info@lacasadelosjuegos.com>',
+    from: `La Casa de los Juegos <${process.env.NEXT_PUBLIC_CONTACT_EMAIL}>`,
     to,
     subject: `${content.emoji} ${content.titulo} — Pedido #${orderNumber}`,
     html,

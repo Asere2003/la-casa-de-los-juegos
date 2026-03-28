@@ -39,10 +39,10 @@ export default function ContactoPage() {
                 <div>
                   <p className="font-medium text-[#2c1810] text-sm uppercase tracking-wider">Email</p>
                   <a
-                    href="mailto:info@lacasadelosjuegos.com"
+                    href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`}
                     className="text-[#1a5c2a] hover:underline"
                   >
-                    info@lacasadelosjuegos.com
+                    {process.env.NEXT_PUBLIC_CONTACT_EMAIL}
                   </a>
                 </div>
               </div>

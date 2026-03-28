@@ -82,7 +82,7 @@ export function ContactForm() {
 
       {status === 'error' && (
         <p className="text-red-600 text-sm">
-          Error al enviar. Escríbenos directamente a info@lacasadelosjuegos.com
+          Error al enviar. Escríbenos directamente a {process.env.NEXT_PUBLIC_CONTACT_EMAIL}
         </p>
       )}
 

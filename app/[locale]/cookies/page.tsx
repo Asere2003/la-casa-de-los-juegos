@@ -82,7 +82,7 @@ export default function CookiesPage() {
       <h2>5. Contacto</h2>
       <p>
         Para cualquier consulta sobre el uso de cookies escríbenos a{' '}
-        <a href="mailto:info@lacasadelosjuegos.com">info@lacasadelosjuegos.com</a>.
+        <a href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`}>{process.env.NEXT_PUBLIC_CONTACT_EMAIL}</a>.
       </p>
     </LegalPage>
   )

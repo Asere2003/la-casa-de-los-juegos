@@ -21,7 +21,7 @@ export default function LegalPage_() {
         <li><strong>Nombre:</strong> [NOMBRE Y APELLIDOS]</li>
         <li><strong>NIF:</strong> [NIF]</li>
         <li><strong>Dirección:</strong> [DIRECCIÓN FISCAL], Granada, España</li>
-        <li><strong>Email:</strong> info@lacasadelosjuegos.com</li>
+        <li><strong>Email:</strong> {process.env.NEXT_PUBLIC_CONTACT_EMAIL}</li>
         <li><strong>Web:</strong> lacasadelosjuegos.com</li>
       </ul>
 

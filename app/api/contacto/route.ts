@@ -14,8 +14,8 @@ export async function POST(req: Request) {
 
   try {
     await resend.emails.send({
-      from: 'La Casa de los Juegos <info@lacasadelosjuegos.com>',
-      to: 'info@lacasadelosjuegos.com',
+      from: `La Casa de los Juegos <${process.env.NEXT_PUBLIC_CONTACT_EMAIL}>`,
+      to: process.env.NEXT_PUBLIC_CONTACT_EMAIL!,
       replyTo: email,
       subject: `[Contacto] ${asunto || 'Nuevo mensaje'} — ${nombre}`,
       text: `Nombre: ${nombre}\nEmail: ${email}\nAsunto: ${asunto}\n\n${mensaje}`,

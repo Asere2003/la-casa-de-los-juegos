@@ -152,7 +152,7 @@ export async function sendConfirmacionPedido({
   `
 
   const { error } = await resend.emails.send({
-    from: 'La Casa de los Juegos <info@lacasadelosjuegos.com>',
+    from: `La Casa de los Juegos <${process.env.NEXT_PUBLIC_CONTACT_EMAIL}>`,
     to,
     subject: `✅ Pedido confirmado #${orderNumber} — La Casa de los Juegos`,
     html,
@@ -160,5 +160,134 @@ export async function sendConfirmacionPedido({
 
   if (error) {
     console.error('Error enviando email de confirmación:', error)
+  }
+}
+
+interface SendNuevoPedidoAdminProps {
+  customerEmail: string
+  orderNumber: string
+  orderId: string
+  total: number
+  shippingCost: number
+  items: OrderItem[]
+  shippingName: string | null
+  shippingAddress: string | null
+  shippingCity: string | null
+  shippingPostalCode: string | null
+}
+
+export async function sendNuevoPedidoAdmin({
+  customerEmail,
+  orderNumber,
+  orderId,
+  total,
+  shippingCost,
+  items,
+  shippingName,
+  shippingAddress,
+  shippingCity,
+  shippingPostalCode,
+}: SendNuevoPedidoAdminProps) {
+  const adminEmail = process.env.ADMIN_EMAIL
+  if (!adminEmail) return
+
+  const itemsHtml = items.map(item => `
+    <tr>
+      <td style="padding: 10px 0; border-bottom: 1px solid #f0ebe8;">
+        <strong style="color: #2a170f;">${item.product_name}</strong><br/>
+        <span style="color: #717a6f; font-size: 13px;">${item.quantity} × ${item.price.toFixed(2)} €</span>
+      </td>
+      <td style="padding: 10px 0; border-bottom: 1px solid #f0ebe8; text-align: right;">
+        <strong style="color: #004317;">${item.subtotal.toFixed(2)} €</strong>
+      </td>
+    </tr>
+  `).join('')
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://lacasadelosjuegos.com'
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="margin: 0; padding: 0; background-color: #f5f5f5; font-family: Georgia, serif;">
+      <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+
+        <div style="background: #004317; border-radius: 2px; padding: 20px 24px; margin-bottom: 24px; text-align: center;">
+          <p style="font-family: monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 3px; color: #c9a84c; margin: 0 0 6px;">
+            Nuevo pedido recibido
+          </p>
+          <h1 style="font-family: Georgia, serif; color: white; font-size: 22px; margin: 0;">
+            #${orderNumber}
+          </h1>
+        </div>
+
+        <div style="background: white; border: 1px solid #e0e0e0; border-radius: 2px; padding: 20px 24px; margin-bottom: 16px;">
+          <p style="font-family: monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #717a6f; margin: 0 0 12px;">
+            Cliente
+          </p>
+          <p style="color: #2a170f; font-size: 15px; margin: 0;">
+            ${shippingName ? `<strong>${shippingName}</strong><br/>` : ''}
+            ${customerEmail}
+          </p>
+        </div>
+
+        <div style="background: white; border: 1px solid #e0e0e0; border-radius: 2px; padding: 20px 24px; margin-bottom: 16px;">
+          <p style="font-family: monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #717a6f; margin: 0 0 16px;">
+            Productos
+          </p>
+          <table style="width: 100%; border-collapse: collapse;">
+            ${itemsHtml}
+          </table>
+          <table style="width: 100%; border-collapse: collapse; margin-top: 12px;">
+            <tr>
+              <td style="padding: 6px 0; color: #717a6f; font-size: 14px;">Gastos de envío</td>
+              <td style="padding: 6px 0; text-align: right; color: #2a170f; font-size: 14px;">
+                ${shippingCost > 0 ? `${shippingCost.toFixed(2)} €` : 'Gratis'}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 12px 0 0; border-top: 2px solid #2a170f; font-size: 16px; font-weight: bold; color: #2a170f;">Total</td>
+              <td style="padding: 12px 0 0; border-top: 2px solid #2a170f; text-align: right; font-size: 18px; font-weight: bold; color: #004317;">${total.toFixed(2)} €</td>
+            </tr>
+          </table>
+        </div>
+
+        ${shippingAddress ? `
+        <div style="background: white; border: 1px solid #e0e0e0; border-radius: 2px; padding: 20px 24px; margin-bottom: 16px;">
+          <p style="font-family: monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #717a6f; margin: 0 0 12px;">
+            Dirección de envío
+          </p>
+          <p style="color: #2a170f; font-size: 14px; line-height: 1.6; margin: 0;">
+            ${shippingName ?? ''}<br/>
+            ${shippingAddress}<br/>
+            ${shippingPostalCode ?? ''} ${shippingCity ?? ''}
+          </p>
+        </div>
+        ` : ''}
+
+        <div style="text-align: center; margin-top: 24px;">
+          <a href="${siteUrl}/es/admin/pedidos/${orderId}"
+             style="background-color: #004317; color: white; font-family: Georgia, serif; font-size: 15px; text-decoration: none; padding: 14px 32px; border-radius: 2px; display: inline-block;">
+            Ver pedido en el panel →
+          </a>
+        </div>
+
+      </div>
+    </body>
+    </html>
+  `
+
+  const { error } = await resend.emails.send({
+    from: `La Casa de los Juegos <${process.env.NEXT_PUBLIC_CONTACT_EMAIL}>`,
+    to: adminEmail,
+    subject: `🛒 Nuevo pedido #${orderNumber} — ${total.toFixed(2)} €`,
+    html,
+  })
+
+  if (error) {
+    console.error('Error enviando email admin nuevo pedido:', error)
   }
 }

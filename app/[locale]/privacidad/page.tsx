@@ -21,7 +21,7 @@ export default function PrivacidadPage() {
         <li><strong>Nombre:</strong> [NOMBRE Y APELLIDOS]</li>
         <li><strong>NIF:</strong> [NIF]</li>
         <li><strong>Dirección:</strong> [DIRECCIÓN FISCAL], Granada, España</li>
-        <li><strong>Email:</strong> info@lacasadelosjuegos.com</li>
+        <li><strong>Email:</strong> {process.env.NEXT_PUBLIC_CONTACT_EMAIL}</li>
         <li><strong>Web:</strong> lacasadelosjuegos.com</li>
       </ul>
 
@@ -61,7 +61,7 @@ export default function PrivacidadPage() {
       <p>
         Puedes ejercer en cualquier momento los derechos de acceso, rectificación, supresión,
         oposición, limitación y portabilidad escribiendo a{' '}
-        <a href="mailto:info@lacasadelosjuegos.com">info@lacasadelosjuegos.com</a>.
+        <a href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`}>{process.env.NEXT_PUBLIC_CONTACT_EMAIL}</a>.
         También tienes derecho a reclamar ante la{' '}
         <a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer">
           Agencia Española de Protección de Datos (AEPD)
