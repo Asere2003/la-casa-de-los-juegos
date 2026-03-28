@@ -5,5 +5,8 @@
   "editor.quickSuggestions": {
     "strings": "on"
   },
-  "tailwindCSS.experimental.configFile": "./tailwind.config.ts"
+  "tailwindCSS.experimental.configFile": "./tailwind.config.ts",
+  "files.associations": {
+  "*.svg": "xml"
+}
 }
