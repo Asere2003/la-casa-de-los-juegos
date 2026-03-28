@@ -12,7 +12,7 @@ type BestsellersSectionProps = {
 export default function BestsellersSection({ items }: BestsellersSectionProps) {
   const t = useTranslations('home')
   return (
-    <section className="py-20 bg-[var(--color-surface)]" aria-labelledby="bestsellers-title">
+    <section id="favoritos" className="py-20 bg-[var(--color-surface)]" aria-labelledby="bestsellers-title">
       <div className="px-6 md:px-10 max-w-7xl mx-auto">
         <SectionHeading eyebrow={t('bestsellers_label')} title={t('bestsellers_title')} centered />
 

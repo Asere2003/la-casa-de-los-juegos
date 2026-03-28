@@ -4,6 +4,7 @@ import { Newsreader, Noto_Serif } from 'next/font/google'
 import { getMessages, getTranslations } from 'next-intl/server'
 
 import BottomNav from '@/components/layout/BottomNav'
+import ScrollToTop from '@/components/shared/ScrollToTop'
 import CartDrawer from '@/components/carrito/CartDrawer'
 import { CookieBanner } from '@/components/legal/CookieBanner'
 import Footer from '@/components/layout/Footer'
@@ -118,6 +119,7 @@ export default async function RootLayout({
 
           <Footer />
           <BottomNav />
+          <ScrollToTop />
 
         </NextIntlClientProvider>
         <CookieBanner />
