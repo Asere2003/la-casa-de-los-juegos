@@ -23,6 +23,7 @@ export default function HeroSection({ image }: HeroSectionProps) {
           className="w-full h-full object-cover"
           sizes="100vw"
           quality={90}
+          loading="eager"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#002108]/95 via-[#004317]/75 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#002108]/70 via-transparent to-transparent" />
