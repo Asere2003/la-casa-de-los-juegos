@@ -118,8 +118,8 @@ export default function ProductActions({ product }: Props) {
       {/* Trust badges */}
       <div className="grid grid-cols-1 gap-2">
         {[
-          { icon: '🚚', text: t('trust_free_shipping') },
-          { icon: '📦', text: t('trust_packaging') },
+          // { icon: '🚚', text: t('trust_free_shipping') },
+          // { icon: '📦', text: t('trust_packaging') },
           { icon: '↩️', text: t('trust_returns') },
         ].map(badge => (
           <div key={badge.icon} className="flex items-center gap-2.5">

@@ -57,8 +57,6 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {[
                 { href: '/catalogo' as const,              label: tNav('catalogue') },
-                { href: '/catalogo?sort=newest' as const,  label: tNav('catalogue') },
-                { href: '/catalogo?sort=popular' as const, label: tNav('catalogue') },
                 { href: '/historia' as const,              label: tNav('history') },
               ].map(link => (
                 <li key={link.href}>

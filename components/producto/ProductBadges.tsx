@@ -86,11 +86,11 @@ export default function ProductBadges({ product }: Props) {
       role="list"
       aria-label={t('features')}
     >
-      {badges.map(badge => (
+      {badges.map((badge, i) => (
         <div
           key={badge.label}
           role="listitem"
-          className="bg-[#fff1ec] p-4 flex flex-col items-center gap-1.5 text-center"
+          className={`bg-[#fff1ec] p-4 flex flex-col items-center gap-1.5 text-center${badges.length % 2 !== 0 && i === badges.length - 1 ? ' col-span-2' : ''}`}
         >
           <span className="text-[#004317]">{badge.icon}</span>
           <span className="font-mono text-[9px] uppercase tracking-widest text-[#717a6f]">{badge.label}</span>
