@@ -36,7 +36,7 @@ export default function CatalogHeader({ total, search, onSearch, filterCount, on
 
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
           <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533] mb-2">{t('label')}</p>
+            <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533] mb-2 mt-2">{t('label')}</p>
             <h1 className="font-headline text-3xl md:text-4xl text-[#2a170f]">{t('title')}</h1>
           </div>
 
