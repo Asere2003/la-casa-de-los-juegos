@@ -1,20 +1,10 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import type { CatalogFilters } from '@/types/catalog'
+import { getCategories } from '@/lib/supabase/queries'
 import { useTranslations } from 'next-intl'
-
-const CATEGORIES = [
-  { slug: 'ajedrez',    key: 'chess' as const,      emoji: '♟',  count: 12 },
-  { slug: 'puzzles',    key: 'puzzles' as const,     emoji: '🧩', count: 38 },
-  { slug: 'juegos-mesa',key: 'boardgames' as const,  emoji: '🎲', count: 64 },
-  { slug: 'rol',        key: 'rpg' as const,         emoji: '🐉', count: 21 },
-  { slug: 'clasicos',   key: 'classics' as const,    emoji: '🎭', count: 29 },
-  { slug: 'del-mundo',  key: 'world' as const,       emoji: '🌍', count: 17 },
-  { slug: 'cartas',     key: 'cards' as const,       emoji: '🃏', count: 45 },
-  { slug: 'habilidad',  key: 'skill' as const,       emoji: '🪀', count: 8  },
-]
 
 const DIFFICULTIES = [
   { value: 'familiar', key: 'difficulty_family' as const },
@@ -43,6 +33,12 @@ export default function FilterSidebar({ filters, onChange, onClear, isOpen, onCl
   const t = useTranslations('catalogue')
   const tCat = useTranslations('categories')
   const tA11y = useTranslations('accessibility')
+
+  const [categories, setCategories] = useState<Awaited<ReturnType<typeof getCategories>>>([])
+
+  useEffect(() => {
+    getCategories().then(setCategories)
+  }, [])
 
   // Cerrar con Escape
   useEffect(() => {
@@ -80,19 +76,20 @@ export default function FilterSidebar({ filters, onChange, onClear, isOpen, onCl
       {/* ── Categoría ── */}
       <FilterSection title={t('category')}>
         <div className="space-y-2">
-          {CATEGORIES.map(cat => (
+          {categories.map(cat => (
             <label key={cat.slug} className="flex items-center gap-3 cursor-pointer group">
               <input
                 type="checkbox"
                 checked={filters.category === cat.slug}
                 onChange={e => onChange({ category: e.target.checked ? cat.slug : '' })}
                 className="w-4 h-4 rounded-sm border-[#c0c9bc] text-[#004317] focus:ring-[#c9a84c] cursor-pointer"
-                aria-label={tCat(cat.key)}
+                aria-label={tCat(cat.key as any)}
               />
               <span className="flex-1 text-sm font-body group-hover:text-[#004317] transition-colors">
-                <span aria-hidden="true">{cat.emoji}</span> {tCat(cat.key)}
+                <span aria-hidden="true">{cat.emoji}</span>{' '}
+                {tCat(cat.key as any)}
               </span>
-              <span className="font-mono text-[9px] text-[#717a6f]">{cat.count}</span>
+              <span className="font-mono text-[9px] text-[#717a6f]">{cat.product_count}</span>
             </label>
           ))}
         </div>

@@ -25,7 +25,7 @@ export default function ProductCard({
           alt={product.name}
           fill
           sizes={compact ? '(max-width: 768px) 50vw, 20vw' : '(max-width: 768px) 50vw, 25vw'}
-          className="object-cover"
+          className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[rgba(42,23,15,0.20)] to-transparent pointer-events-none" aria-hidden="true" />
 

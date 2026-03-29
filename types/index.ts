@@ -3,13 +3,15 @@
 // ============================================================
 
 // ── Categoría ──
-export interface Category {
+export interface Category  {
   id: string
   name: string
-  name_en?: string
-  name_cat?: string
+  name_en: string
+  name_cat: string
   slug: string
-  emoji?: string
+  emoji: string
+  key: string
+  product_count: number
   created_at: string
 }
 

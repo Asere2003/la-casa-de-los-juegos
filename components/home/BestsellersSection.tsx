@@ -33,7 +33,7 @@ export default function BestsellersSection({ items }: BestsellersSectionProps) {
                   alt={product.name}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
-                  className={`object-cover group-hover:scale-105 transition-transform duration-700 ${product.featured ? 'opacity-90' : ''}`}
+                  className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
                 />
                 {product.tag ? (
                   <span className="absolute top-3 left-3 text-white text-[9px] font-mono px-2 py-0.5 uppercase tracking-tight" style={{ background: product.tagBg, borderRadius: '2px' }}>

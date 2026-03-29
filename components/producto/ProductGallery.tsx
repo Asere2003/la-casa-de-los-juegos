@@ -28,7 +28,7 @@ export default function ProductGallery({ images, name }: Props) {
 
       {/* Imagen principal */}
       <div
-        className="relative group aspect-[4/5] overflow-hidden bg-[#fff1ec] shadow-warm-lg"
+        className="relative group aspect-[4/5] overflow-hidden bg-white shadow-warm-lg"
         style={{ borderRadius: '2px' }}
         onKeyDown={handleKeyDown}
         tabIndex={0}
@@ -43,7 +43,7 @@ export default function ProductGallery({ images, name }: Props) {
           fill
           priority={current === 0}
           sizes="(max-width: 1024px) 100vw, 58vw"
-          className="object-cover transition-opacity duration-300 group-hover:scale-[1.02] transition-transform"
+          className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
         />
 
         {/* Gradiente sutil */}
@@ -125,7 +125,7 @@ export default function ProductGallery({ images, name }: Props) {
                 alt={`${name} — miniatura ${i + 1}`}
                 fill
                 sizes="15vw"
-                className="object-cover hover:scale-105 transition-transform duration-500"
+                className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
               />
             </button>
           ))}

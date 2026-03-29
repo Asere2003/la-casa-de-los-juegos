@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 export async function getCategories(): Promise<Category[]> {
     const supabase = createClient()
     const { data, error } = await supabase
-        .from('categories')
+        .from('categories_with_count')
         .select('*')
         .order('name')
 

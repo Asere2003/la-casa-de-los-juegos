@@ -91,7 +91,7 @@ export async function cambiarPassword(formData: FormData) {
   revalidatePath('/cuenta')
 }
 
-// ── Solicitar devolución ────────────────────────────────────
+// ── SOLICITAR DEVOLUCIÓN ────────────────────────────────────
 export async function solicitarDevolucion(orderId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

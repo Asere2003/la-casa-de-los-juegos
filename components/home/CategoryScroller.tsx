@@ -1,20 +1,26 @@
-import type { CategoryItem } from '@/types/home'
+import type { Category } from '@/types/index'
 import CategoryPill from '@/components/home/CategoryPill'
-import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 
 type CategoryScrollerProps = {
-  items: CategoryItem[]
+  items: Category[]
 }
 
-export default function CategoryScroller({ items }: CategoryScrollerProps) {
-  const t = useTranslations('categories')
+export default async function CategoryScroller({ items }: CategoryScrollerProps) {
+  const tCat      = await getTranslations('categories')
+  const tCatalogue = await getTranslations('catalogue')
+
   return (
-    <section className="py-14 bg-[var(--color-surface)] border-b border-[var(--color-outline-var)]/20" aria-label={t('chess')}>
+    <section className="py-14 bg-[var(--color-surface)] border-b border-[var(--color-outline-var)]/20" aria-label={tCatalogue('category')}>
       <div className="px-6 max-w-7xl mx-auto">
-        <p className="section-label mb-6 text-center">{useTranslations('catalogue')('category')}</p>
+        <p className="section-label mb-6 text-center">{tCatalogue('category')}</p>
         <div className="flex overflow-x-auto no-scrollbar gap-5 pb-3 items-start justify-start md:justify-center">
-          {items.map((item) => (
-            <CategoryPill key={item.slug} item={item} />
+          {items.map(item => (
+            <CategoryPill
+              key={item.slug}
+              item={item}
+              label={tCat(item.key as any)}
+            />
           ))}
         </div>
       </div>

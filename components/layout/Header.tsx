@@ -7,6 +7,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { CldImage } from 'next-cloudinary'
 import type { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
+import { getCategories } from '@/lib/supabase/queries'
 import { useCartStore } from '@/store/cartStore'
 
 const navLinks = [
@@ -14,22 +15,12 @@ const navLinks = [
   { href: '/historia' as const, key: 'history' },
 ]
 
-const categories = [
-  { emoji: '♟', key: 'chess', slug: 'ajedrez' },
-  { emoji: '🧩', key: 'puzzles', slug: 'puzzles' },
-  { emoji: '🎲', key: 'boardgames', slug: 'juegos-mesa' },
-  { emoji: '🐉', key: 'rpg', slug: 'rol' },
-  { emoji: '🎭', key: 'classics', slug: 'clasicos' },
-  { emoji: '🌍', key: 'world', slug: 'del-mundo' },
-  { emoji: '🃏', key: 'cards', slug: 'cartas' },
-  { emoji: '🪀', key: 'skill', slug: 'habilidad' },
-]
-
 const localeLabels: Record<string, string> = { es: 'ES', en: 'EN', cat: 'CAT' }
 
 export default function Header() {
   const [isAdmin, setIsAdmin] = useState(false)
   const [user, setUser] = useState<User | null>(null)
+  const [categories, setCategories] = useState<Awaited<ReturnType<typeof getCategories>>>([])
 
   const pathname = usePathname()
   const router = useRouter()
@@ -50,6 +41,10 @@ export default function Header() {
   const toggleCart = useCartStore(s => s.toggleCart)
   const searchRef = useRef<HTMLInputElement>(null)
   const langRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    getCategories().then(setCategories)
+  }, [])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -123,15 +118,14 @@ export default function Header() {
     )
 
     return () => subscription.unsubscribe()
-  }, [pathname]) // 👈 clave: se re-ejecuta cada vez que cambia la ruta
+  }, [pathname])
 
-  // Función logout
   async function handleLogout() {
     const supabase = createClient()
-    setUser(null)        // limpia el estado local inmediatamente
-    setDrawerOpen(false) // cierra el drawer inmediatamente
-    router.push('/')     // redirige inmediatamente
-    await supabase.auth.signOut() // esto se hace en segundo plano
+    setUser(null)
+    setDrawerOpen(false)
+    router.push('/')
+    await supabase.auth.signOut()
   }
 
   function handleSearch(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -141,7 +135,6 @@ export default function Header() {
       router.push(`/catalogo?search=${encodeURIComponent(searchQuery.trim())}`)
     }
   }
-
 
   return (
     <>
@@ -425,7 +418,7 @@ export default function Header() {
               {categories.map(cat => (
                 <Link key={cat.slug} href={`/catalogo?category=${cat.slug}`} onClick={() => setDrawerOpen(false)}
                   className="py-1.5 px-1 text-sm font-body text-[#2a170f]/75 hover:text-[#004317] transition-colors rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]">
-                  {cat.emoji} {tCat(cat.key)}
+                  {cat.emoji} {tCat(cat.key as any)}
                 </Link>
               ))}
             </div>

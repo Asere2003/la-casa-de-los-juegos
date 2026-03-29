@@ -1,8 +1,7 @@
-import { getFeaturedProducts, getProductsNewCuriosities } from '@/lib/supabase/queries'
+import { getCategories, getFeaturedProducts, getProductsNewCuriosities } from '@/lib/supabase/queries'
 
 import AudienceGrid from '@/components/home/AudienceGrid'
 import BestsellersSection from '@/components/home/BestsellersSection'
-import type { CategoryItem } from '@/types/home'
 import CategoryScroller from '@/components/home/CategoryScroller'
 import EditorialBanner from '@/components/home/EditorialBanner'
 import HeroSection from '@/components/home/HeroSection'
@@ -18,27 +17,14 @@ export async function generateMetadata() {
 }
 
 export default async function HomePage() {
-  const tCat  = await getTranslations('categories')
   const tHome = await getTranslations('home')
 
-  // ── Datos desde Supabase ──
-  const [newArrivalsRaw, bestsellersRaw] = await Promise.all([
+  const [newArrivalsRaw, bestsellersRaw, categories] = await Promise.all([
     getProductsNewCuriosities({ sort: 'newest', limit: 4 }),
     getFeaturedProducts(3),
+    getCategories(),
   ])
 
-  const categories: CategoryItem[] = [
-    { emoji: '♟', label: tCat('chess'),      slug: 'ajedrez' },
-    { emoji: '🧩', label: tCat('puzzles'),    slug: 'puzzles' },
-    { emoji: '🎲', label: tCat('boardgames'), slug: 'juegos-mesa' },
-    { emoji: '🐉', label: tCat('rpg'),        slug: 'rol' },
-    { emoji: '🎭', label: tCat('classics'),   slug: 'clasicos' },
-    { emoji: '🌍', label: tCat('world'),      slug: 'del-mundo' },
-    { emoji: '🃏', label: tCat('cards'),      slug: 'cartas' },
-    { emoji: '🪀', label: tCat('skill'),      slug: 'habilidad' },
-  ]
-
-  // Adaptar productos de Supabase al formato que esperan los componentes
   const newArrivals = newArrivalsRaw.map(p => ({
     id:          p.id,
     name:        p.name,
@@ -82,27 +68,26 @@ export default async function HomePage() {
   )
 }
 
-// ── Helpers ──────────────────────────────────────────────────
 function getCategoryColor(slug: string): string {
   const colors: Record<string, string> = {
-    'ajedrez':    '#1c1c1c',
-    'puzzles':    '#1a3a5c',
-    'juegos-mesa':'#1a5c2a',
-    'rol':        '#3d1a5c',
-    'clasicos':   '#5c3d1a',
-    'del-mundo':  '#1a4a5c',
-    'cartas':     '#5c1a1a',
-    'habilidad':  '#4a5c1a',
+    'ajedrez':     '#1c1c1c',
+    'puzzles':     '#1a3a5c',
+    'juegos-mesa': '#1a5c2a',
+    'rol':         '#3d1a5c',
+    'clasicos':    '#5c3d1a',
+    'del-mundo':   '#1a4a5c',
+    'cartas':      '#5c1a1a',
+    'habilidad':   '#4a5c1a',
   }
   return colors[slug] ?? '#2a170f'
 }
 
 function getBadgeLabel(badge?: string | null): string | null {
   const labels: Record<string, string> = {
-    'nuevo':           'Nuevo',
-    'agotandose':      'Agotándose',
-    'ultimas-unidades':'Últimas Unidades',
-    'oferta':          'Oferta',
+    'nuevo':            'Nuevo',
+    'agotandose':       'Agotándose',
+    'ultimas-unidades': 'Últimas Unidades',
+    'oferta':           'Oferta',
   }
   return badge ? (labels[badge] ?? null) : null
 }
