@@ -1,8 +1,8 @@
+import FavoriteButton from '@/components/FavoriteButton'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import type { ProductCardItem } from '@/types/home'
 import SectionHeading from '@/components/home/SectionHeading'
-import FavoriteButton from '@/components/FavoriteButton'
 import { formatEuro } from '@/lib/format'
 import { useTranslations } from 'next-intl'
 
@@ -25,7 +25,7 @@ export default function BestsellersSection({ items, userId, favoriteIds }: Bests
               key={product.id}
               className={`group overflow-hidden transition-all duration-500 ${
                 product.featured
-                  ? 'bg-[var(--color-outline-var)] shadow-[0_20px_50px_rgba(0,67,23,0.4)] md:-translate-y-3 md:scale-105 z-10 relative hover:md:-translate-y-5'
+                  ? 'bg-[var(--color-white)] shadow-[0_20px_50px_rgba(0,67,23,0.4)] md:-translate-y-3 md:scale-105 z-10 relative hover:md:-translate-y-5'
                   : 'bg-[var(--color-surface-low)] shadow-warm hover:shadow-warm-lg hover:-translate-y-1'
               }`}
               style={{ borderRadius: '2px' }}
@@ -54,16 +54,16 @@ export default function BestsellersSection({ items, userId, favoriteIds }: Bests
                 </div>
               </Link>
 
-              <div className="p-4 md:p-5">
+              <div className="p-4 md:p-5 bg-[var(--color-primary)]">
                 <Link
                   href={`/producto/${product.slug}`}
                   className={`font-headline italic text-lg mb-1 block hover:opacity-80 transition-opacity focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] rounded ${
-                    product.featured ? 'text-[var(--color-gold)]' : 'text-[var(--color-on-surface)]'
+                    product.featured ? 'text-[var(--color-surface)]' : 'text-[var(--color-on-surface)]'
                   }`}
                 >
                   {product.name}
                 </Link>
-                <p className={`font-body italic text-sm mb-4 ${product.featured ? 'text-white/60' : 'text-[var(--color-on-surface-var)]'}`}>
+                <p className={`font-body italic text-sm mb-4 ${product.featured ? 'text-[var(--color-surface)]'  : 'text-[var(--color-on-surface-var)]'}`}>
                   {product.description}
                 </p>
                 <div className={`flex justify-between items-center border-t pt-4 ${product.featured ? 'border-[var(--color-gold)]/20' : 'border-[var(--color-outline-var)]/20'}`}>

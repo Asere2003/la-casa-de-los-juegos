@@ -1,10 +1,11 @@
 'use client'
 
+import type { Favorite, Review } from '@/types/cuentas'
+
 import AjustesTab from './AjustesTab'
 import FavoritosTab from './FavoritosTab'
 import PedidosTab from './PedidosTab'
 import ResenasTab from './Resenastab'
-import type { Favorite, Review } from '@/types/cuentas'
 import type { User } from '@supabase/supabase-js'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
@@ -49,18 +50,10 @@ interface Props {
 
 export default function CuentaDashboard({ user, profile, orders, favorites, reviews, purchasedProductIds }: Props) {
   const searchParams = useSearchParams()
-  const [activeTab, setActiveTab] = useState(searchParams.get('tab') ?? 'ajustes')
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') ?? 'pedidos')
   const t = useTranslations('cuenta')
 
   const tabs = [
-    {
-      key: 'ajustes', label: t('tabs.ajustes'), badge: null,
-      icon: (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
-        </svg>
-      )
-    },
     {
       key: 'pedidos', label: t('tabs.pedidos'), badge: orders.length > 0 ? orders.length : null,
       icon: (
@@ -85,6 +78,14 @@ export default function CuentaDashboard({ user, profile, orders, favorites, revi
         </svg>
       )
     },
+    {
+      key: 'ajustes', label: t('tabs.ajustes'), badge: null,
+      icon: (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
+        </svg>
+      )
+    }
   ]
 
   const nombreCorto = profile?.nombre
@@ -170,7 +171,6 @@ export default function CuentaDashboard({ user, profile, orders, favorites, revi
 
           {/* Contenido */}
           <main className="flex-1 min-w-0">
-            {activeTab === 'ajustes' && <AjustesTab user={user} profile={profile} />}
             {activeTab === 'pedidos' && <PedidosTab orders={orders} />}
             {activeTab === 'favoritos' && (
               <FavoritosTab userId={user.id} initialFavorites={favorites} />
@@ -178,6 +178,7 @@ export default function CuentaDashboard({ user, profile, orders, favorites, revi
             {activeTab === 'resenas' && (
               <ResenasTab userId={user.id} initialReviews={reviews} purchasedProductIds={purchasedProductIds} />
             )}
+            {activeTab === 'ajustes' && <AjustesTab user={user} profile={profile} />}
           </main>
 
         </div>
