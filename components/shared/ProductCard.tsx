@@ -2,17 +2,22 @@ import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import type { ProductCardItem } from '@/types/home'
 import { formatEuro } from '@/lib/format'
+import FavoriteButton from '@/components/FavoriteButton'
 
 type ProductCardProps = {
   product: ProductCardItem
   showDescription?: boolean
   compact?: boolean
+  userId?: string | null        // ← nuevo
+  isFavorite?: boolean          // ← nuevo
 }
 
 export default function ProductCard({
   product,
   showDescription = true,
   compact = false,
+  userId = null,                // ← nuevo
+  isFavorite = false,           // ← nuevo
 }: ProductCardProps) {
   return (
     <article className="product-card group flex flex-col">
@@ -38,16 +43,27 @@ export default function ProductCard({
           </span>
         ) : null}
 
-        {product.tag ? (
-          <span
-            className={`absolute top-3 right-3 text-[9px] font-mono px-2 py-0.5 uppercase tracking-tight font-bold ${
-              product.tag === 'Nuevo' ? 'bg-[var(--color-gold)] text-[var(--color-wood-dark)]' : 'bg-[var(--color-error)] text-white'
-            }`}
-            style={{ borderRadius: '2px' }}
-          >
-            {product.tag}
-          </span>
-        ) : null}
+        {/* Tag + Favorito conviven en la esquina derecha */}
+        <div className="absolute top-2 right-2 flex flex-col items-end gap-1.5">
+          {product.tag ? (
+            <span
+              className={`text-[9px] font-mono px-2 py-0.5 uppercase tracking-tight font-bold ${
+                product.tag === 'Nuevo' ? 'bg-[var(--color-gold)] text-[var(--color-wood-dark)]' : 'bg-[var(--color-error)] text-white'
+              }`}
+              style={{ borderRadius: '2px' }}
+            >
+              {product.tag}
+            </span>
+          ) : null}
+
+          {/* ← Botón corazón */}
+          <FavoriteButton
+            productId={product.id}
+            userId={userId}
+            initialIsFavorite={isFavorite}
+            size="sm"
+          />
+        </div>
       </Link>
 
       <div className="p-4 border-t border-[var(--color-outline-var)]/20 flex-1 flex flex-col">

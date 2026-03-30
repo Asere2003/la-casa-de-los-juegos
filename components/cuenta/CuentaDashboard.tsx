@@ -1,7 +1,10 @@
 'use client'
 
 import AjustesTab from './AjustesTab'
+import FavoritosTab from './FavoritosTab'
 import PedidosTab from './PedidosTab'
+import ResenasTab from './Resenastab'
+import type { Favorite, Review } from '@/types/cuentas'
 import type { User } from '@supabase/supabase-js'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
@@ -39,9 +42,12 @@ interface Props {
   user: User
   profile: Profile | null
   orders: Order[]
+  favorites: Favorite[]
+  reviews: Review[]
+  purchasedProductIds: string[]
 }
 
-export default function CuentaDashboard({ user, profile, orders }: Props) {
+export default function CuentaDashboard({ user, profile, orders, favorites, reviews, purchasedProductIds }: Props) {
   const searchParams = useSearchParams()
   const [activeTab, setActiveTab] = useState(searchParams.get('tab') ?? 'ajustes')
   const t = useTranslations('cuenta')
@@ -64,7 +70,7 @@ export default function CuentaDashboard({ user, profile, orders }: Props) {
       )
     },
     {
-      key: 'favoritos', label: t('tabs.favoritos'), badge: null,
+      key: 'favoritos', label: t('tabs.favoritos'), badge: favorites.length > 0 ? favorites.length : null,
       icon: (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -166,8 +172,12 @@ export default function CuentaDashboard({ user, profile, orders }: Props) {
           <main className="flex-1 min-w-0">
             {activeTab === 'ajustes' && <AjustesTab user={user} profile={profile} />}
             {activeTab === 'pedidos' && <PedidosTab orders={orders} />}
-            {activeTab === 'favoritos' && <Proximamente label={t('tabs.favoritos')} />}
-            {activeTab === 'resenas' && <Proximamente label={t('tabs.resenas')} />}
+            {activeTab === 'favoritos' && (
+              <FavoritosTab userId={user.id} initialFavorites={favorites} />
+            )}
+            {activeTab === 'resenas' && (
+              <ResenasTab userId={user.id} initialReviews={reviews} purchasedProductIds={purchasedProductIds} />
+            )}
           </main>
 
         </div>
@@ -176,14 +186,3 @@ export default function CuentaDashboard({ user, profile, orders }: Props) {
   )
 }
 
-function Proximamente({ label }: { label: string }) {
-  const t = useTranslations('cuenta')
-  return (
-    <div className="text-center py-16">
-      <span className="block w-10 h-0.5 bg-[#c9a84c] mx-auto mb-4" />
-      <p className="text-[#717a6f] text-sm" style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic' }}>
-        {t('coming_soon', { label })}
-      </p>
-    </div>
-  )
-}

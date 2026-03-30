@@ -5,21 +5,24 @@ import { Link } from '@/i18n/navigation'
 import type { Product } from '@/types'
 import { useCartStore } from '@/store/cartStore'
 import { useTranslations } from 'next-intl'
+import FavoriteButton from '@/components/FavoriteButton'
 
 // ── ProductCard ──────────────────────────────────────────
 interface CardProps {
   product: Product
   index: number
+  userId?: string | null
+  isFavorite?: boolean
 }
 
-function ProductCard({ product, index }: CardProps) {
+function ProductCard({ product, index, userId, isFavorite }: CardProps) {
   const addItem = useCartStore(s => s.addItem)
   const t = useTranslations('catalogue')
   const tCommon = useTranslations('common')
   const tProduct = useTranslations('product')
   const tA11y = useTranslations('accessibility')
 
-  const isLowStock  = product.stock > 0 && product.stock <= 3
+  const isLowStock   = product.stock > 0 && product.stock <= 3
   const isOutOfStock = product.stock === 0
   const hasDiscount  = product.compare_price && product.compare_price > product.price
   const discountPct  = hasDiscount
@@ -49,14 +52,14 @@ function ProductCard({ product, index }: CardProps) {
             alt={product.name}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+            className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="w-full h-full bg-[#fff1ec] flex items-center justify-center text-4xl">🎲</div>
         )}
 
         {/* Gradiente */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#2a170f]/20 to-transparent pointer-events-none" aria-hidden="true"/>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#2a170f]/20 to-transparent pointer-events-none" aria-hidden="true" />
 
         {/* Badge categoría */}
         {product.category && (
@@ -68,8 +71,15 @@ function ProductCard({ product, index }: CardProps) {
           </span>
         )}
 
-        {/* Badges estado */}
-        <div className="absolute top-3 right-3 flex flex-col gap-1 items-end">
+        {/* Badges estado + corazón */}
+        <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
+          {/* Corazón — siempre visible */}
+          <FavoriteButton
+            productId={product.id}
+            userId={userId ?? null}
+            initialIsFavorite={isFavorite ?? false}
+            size="sm"
+          />
           {isOutOfStock && (
             <span className="bg-[#717a6f] text-white text-[8px] font-mono px-2 py-0.5 uppercase tracking-tighter" style={{ borderRadius: '2px' }}>
               {tCommon('sold_out')}
@@ -167,9 +177,11 @@ function ProductCard({ product, index }: CardProps) {
 interface GridProps {
   products: Product[]
   loading: boolean
+  userId?: string | null
+  favoriteIds?: string[]
 }
 
-export default function ProductGrid({ products, loading }: GridProps) {
+export default function ProductGrid({ products, loading, userId, favoriteIds }: GridProps) {
   const t = useTranslations('catalogue')
 
   if (loading) {
@@ -219,7 +231,12 @@ export default function ProductGrid({ products, loading }: GridProps) {
       >
         {products.map((product, i) => (
           <div key={product.id} role="listitem">
-            <ProductCard product={product} index={i}/>
+            <ProductCard
+              product={product}
+              index={i}
+              userId={userId}
+              isFavorite={favoriteIds?.includes(product.id) ?? false}
+            />
           </div>
         ))}
       </div>

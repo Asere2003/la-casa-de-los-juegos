@@ -1,15 +1,16 @@
 'use client'
 
 import type { Product } from '@/types'
-import { useState } from 'react'
 import { useTranslations } from 'next-intl'
+import FavoriteButton from '@/components/FavoriteButton'
 
 interface Props {
   product: Product
+  userId: string | null
+  isFavorite: boolean
 }
 
-export default function ProductInfo({ product }: Props) {
-  const [wishlisted, setWishlisted] = useState(false)
+export default function ProductInfo({ product, userId, isFavorite }: Props) {
   const t = useTranslations('product')
   const tCommon = useTranslations('common')
 
@@ -23,7 +24,7 @@ export default function ProductInfo({ product }: Props) {
   return (
     <div className="flex flex-col gap-4">
 
-      {/* Fila superior: estado stock + wishlist */}
+      {/* Fila superior: estado stock + favorito */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {isOutOfStock && (
@@ -50,22 +51,13 @@ export default function ProductInfo({ product }: Props) {
           )}
         </div>
 
-        {/* Wishlist */}
-        <button
-          onClick={() => setWishlisted(v => !v)}
-          aria-label={wishlisted ? t('remove_from_wishlist') : t('add_to_wishlist')}
-          aria-pressed={wishlisted}
-          className="text-[#717a6f] hover:text-[#ba1a1a] transition-colors p-2 focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded"
-        >
-          <svg
-            width="20" height="20" viewBox="0 0 24 24"
-            fill={wishlisted ? '#ba1a1a' : 'none'}
-            stroke={wishlisted ? '#ba1a1a' : 'currentColor'}
-            strokeWidth="2" aria-hidden="true"
-          >
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
-        </button>
+        {/* Corazón conectado a Supabase */}
+        <FavoriteButton
+          productId={product.id}
+          userId={userId}
+          initialIsFavorite={isFavorite}
+          size="md"
+        />
       </div>
 
       {/* Nombre */}
@@ -77,7 +69,7 @@ export default function ProductInfo({ product }: Props) {
       {product.category && (
         <span
           className="inline-flex items-center gap-1.5 text-white font-mono text-[9px] uppercase tracking-wider px-3 py-1.5 w-fit"
-          style={{ background:  '#1a5c2a', borderRadius: '2px' }}
+          style={{ background: '#1a5c2a', borderRadius: '2px' }}
         >
           {product.category.emoji} {product.category.name}
         </span>

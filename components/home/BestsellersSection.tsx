@@ -2,14 +2,17 @@ import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import type { ProductCardItem } from '@/types/home'
 import SectionHeading from '@/components/home/SectionHeading'
+import FavoriteButton from '@/components/FavoriteButton'
 import { formatEuro } from '@/lib/format'
 import { useTranslations } from 'next-intl'
 
 type BestsellersSectionProps = {
   items: ProductCardItem[]
+  userId?: string | null
+  favoriteIds?: string[]
 }
 
-export default function BestsellersSection({ items }: BestsellersSectionProps) {
+export default function BestsellersSection({ items, userId, favoriteIds }: BestsellersSectionProps) {
   const t = useTranslations('home')
   return (
     <section id="favoritos" className="py-20 bg-[var(--color-surface)]" aria-labelledby="bestsellers-title">
@@ -22,7 +25,7 @@ export default function BestsellersSection({ items }: BestsellersSectionProps) {
               key={product.id}
               className={`group overflow-hidden transition-all duration-500 ${
                 product.featured
-                  ? 'bg-[var(--color-primary-container)] shadow-[0_20px_50px_rgba(0,67,23,0.4)] md:-translate-y-3 md:scale-105 z-10 relative hover:md:-translate-y-5'
+                  ? 'bg-[var(--color-outline-var)] shadow-[0_20px_50px_rgba(0,67,23,0.4)] md:-translate-y-3 md:scale-105 z-10 relative hover:md:-translate-y-5'
                   : 'bg-[var(--color-surface-low)] shadow-warm hover:shadow-warm-lg hover:-translate-y-1'
               }`}
               style={{ borderRadius: '2px' }}
@@ -35,11 +38,20 @@ export default function BestsellersSection({ items }: BestsellersSectionProps) {
                   sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
                 />
-                {product.tag ? (
-                  <span className="absolute top-3 left-3 text-white text-[9px] font-mono px-2 py-0.5 uppercase tracking-tight" style={{ background: product.tagBg, borderRadius: '2px' }}>
-                    {product.tag}
-                  </span>
-                ) : null}
+                {/* Tag + Favorito */}
+                <div className="absolute top-2 right-2 flex flex-col items-end gap-1.5">
+                  {product.tag ? (
+                    <span className="text-white text-[9px] font-mono px-2 py-0.5 uppercase tracking-tight" style={{ background: product.tagBg, borderRadius: '2px' }}>
+                      {product.tag}
+                    </span>
+                  ) : null}
+                  <FavoriteButton
+                    productId={product.id}
+                    userId={userId ?? null}
+                    initialIsFavorite={favoriteIds?.includes(product.id) ?? false}
+                    size="sm"
+                  />
+                </div>
               </Link>
 
               <div className="p-4 md:p-5">

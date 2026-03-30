@@ -10,8 +10,8 @@ import ProductMeta from '@/components/producto/ProductMeta'
 import RelatedProducts from '@/components/producto/RelatedProducts'
 import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-
-export const dynamic = 'force-dynamic'
+import { createClient } from '@/lib/supabase/server'
+import FavoriteButton from '@/components/FavoriteButton'
 
 export async function generateMetadata(
   { params }: { params: Promise<{ locale: string; slug: string }> }
@@ -61,10 +61,30 @@ export async function generateMetadata(
     },
   }
 }
+
 export default async function ProductoPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const product = await getProductBySlug(slug)
+
   if (!product) notFound()
+
+  // ← Obtener usuario y favorito
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  let isFavorite = false
+  if (user) {
+    const { data } = await supabase
+      .from('favorites')
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('product_id', product.id)
+      .maybeSingle()
+    console.log('favorites query:', data, 'user:', user.id, 'product:', product.id) // ← añade esto
+    isFavorite = !!data
+
+  }
+
 
   const related = product.category_id
     ? await getRelatedProducts(product.category_id, product.id, 4)
@@ -79,7 +99,11 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
             <ProductGallery images={product.images} name={product.name} />
           </div>
           <div className="lg:col-span-5 flex flex-col gap-6">
-            <ProductInfo product={product} />
+            <ProductInfo
+              product={product}
+              userId={user?.id ?? null}
+              isFavorite={isFavorite}
+            />
             <ProductBadges product={product} />
             <ProductDescription description={product.description} />
             <ProductActions product={product} />

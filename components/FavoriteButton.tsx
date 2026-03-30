@@ -1,0 +1,89 @@
+'use client'
+
+import { useEffect, useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
+import { toggleFavorite } from '@/app/actions/favorites'
+
+interface FavoriteButtonProps {
+  productId: string
+  userId: string | null
+  initialIsFavorite?: boolean
+  size?: 'sm' | 'md' | 'lg'
+  className?: string
+}
+
+const sizeMap = {
+  sm: { btn: 'w-7 h-7',  icon: 16 },
+  md: { btn: 'w-9 h-9',  icon: 18 },
+  lg: { btn: 'w-11 h-11', icon: 22 },
+}
+
+export default function FavoriteButton({
+  productId,
+  userId,
+  initialIsFavorite = false,
+  size = 'md',
+  className = '',
+}: FavoriteButtonProps) {
+  const router = useRouter()
+  const [isFavorite, setIsFavorite] = useState(initialIsFavorite)
+  const [isPending, startTransition] = useTransition()
+  const { btn, icon } = sizeMap[size]
+
+  // Sincroniza cuando el servidor manda un valor actualizado
+  useEffect(() => {
+    setIsFavorite(initialIsFavorite)
+  }, [initialIsFavorite])
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (!userId) {
+      router.push('/login?redirect=/cuenta?tab=favoritos')
+      return
+    }
+
+    const next = !isFavorite
+    setIsFavorite(next)
+
+    startTransition(async () => {
+      const { ok } = await toggleFavorite(productId, next)
+      if (!ok) setIsFavorite(!next)
+    })
+  }
+
+  return (
+    <button
+      onClick={handleClick}
+      disabled={isPending}
+      aria-label={isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+      title={isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+      className={`
+        ${btn} flex items-center justify-center rounded-full
+        transition-all duration-200
+        ${isFavorite
+          ? 'bg-[#c9a84c]/15 text-[#c9a84c] hover:bg-[#c9a84c]/25'
+          : 'bg-white/80 text-[#717a6f] hover:bg-white hover:text-[#c9a84c]'
+        }
+        shadow-sm backdrop-blur-sm
+        ${isPending ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}
+        ${className}
+      `}
+    >
+      <svg
+        width={icon}
+        height={icon}
+        viewBox="0 0 24 24"
+        fill={isFavorite ? 'currentColor' : 'none'}
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={`transition-transform duration-200 ${isPending ? '' : 'hover:scale-110'}`}
+      >
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+      </svg>
+    </button>
+  )
+}

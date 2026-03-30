@@ -6,6 +6,7 @@ import CategoryScroller from '@/components/home/CategoryScroller'
 import EditorialBanner from '@/components/home/EditorialBanner'
 import HeroSection from '@/components/home/HeroSection'
 import NewArrivalsSection from '@/components/home/NewArrivalsSection'
+import { createClient } from '@/lib/supabase/server'
 import { getTranslations } from 'next-intl/server'
 
 export async function generateMetadata() {
@@ -24,6 +25,19 @@ export default async function HomePage() {
     getFeaturedProducts(3),
     getCategories(),
   ])
+
+  // Usuario y favoritos
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  let favoriteIds: string[] = []
+  if (user) {
+    const { data } = await supabase
+      .from('favorites')
+      .select('product_id')
+      .eq('user_id', user.id)
+    favoriteIds = (data ?? []).map(f => f.product_id)
+  }
 
   const newArrivals = newArrivalsRaw.map(p => ({
     id:          p.id,
@@ -60,9 +74,17 @@ export default async function HomePage() {
     <>
       <HeroSection image="inicio/hero-fondo-tienda-1" />
       <CategoryScroller items={categories} />
-      <NewArrivalsSection items={newArrivals} />
+      <NewArrivalsSection
+        items={newArrivals}
+        userId={user?.id ?? null}
+        favoriteIds={favoriteIds}
+      />
       <EditorialBanner image="inicio/hero-tienda" />
-      <BestsellersSection items={bestsellers} />
+      <BestsellersSection
+        items={bestsellers}
+        userId={user?.id ?? null}
+        favoriteIds={favoriteIds}
+      />
       <AudienceGrid items={audienceGroups} />
     </>
   )

@@ -24,6 +24,8 @@ interface SearchParams {
 
 interface Props {
   initialSearchParams: SearchParams
+  userId?: string | null     
+  favoriteIds?: string[]       
 }
 
 const DEFAULT_FILTERS: CatalogFilters = {
@@ -31,7 +33,7 @@ const DEFAULT_FILTERS: CatalogFilters = {
   difficulty: '', players: '', search: '', sort: 'newest',
 }
 
-export default function CatalogoContent({ initialSearchParams }: Props) {
+export default function CatalogoContent({ initialSearchParams, userId = null, favoriteIds = [] }: Props) {
   const router = useRouter()
 
   const [filters, setFilters] = useState<CatalogFilters>({
@@ -111,7 +113,12 @@ export default function CatalogoContent({ initialSearchParams }: Props) {
             <ActiveFilters filters={filters} onRemove={clearFilter} onClearAll={clearAll} />
             <SortSelect value={filters.sort} onChange={val => updateFilters({ sort: val })} />
           </div>
-          <ProductGrid products={products} loading={loading} />
+  <ProductGrid
+  products={products}
+  loading={loading}
+  userId={userId}              // ← nuevo
+  favoriteIds={favoriteIds}    // ← nuevo
+/>
           {!loading && products.length > 0 && (
             <div className="mt-14 flex justify-center">
               <button

@@ -1,4 +1,5 @@
-import type { Category, Product } from '@/types'
+import type { Category, Product} from '@/types'
+import type { Favorite, Review } from '@/types/cuentas'
 
 import { createClient } from '@/lib/supabase/client'
 
@@ -163,4 +164,147 @@ export async function getProductsByCategory(
     const { data, error } = await query
     if (error) { console.error('getProductsByCategory:', error); return [] }
     return data ?? []
+}
+
+// ============================================================
+// FAVORITOS
+// ============================================================
+ 
+/** Obtiene los favoritos del usuario con datos del producto */
+export async function getFavorites(userId: string): Promise<Favorite[]> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('favorites')
+    .select(`
+      id,
+      product_id,
+      created_at,
+      product:products (
+        id, name, slug, price, compare_price, images, badge, stock
+      )
+    `)
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+ 
+  if (error) { console.error('getFavorites:', error); return [] }
+  return (data ?? []) as unknown as Favorite[]
+}
+ 
+/** Obtiene solo los IDs de favoritos del usuario (para el botón) */
+export async function getFavoriteIds(userId: string): Promise<string[]> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('favorites')
+    .select('product_id')
+    .eq('user_id', userId)
+ 
+  if (error) { console.error('getFavoriteIds:', error); return [] }
+  return (data ?? []).map(f => f.product_id)
+}
+ 
+/** Añade un producto a favoritos */
+export async function addFavorite(userId: string, productId: string): Promise<boolean> {
+  const supabase = createClient()
+  const { error } = await supabase
+    .from('favorites')
+    .insert({ user_id: userId, product_id: productId })
+ 
+  if (error) { console.error('addFavorite:', error); return false }
+  return true
+}
+ 
+/** Elimina un producto de favoritos */
+export async function removeFavorite(userId: string, productId: string): Promise<boolean> {
+  const supabase = createClient()
+  const { error } = await supabase
+    .from('favorites')
+    .delete()
+    .eq('user_id', userId)
+    .eq('product_id', productId)
+ 
+  if (error) { console.error('removeFavorite:', error); return false }
+  return true
+}
+ 
+// ============================================================
+// RESEÑAS
+// ============================================================
+ 
+/** Obtiene las reseñas del usuario con datos del producto */
+export async function getUserReviews(userId: string): Promise<Review[]> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('reviews')
+    .select(`
+      *,
+      product:products (id, name, slug, images)
+    `)
+    .eq('user_id', userId)
+    .order('updated_at', { ascending: false })
+ 
+  if (error) { console.error('getUserReviews:', error); return [] }
+  return (data ?? []) as unknown as Review[]
+}
+ 
+/** Obtiene las reseñas públicas de un producto */
+export async function getProductReviews(productId: string): Promise<Review[]> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('reviews')
+    .select(`
+      *,
+      profile:profiles (nombre)
+    `)
+    .eq('product_id', productId)
+    .order('created_at', { ascending: false })
+ 
+  if (error) { console.error('getProductReviews:', error); return [] }
+  return (data ?? []) as unknown as Review[]
+}
+ 
+/** Crea o actualiza una reseña */
+export async function upsertReview(review: {
+  user_id: string
+  product_id: string
+  rating: number
+  titulo?: string
+  contenido?: string
+}): Promise<Review | null> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('reviews')
+    .upsert(review, { onConflict: 'user_id,product_id' })
+    .select()
+    .single()
+ 
+  if (error) { console.error('upsertReview:', error); return null }
+  return data as Review
+}
+ 
+/** Elimina una reseña */
+export async function deleteReview(userId: string, reviewId: string): Promise<boolean> {
+  const supabase = createClient()
+  const { error } = await supabase
+    .from('reviews')
+    .delete()
+    .eq('id', reviewId)
+    .eq('user_id', userId)
+ 
+  if (error) { console.error('deleteReview:', error); return false }
+  return true
+}
+ 
+/** Comprueba si el usuario ha comprado un producto (para verified_purchase) */
+export async function hasPurchasedProduct(userId: string, productId: string): Promise<boolean> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('order_items')
+    .select('id, order:orders!inner(user_id, status)')
+    .eq('product_id', productId)
+    .eq('order.user_id', userId)
+    .in('order.status', ['entregado', 'enviado'])
+    .limit(1)
+ 
+  if (error) { console.error('hasPurchasedProduct:', error); return false }
+  return (data ?? []).length > 0
 }

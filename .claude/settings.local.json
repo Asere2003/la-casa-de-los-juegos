@@ -1,10 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx vitest:*)"
+      "Bash(npx vitest:*)",
+      "Bash(npx tsc:*)"
     ]
   },
   "files.associations": {
-  "*.svg": "xml"
-}
+    "*.svg": "xml"
+  }
 }
