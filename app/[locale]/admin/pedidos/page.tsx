@@ -36,19 +36,26 @@ export default async function AdminPedidosPage({
 
   if (error) console.error(error)
 
+  // Añade subtotal a cada order_item para cumplir el tipado
+  const safeOrders = (orders ?? []).map(order => ({
+    ...order,
+    order_items: (order.order_items ?? []).map(item => ({
+      ...item,
+      subtotal: item.price * item.quantity
+    }))
+  }))
+
   return (
-
-      <div>
-        <div className="mb-8">
-          <p className="text-xs uppercase tracking-widest text-[#c9a84c] font-medium mb-1">
-            Panel de administración
-          </p>
-          <h1 className="font-['Noto_Serif'] text-3xl text-[#004317]">
-            Pedidos
-          </h1>
-        </div>
-        <PedidosAdminTable orders={orders ?? []} locale={locale} />
+    <div>
+      <div className="mb-8">
+        <p className="text-xs uppercase tracking-widest text-[#c9a84c] font-medium mb-1">
+          Panel de administración
+        </p>
+        <h1 className="font-['Noto_Serif'] text-3xl text-[#004317]">
+          Pedidos
+        </h1>
       </div>
-
+      <PedidosAdminTable orders={safeOrders} locale={locale} />
+    </div>
   )
 }

@@ -13,7 +13,6 @@ export default async function AdminPedidoDetallePage({
 }) {
   const { locale, id } = await params
   const supabase = await createClient()
-
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect(`/${locale}/login`)
 

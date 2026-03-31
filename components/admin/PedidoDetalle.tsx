@@ -3,8 +3,8 @@
 import { useState, useTransition } from 'react'
 
 import Image from 'next/image'
+import type { Order } from '@/types/orders'
 import { actualizarEstadoPedido } from '@/actions/admin'
-import type { Order, OrderItem } from '@/types/orders'
 
 interface Props {
   order: Order
@@ -34,6 +34,7 @@ const STATUS_FLOW: Record<string, string[]> = {
 }
 
 export default function PedidoDetalle({ order, locale }: Props) {
+  console.log('order subtotal:', order.subtotal, typeof order.subtotal)
   const [status, setStatus] = useState(order.status)
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -165,7 +166,7 @@ export default function PedidoDetalle({ order, locale }: Props) {
                 <p className="text-xs text-[#2c1810]/50">{item.quantity} × {item.price.toFixed(2)} €</p>
               </div>
               <p className="font-mono text-sm font-bold text-[#004317]">
-                {item.subtotal.toFixed(2)} €
+                {(item.subtotal ?? 0).toFixed(2)} €
               </p>
             </div>
           ))}
@@ -175,18 +176,18 @@ export default function PedidoDetalle({ order, locale }: Props) {
         <div className="border-t border-[#2c1810]/10 mt-4 pt-4 space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-[#2c1810]/60">Subtotal</span>
-            <span className="font-mono">{order.subtotal.toFixed(2)} €</span>
+            <span className="font-mono">{order.subtotal?.toFixed(2)} €</span>
           </div>
-          {order.shipping_cost > 0 && (
+          {order.shipping_cost && order.shipping_cost > 0 && (
             <div className="flex justify-between text-sm">
               <span className="text-[#2c1810]/60">Envío</span>
-              <span className="font-mono">{order.shipping_cost.toFixed(2)} €</span>
+              <span className="font-mono">{order.shipping_cost?.toFixed(2)} €</span>
             </div>
           )}
-          {order.discount > 0 && (
+          {order.discount && order.discount > 0 && (
             <div className="flex justify-between text-sm">
               <span className="text-[#2c1810]/60">Descuento</span>
-              <span className="font-mono text-[#004317]">−{order.discount.toFixed(2)} €</span>
+              <span className="font-mono text-[#004317]">−{order.discount?.toFixed(2)} €</span>
             </div>
           )}
           <div className="flex justify-between text-base font-bold border-t border-[#2c1810]/10 pt-2">

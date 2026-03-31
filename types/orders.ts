@@ -6,7 +6,7 @@ export interface OrderItem {
   product_slug?: string | null
   quantity: number
   price: number
-  subtotal?: number
+  subtotal: number
 }
 
 export interface Order {
