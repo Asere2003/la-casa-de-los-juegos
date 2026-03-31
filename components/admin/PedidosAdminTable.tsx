@@ -3,24 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import Link from 'next/link'
-
-interface OrderItem {
-  id: string
-  product_name: string
-  quantity: number
-  price: number
-}
-
-interface Order {
-  id: string
-  status: string
-  total: number
-  shipping_name: string | null
-  shipping_email: string | null
-  shipping_city: string | null
-  created_at: string
-  order_items: OrderItem[]
-}
+import type { Order } from '@/types/orders'
 
 interface Props {
   orders: Order[]

@@ -1,12 +1,13 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import Link from 'next/link'
+
+import type { Favorite } from '@/types/cuentas'
 import Image from 'next/image'
-import { useLocale } from 'next-intl'
+import Link from 'next/link'
 import { removeFavorite } from '@/lib/supabase/queries'
 import { useCartStore } from '@/store/cartStore'
-import type { Favorite } from '@/types/cuentas'
+import { useLocale } from 'next-intl'
 
 interface FavoritosTabProps {
   userId: string

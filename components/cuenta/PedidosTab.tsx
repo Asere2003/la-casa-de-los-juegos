@@ -3,29 +3,14 @@
 import { useState, useTransition } from 'react'
 
 import { solicitarDevolucion } from '@/actions/cuenta'
+import { useLocale } from 'next-intl'
+import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-
-interface OrderItem {
-    id: string
-    product_name: string
-    product_image: string | null
-    quantity: number
-    price: number
-    subtotal: number
-}
-
-interface Order {
-    id: string
-    status: string
-    total: number
-    created_at: string
-    delivered_at: string | null
-    order_items: OrderItem[]
-
-}
+import type { Order } from '@/types/orders'
 
 interface Props {
     orders: Order[]
+    reviewedProductIds?: string[] // IDs de productos ya reseñados
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -39,9 +24,12 @@ const STATUS_COLORS: Record<string, string> = {
     cancelled: 'bg-red-100 text-red-700',
 }
 
-export default function PedidosTab({ orders }: Props) {
+const CAN_REVIEW_STATUSES = ['shipped', 'delivered']
 
+export default function PedidosTab({ orders, reviewedProductIds = [] }: Props) {
     const t = useTranslations('cuenta.pedidos')
+    const router = useRouter()
+    const locale = useLocale()
 
     const getStatusLabel = (status: string): string => {
         const labels: Record<string, string> = {
@@ -73,6 +61,10 @@ export default function PedidosTab({ orders }: Props) {
         })
     }
 
+    function handleDejarResena(productId: string) {
+        router.push(`/${locale}/cuenta?tab=resenas&product=${productId}`)
+    }
+
     if (!orders || orders.length === 0) {
         return (
             <div className="text-center py-16">
@@ -83,11 +75,7 @@ export default function PedidosTab({ orders }: Props) {
                 >
                     {t('empty')}
                 </p>
-
-                <a
-                    href="/catalogo"
-                    className="btn-primary px-6 py-2 text-sm inline-block"
-                >
+                <a href="/catalogo" className="btn-primary px-6 py-2 text-sm inline-block">
                     {t('view_catalogue')}
                 </a>
             </div>
@@ -99,6 +87,7 @@ export default function PedidosTab({ orders }: Props) {
             {orders.map(order => {
                 const statusColor = STATUS_COLORS[order.status] ?? 'bg-gray-100 text-gray-700'
                 const statusLabel = getStatusLabel(order.status)
+                const canReview = CAN_REVIEW_STATUSES.includes(order.status)
                 const date = new Date(order.created_at).toLocaleDateString('es-ES', {
                     day: 'numeric',
                     month: 'long',
@@ -134,39 +123,63 @@ export default function PedidosTab({ orders }: Props) {
                             </div>
                         </div>
 
-                        {/* Línea separadora */}
+                        {/* Productos */}
                         <div className="border-t border-[#c0c9bc]/30 pt-4">
                             <div className="space-y-3">
-                                {order.order_items.map(item => (
-                                    <div key={item.id} className="flex items-center gap-3">
-                                        <div className="w-10 h-10 bg-[#004317]/10 rounded flex-shrink-0 overflow-hidden">
-                                            {item.product_image ? (
-                                                <img
-                                                    src={item.product_image}
-                                                    alt={item.product_name}
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-lg">
-                                                    🎲
-                                                </div>
-                                            )}
+                                {order.order_items.map(item => {
+                                    const alreadyReviewed = item.product_id
+                                        ? reviewedProductIds.includes(item.product_id)
+                                        : false
+
+                                    return (
+                                        <div key={item.id} className="flex items-center gap-3">
+                                            <div className="w-10 h-10 bg-[#004317]/10 rounded flex-shrink-0 overflow-hidden">
+                                                {item.product_image ? (
+                                                    <img
+                                                        src={item.product_image}
+                                                        alt={item.product_name}
+                                                        className="w-full h-full object-contain"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center text-lg">
+                                                        🎲
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm text-[#2a170f] font-medium truncate">
+                                                    {item.product_name}
+                                                </p>
+                                                <p className="text-xs text-[#717a6f]">
+                                                    {item.quantity} × {item.price.toFixed(2)} €
+                                                </p>
+                                            </div>
+                                            <div className="flex items-center gap-3 flex-shrink-0">
+                                                {/* Botón reseña */}
+                                                {canReview && item.product_id && (
+                                                    alreadyReviewed ? (
+                                                        <span className="font-mono text-[8px] uppercase tracking-wide text-[#004317]">
+                                                            ✓ Reseñado
+                                                        </span>
+                                                    ) : (
+                                                        <button
+                                                            onClick={() => handleDejarResena(item.product_id!)}
+                                                            className="font-mono text-[8px] uppercase tracking-wide text-[#c9a84c] hover:text-[#004317] transition-colors underline"
+                                                        >
+                                                            Dejar reseña
+                                                        </button>
+                                                    )
+                                                )}
+                                                <p className="text-sm font-mono text-[#2a170f]">
+                                                    {item.subtotal.toFixed(2)} €
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-sm text-[#2a170f] font-medium truncate">
-                                                {item.product_name}
-                                            </p>
-                                            <p className="text-xs text-[#717a6f]">
-                                                {item.quantity} × {item.price.toFixed(2)} €
-                                            </p>
-                                        </div>
-                                        <p className="text-sm font-mono text-[#2a170f] flex-shrink-0">
-                                            {item.subtotal.toFixed(2)} €
-                                        </p>
-                                    </div>
-                                ))}
+                                    )
+                                })}
                             </div>
                         </div>
+
                         {/* Botón devolución */}
                         {(devoluciones[order.id] ?? order.status) === 'delivered' && (() => {
                             if (!order.delivered_at) return false
@@ -176,19 +189,19 @@ export default function PedidosTab({ orders }: Props) {
                             )
                             return days <= 14
                         })() && (
-                                <div className="border-t border-[#c0c9bc]/30 pt-4 mt-4 flex items-center justify-between">
-                                    <p className="text-xs text-[#717a6f] italic">
-                                        {t('problem_with_order')}
-                                    </p>
-                                    <button
-                                        onClick={() => handleDevolucion(order.id)}
-                                        disabled={loadingId === order.id}
-                                        className="text-xs text-[#717a6f] underline hover:text-red-600 transition-colors disabled:opacity-50"
-                                    >
-                                        {loadingId === order.id ? 'Procesando...' : 'Solicitar devolución'}
-                                    </button>
-                                </div>
-                            )}
+                            <div className="border-t border-[#c0c9bc]/30 pt-4 mt-4 flex items-center justify-between">
+                                <p className="text-xs text-[#717a6f] italic">
+                                    {t('problem_with_order')}
+                                </p>
+                                <button
+                                    onClick={() => handleDevolucion(order.id)}
+                                    disabled={loadingId === order.id}
+                                    className="text-xs text-[#717a6f] underline hover:text-red-600 transition-colors disabled:opacity-50"
+                                >
+                                    {loadingId === order.id ? 'Procesando...' : 'Solicitar devolución'}
+                                </button>
+                            </div>
+                        )}
 
                         {(devoluciones[order.id] ?? order.status) === 'return_requested' && (
                             <div className="border-t border-[#c0c9bc]/30 pt-4 mt-4">

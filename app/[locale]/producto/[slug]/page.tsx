@@ -8,10 +8,9 @@ import ProductGallery from '@/components/producto/ProductGallery'
 import ProductInfo from '@/components/producto/ProductInfo'
 import ProductMeta from '@/components/producto/ProductMeta'
 import RelatedProducts from '@/components/producto/RelatedProducts'
+import { createClient } from '@/lib/supabase/server'
 import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
-import FavoriteButton from '@/components/FavoriteButton'
 
 export async function generateMetadata(
   { params }: { params: Promise<{ locale: string; slug: string }> }

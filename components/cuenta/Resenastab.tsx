@@ -1,75 +1,241 @@
 'use client'
 
-import { useState, useTransition } from 'react'
-import Link from 'next/link'
+import { useEffect, useState, useTransition } from 'react'
+import useSWR from 'swr'
+
 import Image from 'next/image'
-import { useLocale } from 'next-intl'
-import { deleteReview } from '@/lib/supabase/queries'
+import Link from 'next/link'
 import type { Review } from '@/types/cuentas'
-import StarRating from './Starrating'
 import ReviewForm from './ReviewForm'
+import StarRating from './Starrating'
+import { createClient } from '@/lib/supabase/client'
+import { useUserReviews } from '@/lib/useUserReviews'
+import { deleteReview } from '@/lib/supabase/queries'
+import { useLocale } from 'next-intl'
+import { useSearchParams } from 'next/navigation'
+
+interface PendingProduct {
+  id: string
+  name: string
+  slug: string
+  images: string[]
+}
 
 interface ResenasTabProps {
   userId: string
   initialReviews: Review[]
-  /** IDs de productos comprados — para el badge verified */
   purchasedProductIds: string[]
 }
 
 export default function ResenasTab({ userId, initialReviews, purchasedProductIds }: ResenasTabProps) {
-  const [reviews, setReviews] = useState(initialReviews)
+  const { data: reviews = [], mutate } = useUserReviews(userId)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [writingFor, setWritingFor] = useState<string | null>(null)
+  const [pendingProducts, setPendingProducts] = useState<PendingProduct[] | null>(null)
+  const [loadingPending, setLoadingPending] = useState(false)
   const locale = useLocale()
+  const searchParams = useSearchParams()
+  const productFromUrl = searchParams.get('product')
 
-  const handleSave = (updated: Review) => {
-    setReviews(prev => {
-      const exists = prev.find(r => r.id === updated.id || r.product_id === updated.product_id)
-      if (exists) return prev.map(r => (r.product_id === updated.product_id ? updated : r))
-      return [updated, ...prev]
-    })
+  // IDs ya reseñados
+  const reviewedIds = new Set(reviews.map(r => r.product_id))
+
+  // IDs comprados pero sin reseña (sin duplicados)
+  const pendingIds = [...new Set(purchasedProductIds)].filter(id => !reviewedIds.has(id))
+
+  // Carga lazy de productos pendientes
+  async function loadPendingProducts() {
+    if (pendingProducts !== null || pendingIds.length === 0) return
+    setLoadingPending(true)
+    const supabase = createClient()
+    const { data } = await supabase
+      .from('products')
+      .select('id, name, slug, images')
+      .in('id', pendingIds)
+    setPendingProducts((data ?? []) as PendingProduct[])
+    setLoadingPending(false)
+  }
+
+  const handleSave = async (updated: Review) => {
     setEditingId(null)
+    setWritingFor(null)
+    setPendingProducts(prev => prev ? prev.filter(p => p.id !== updated.product_id) : prev)
+    await mutate()
   }
 
-  const handleDelete = (reviewId: string) => {
-    setReviews(prev => prev.filter(r => r.id !== reviewId))
+  const handleDelete = async (reviewId: string, productId: string) => {
+    if (purchasedProductIds.includes(productId) && pendingProducts !== null) {
+      const supabase = createClient()
+      const { data } = await supabase
+        .from('products')
+        .select('id, name, slug, images')
+        .eq('id', productId)
+        .single()
+      if (data) setPendingProducts(prev => prev ? [data as PendingProduct, ...prev] : [data as PendingProduct])
+    }
+    await mutate()
   }
 
-  if (reviews.length === 0) {
+  const hasPending = pendingIds.length > 0
+  const hasReviews = reviews.length > 0
+
+  useEffect(() => {
+    if (!productFromUrl || !pendingIds.includes(productFromUrl)) return
+
+    const supabase = createClient()
+    supabase
+      .from('products')
+      .select('id, name, slug, images')
+      .in('id', pendingIds)
+      .then(({ data }) => {
+        const products = (data ?? []) as PendingProduct[]
+        // Reordenar para que el producto del URL aparezca primero
+        const sorted = [
+          ...products.filter(p => p.id === productFromUrl),
+          ...products.filter(p => p.id !== productFromUrl),
+        ]
+        setPendingProducts(sorted)
+        // Pequeño delay para que React procese el estado antes de abrir el form
+        setTimeout(() => setWritingFor(productFromUrl), 50)
+      })
+  }, [productFromUrl])
+
+  if (!hasPending && !hasReviews) {
     return <ResenasEmpty locale={locale} />
   }
 
   return (
-    <div className="space-y-4">
-      {/* Cabecera */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533]">
-            Mis reseñas
-          </span>
-          <span className="block w-8 h-0.5 bg-[#c9a84c] mt-1.5" />
-        </div>
-        <span className="font-mono text-[10px] text-[#717a6f]">
-          {reviews.length} {reviews.length === 1 ? 'reseña' : 'reseñas'}
-        </span>
-      </div>
+    <div className="space-y-10">
 
-      {/* Lista */}
-      <div className="space-y-4">
-        {reviews.map(review => (
-          <ReviewCard
-            key={review.id}
-            review={review}
-            userId={userId}
-            locale={locale}
-            isEditing={editingId === review.id}
-            isVerified={purchasedProductIds.includes(review.product_id)}
-            onEdit={() => setEditingId(review.id)}
-            onCancelEdit={() => setEditingId(null)}
-            onSave={handleSave}
-            onDelete={handleDelete}
-          />
-        ))}
-      </div>
+      {/* ── Pendientes de reseñar ── */}
+      {hasPending && (
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533]">
+                Pendientes de reseñar
+              </span>
+              <span className="block w-8 h-0.5 bg-[#c9a84c] mt-1.5" />
+            </div>
+            <span className="font-mono text-[10px] text-[#717a6f]">
+              {pendingIds.length} {pendingIds.length === 1 ? 'producto' : 'productos'}
+            </span>
+          </div>
+
+          {pendingProducts === null ? (
+            <button
+              onClick={loadPendingProducts}
+              disabled={loadingPending}
+              className="btn-outline text-xs py-2 px-4"
+            >
+              {loadingPending ? 'Cargando...' : 'Ver productos pendientes'}
+            </button>
+          ) : (
+            <div className="space-y-3">
+              {pendingProducts.map(product => (
+                <div key={product.id}>
+                  <div className="bg-white border border-[#c0c9bc]/30 rounded-sm overflow-hidden">
+                    <div className="flex items-center gap-3 p-3">
+                      {/* Imagen */}
+                      <div className="w-10 h-10 flex-shrink-0 bg-[#f5f0eb] rounded-sm overflow-hidden">
+                        {product.images?.[0] ? (
+                          <Image
+                            src={product.images[0]}
+                            alt={product.name}
+                            width={40}
+                            height={40}
+                            className="w-full h-full object-contain"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-[#c0c9bc]">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                              <rect x="3" y="3" width="18" height="18" rx="2" />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Nombre */}
+                      <div className="flex-1 min-w-0">
+                        <Link
+                          href={`/${locale}/producto/${product.slug}`}
+                          className="text-xs text-[#2a170f] hover:text-[#004317] transition-colors truncate block"
+                          style={{ fontFamily: 'Newsreader, serif' }}
+                        >
+                          {product.name}
+                        </Link>
+                        <span className="font-mono text-[8px] text-[#717a6f]">Sin reseña</span>
+                      </div>
+
+                      {/* Botón */}
+                      <button
+                        onClick={() => setWritingFor(writingFor === product.id ? null : product.id)}
+                        className="btn-primary text-xs py-1.5 px-3 shrink-0"
+                      >
+                        {writingFor === product.id ? 'Cancelar' : 'Escribir reseña'}
+                      </button>
+                    </div>
+
+                    {/* Formulario inline */}
+                    {writingFor === product.id && (
+                      <div className="border-t border-[#c0c9bc]/20 bg-[#f9f6f1] p-4">
+                        <ReviewForm
+                          userId={userId}
+                          productId={product.id}
+                          onSave={review => handleSave({
+                            ...review,
+                            product: {
+                              id: product.id,
+                              name: product.name,
+                              slug: product.slug,
+                              images: product.images,
+                            }
+                          })}
+                          onCancel={() => setWritingFor(null)}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* ── Mis reseñas ── */}
+      {hasReviews && (
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533]">
+                Mis reseñas
+              </span>
+              <span className="block w-8 h-0.5 bg-[#c9a84c] mt-1.5" />
+            </div>
+            <span className="font-mono text-[10px] text-[#717a6f]">
+              {reviews.length} {reviews.length === 1 ? 'reseña' : 'reseñas'}
+            </span>
+          </div>
+
+          <div className="space-y-4">
+            {reviews.map(review => (
+              <ReviewCard
+                key={review.id}
+                review={review}
+                userId={userId}
+                locale={locale}
+                isEditing={editingId === review.id}
+                isVerified={purchasedProductIds.includes(review.product_id)}
+                onEdit={() => setEditingId(review.id)}
+                onCancelEdit={() => setEditingId(null)}
+                onSave={handleSave}
+                onDelete={(id) => handleDelete(id, review.product_id)}
+              />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   )
 }
@@ -155,20 +321,17 @@ function ReviewCard({
           />
         ) : (
           <>
-            {/* Rating + fecha */}
             <div className="flex items-start justify-between gap-2 mb-3">
               <StarRating value={review.rating} size={16} />
               <span className="font-mono text-[9px] text-[#c0c9bc] flex-shrink-0">{fecha}</span>
             </div>
 
-            {/* Título */}
             {review.titulo && (
               <p className="text-sm font-semibold text-[#2a170f] mb-1" style={{ fontFamily: 'Noto Serif, serif' }}>
                 {review.titulo}
               </p>
             )}
 
-            {/* Contenido */}
             {review.contenido && (
               <p className="text-sm text-[#717a6f] leading-relaxed" style={{ fontFamily: 'Newsreader, serif' }}>
                 {review.contenido}

@@ -1,15 +1,17 @@
 'use client'
 
 import type { Favorite, Review } from '@/types/cuentas'
+import { useEffect, useState } from 'react'
 
 import AjustesTab from './AjustesTab'
 import FavoritosTab from './FavoritosTab'
+import type { Order } from '@/types/orders'
 import PedidosTab from './PedidosTab'
 import ResenasTab from './Resenastab'
 import type { User } from '@supabase/supabase-js'
 import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { useUserReviews } from '@/lib/useUserReviews'
 
 interface Profile {
   id: string
@@ -21,23 +23,7 @@ interface Profile {
   pais: string | null
 }
 
-interface OrderItem {
-  id: string
-  product_name: string
-  product_image: string | null
-  quantity: number
-  price: number
-  subtotal: number
-}
 
-interface Order {
-  id: string
-  status: string
-  total: number
-  created_at: string,
-  delivered_at: string | null
-  order_items: OrderItem[]
-}
 
 interface Props {
   user: User
@@ -46,12 +32,14 @@ interface Props {
   favorites: Favorite[]
   reviews: Review[]
   purchasedProductIds: string[]
+  reviewedProductIds: string[]
 }
 
-export default function CuentaDashboard({ user, profile, orders, favorites, reviews, purchasedProductIds }: Props) {
+export default function CuentaDashboard({ user, profile, orders, favorites, reviews, purchasedProductIds, reviewedProductIds }: Props) {
   const searchParams = useSearchParams()
   const [activeTab, setActiveTab] = useState(searchParams.get('tab') ?? 'pedidos')
   const t = useTranslations('cuenta')
+  const { data: reseñas = [] } = useUserReviews(user.id)
 
   const tabs = [
     {
@@ -71,7 +59,7 @@ export default function CuentaDashboard({ user, profile, orders, favorites, revi
       )
     },
     {
-      key: 'resenas', label: t('tabs.resenas'), badge: null,
+      key: 'resenas', label: t('tabs.resenas'), badge: reseñas.length > 0 ? reseñas.length : null,
       icon: (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
@@ -91,6 +79,11 @@ export default function CuentaDashboard({ user, profile, orders, favorites, revi
   const nombreCorto = profile?.nombre
     ? profile.nombre.split(' ')[0]
     : user.email?.split('@')[0] ?? ''
+
+    useEffect(() => {
+      const tab = searchParams.get('tab')
+      if (tab) setActiveTab(tab)
+    }, [searchParams])
 
   return (
     <div className="min-h-screen bg-[#fff8f6]">

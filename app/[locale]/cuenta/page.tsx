@@ -26,21 +26,21 @@ export default async function CuentaPage({
   const { data: orders } = await supabase
     .from('orders')
     .select(`
-    id,
-    status,
-    total,
-    created_at,
-    delivered_at,
-    order_items (
       id,
-      product_id,
-      product_name,
-      product_image,
-      quantity,
-      price,
-      subtotal
-    )
-  `)
+      status,
+      total,
+      created_at,
+      delivered_at,
+      order_items (
+        id,
+        product_id,
+        product_name,
+        product_image,
+        quantity,
+        price,
+        subtotal
+      )
+    `)
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
@@ -66,12 +66,14 @@ export default async function CuentaPage({
       product:products (id, name, slug, images)
     `)
     .eq('user_id', user.id)
-    .order('updated_at', { ascending: false })
+    .order('created_at', { ascending: false })
 
-  // IDs de productos comprados (para verified_purchase)
+  // IDs de productos comprados (para verified_purchase y reseñas)
   const purchasedProductIds = (orders ?? [])
-    .filter(o => ['entregado', 'enviado'].includes(o.status))
+    .filter(o => ['shipped', 'delivered'].includes(o.status))
     .flatMap(o => o.order_items.map((i: { product_id: string }) => i.product_id))
+
+  const reviewedProductIds = (reviews ?? []).map(r => r.product_id)
 
   return (
     <main className="min-h-screen bg-[#fff8f6] pt-20 pb-32">
@@ -82,6 +84,7 @@ export default async function CuentaPage({
         favorites={(favorites ?? []) as any}
         reviews={(reviews ?? []) as any}
         purchasedProductIds={purchasedProductIds}
+        reviewedProductIds={reviewedProductIds}
       />
     </main>
   )
