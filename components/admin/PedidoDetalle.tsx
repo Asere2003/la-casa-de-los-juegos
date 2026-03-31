@@ -12,25 +12,25 @@ interface Props {
 }
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-  pending:          { label: 'Pendiente',        color: 'bg-yellow-100 text-yellow-700' },
-  paid:             { label: 'Pagado',            color: 'bg-green-100 text-green-700' },
-  processing:       { label: 'Procesando',        color: 'bg-blue-100 text-blue-700' },
-  shipped:          { label: 'Enviado',           color: 'bg-purple-100 text-purple-700' },
-  delivered:        { label: 'Entregado',         color: 'bg-[#004317]/10 text-[#004317]' },
-  return_requested: { label: 'Dev. solicitada',   color: 'bg-orange-100 text-orange-700' },
-  returned:         { label: 'Devuelto',          color: 'bg-gray-100 text-gray-700' },
-  cancelled:        { label: 'Cancelado',         color: 'bg-red-100 text-red-700' },
+  pending: { label: 'Pendiente', color: 'bg-yellow-100 text-yellow-700' },
+  paid: { label: 'Pagado', color: 'bg-green-100 text-green-700' },
+  processing: { label: 'Procesando', color: 'bg-blue-100 text-blue-700' },
+  shipped: { label: 'Enviado', color: 'bg-purple-100 text-purple-700' },
+  delivered: { label: 'Entregado', color: 'bg-[#004317]/10 text-[#004317]' },
+  return_requested: { label: 'Dev. solicitada', color: 'bg-orange-100 text-orange-700' },
+  returned: { label: 'Devuelto', color: 'bg-gray-100 text-gray-700' },
+  cancelled: { label: 'Cancelado', color: 'bg-red-100 text-red-700' },
 }
 
 const STATUS_FLOW: Record<string, string[]> = {
-  pending:          ['paid', 'cancelled'],
-  paid:             ['processing', 'cancelled'],
-  processing:       ['shipped', 'cancelled'],
-  shipped:          ['delivered'],
-  delivered:        ['return_requested'],
+  pending: ['paid', 'cancelled'],
+  paid: ['processing', 'cancelled'],
+  processing: ['shipped', 'cancelled'],
+  shipped: ['delivered'],
+  delivered: ['return_requested'],
   return_requested: ['returned', 'delivered'],
-  returned:         [],
-  cancelled:        [],
+  returned: [],
+  cancelled: [],
 }
 
 export default function PedidoDetalle({ order, locale }: Props) {
@@ -101,11 +101,10 @@ export default function PedidoDetalle({ order, locale }: Props) {
                   key={nextStatus}
                   onClick={() => handleStatusChange(nextStatus)}
                   disabled={isPending}
-                  className={`text-xs px-4 py-2 rounded font-mono border transition-colors disabled:opacity-50 ${
-                    nextStatus === 'cancelled' || nextStatus === 'returned'
+                  className={`text-xs px-4 py-2 rounded font-mono border transition-colors disabled:opacity-50 ${nextStatus === 'cancelled' || nextStatus === 'returned'
                       ? 'border-red-200 text-red-600 hover:bg-red-50'
                       : 'border-[#004317]/30 text-[#004317] hover:bg-[#004317]/5'
-                  }`}
+                    }`}
                 >
                   {isPending ? '...' : `→ ${STATUS_LABELS[nextStatus]?.label}`}
                 </button>
@@ -132,8 +131,8 @@ export default function PedidoDetalle({ order, locale }: Props) {
           <div className="md:col-span-2">
             <p className="text-xs text-[#2c1810]/40 mb-1">Dirección de envío</p>
             <p className="text-[#2c1810]">
-              {order.shipping_address ?? '—'}<br/>
-              {order.shipping_postal_code} {order.shipping_city}<br/>
+              {order.shipping_address ?? '—'}<br />
+              {order.shipping_postal_code} {order.shipping_city}<br />
               {order.shipping_country}
             </p>
           </div>
@@ -173,28 +172,31 @@ export default function PedidoDetalle({ order, locale }: Props) {
         </div>
 
         {/* Totales */}
-        <div className="border-t border-[#2c1810]/10 mt-4 pt-4 space-y-2">
-          <div className="flex justify-between text-sm">
-            <span className="text-[#2c1810]/60">Subtotal</span>
-            <span className="font-mono">{order.subtotal?.toFixed(2)} €</span>
-          </div>
-          {order.shipping_cost && order.shipping_cost > 0 && (
-            <div className="flex justify-between text-sm">
-              <span className="text-[#2c1810]/60">Envío</span>
-              <span className="font-mono">{order.shipping_cost?.toFixed(2)} €</span>
-            </div>
-          )}
-          {order.discount && order.discount > 0 && (
-            <div className="flex justify-between text-sm">
-              <span className="text-[#2c1810]/60">Descuento</span>
-              <span className="font-mono text-[#004317]">−{order.discount?.toFixed(2)} €</span>
-            </div>
-          )}
-          <div className="flex justify-between text-base font-bold border-t border-[#2c1810]/10 pt-2">
-            <span className="text-[#2c1810]">Total</span>
-            <span className="font-mono text-[#004317]">{order.total.toFixed(2)} €</span>
-          </div>
-        </div>
+        {/* Totales */}
+<div className="border-t border-[#2c1810]/10 mt-4 pt-4 space-y-2">
+  <div className="flex justify-between text-sm">
+    <span className="text-[#2c1810]/60">Subtotal</span>
+    <span className="font-mono">{(order.subtotal ?? 0).toFixed(2)} €</span>
+  </div>
+  <div className="flex justify-between text-sm">
+    <span className="text-[#2c1810]/60">Envío</span>
+    <span className="font-mono">
+      {(order.shipping_cost ?? 0) > 0
+        ? `${order.shipping_cost!.toFixed(2)} €`
+        : 'Gratis'}
+    </span>
+  </div>
+  {(order.discount ?? 0) > 0 && (
+    <div className="flex justify-between text-sm">
+      <span className="text-[#2c1810]/60">Descuento</span>
+      <span className="font-mono text-[#004317]">−{order.discount!.toFixed(2)} €</span>
+    </div>
+  )}
+  <div className="flex justify-between text-base font-bold border-t border-[#2c1810]/10 pt-2">
+    <span className="text-[#2c1810]">Total</span>
+    <span className="font-mono text-[#004317]">{order.total.toFixed(2)} €</span>
+  </div>
+</div>
       </div>
 
     </div>
