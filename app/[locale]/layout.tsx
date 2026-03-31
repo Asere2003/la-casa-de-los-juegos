@@ -4,14 +4,15 @@ import { Newsreader, Noto_Serif } from 'next/font/google'
 import { getMessages, getTranslations } from 'next-intl/server'
 
 import BottomNav from '@/components/layout/BottomNav'
-import ScrollToTop from '@/components/shared/ScrollToTop'
 import CartDrawer from '@/components/carrito/CartDrawer'
 import { CookieBanner } from '@/components/legal/CookieBanner'
+import { DevModeBanner } from '@/components/layout/DevModeBanner'
 import Footer from '@/components/layout/Footer'
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics'
 import Header from '@/components/layout/Header'
 import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
+import ScrollToTop from '@/components/shared/ScrollToTop'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 
@@ -122,6 +123,7 @@ export default async function RootLayout({
           <ScrollToTop />
 
         </NextIntlClientProvider>
+        <DevModeBanner />
         <CookieBanner />
         <GoogleAnalytics />
       </body>
