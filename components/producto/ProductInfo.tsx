@@ -1,8 +1,8 @@
 'use client'
 
+import FavoriteButton from '@/components/FavoriteButton'
 import type { Product } from '@/types'
 import { useTranslations } from 'next-intl'
-import FavoriteButton from '@/components/FavoriteButton'
 
 interface Props {
   product: Product
@@ -57,6 +57,7 @@ export default function ProductInfo({ product, userId, isFavorite }: Props) {
           userId={userId}
           initialIsFavorite={isFavorite}
           size="md"
+          variant="ghost"
         />
       </div>
 

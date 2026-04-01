@@ -20,7 +20,7 @@ export default function CatalogHeader({ total, search, onSearch, filterCount, on
   const tA11y = useTranslations('accessibility')
 
   return (
-    <div className="bg-[#fff1ec] border-b border-[#c0c9bc]/20">
+    <div className="border-b border-[#c0c9bc]/20">
       <div className="max-w-7xl mx-auto px-5 md:px-10 py-8">
 
         {/* Breadcrumbs */}
@@ -36,8 +36,8 @@ export default function CatalogHeader({ total, search, onSearch, filterCount, on
 
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
           <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533] mb-2 mt-2">{t('label')}</p>
-            <h1 className="font-headline text-3xl md:text-4xl text-[#2a170f]">{t('title')}</h1>
+            <p className="font-mono text-[9px] section-label uppercase tracking-[0.22em] text-[#805533] mb-2 mt-2">{t('label')}</p>
+            <h1 className="text-2xl text-primary font-bold font-headline md:text-4xl ">{t('title')}</h1>
           </div>
 
           {/* Búsqueda + botón filtros móvil */}
@@ -84,7 +84,7 @@ export default function CatalogHeader({ total, search, onSearch, filterCount, on
         </div>
 
         {/* Contador de resultados */}
-        <p className="font-mono text-[10px] uppercase tracking-wide text-[#717a6f] mt-4" aria-live="polite" aria-atomic="true">
+        <p className="font-mono text-[10px] uppercase tracking-wide text-[#717a6f] mt-4" aria-live="polite" aria-atomic="true" >
           {t('found', { count: total })}
         </p>
       </div>

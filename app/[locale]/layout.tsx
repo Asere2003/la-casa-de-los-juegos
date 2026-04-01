@@ -97,13 +97,13 @@ export default async function RootLayout({
       </head>
       <body
           suppressHydrationWarning 
-          className="bg-[#fff8f6] text-[#2a170f] font-body antialiased">
+          className="bg-[var(--color-surface)] text-[var(--color-on-surface)] font-body antialiased">
         <NextIntlClientProvider messages={messages}>
 
           {/* Skip link accesibilidad */}
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-[#004317] focus:text-white focus:px-4 focus:py-2 focus:rounded focus:text-sm focus:font-bold"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-[var(--color-primary)] focus:text-[var(--color-surface)] focus:px-4 focus:py-2 focus:rounded focus:text-sm focus:font-bold"
           >
             {t('skip_to_content')}
           </a>

@@ -1,11 +1,11 @@
 'use client'
 
+import FavoriteButton from '@/components/FavoriteButton'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import type { Product } from '@/types'
 import { useCartStore } from '@/store/cartStore'
 import { useTranslations } from 'next-intl'
-import FavoriteButton from '@/components/FavoriteButton'
 
 // ── ProductCard ──────────────────────────────────────────
 interface CardProps {
@@ -79,6 +79,7 @@ function ProductCard({ product, index, userId, isFavorite }: CardProps) {
             userId={userId ?? null}
             initialIsFavorite={isFavorite ?? false}
             size="sm"
+            variant="ghost"
           />
           {isOutOfStock && (
             <span className="bg-[#717a6f] text-white text-[8px] font-mono px-2 py-0.5 uppercase tracking-tighter" style={{ borderRadius: '2px' }}>

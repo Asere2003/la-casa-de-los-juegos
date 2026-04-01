@@ -13,29 +13,59 @@
     --font-body:     'Newsreader', serif;
     --font-mono:     'JetBrains Mono', monospace;
 
-    /* Colores */
-    --color-primary:           #004317;
-    --color-primary-container: #1a5c2a;
-    --color-primary-light:     #2d7a3f;
-    --color-secondary:         #805533;
-    --color-tertiary:          #755b00;
-    --color-gold:              #c9a84c;
-    --color-gold-dim:          #e6c364;
+    /* Colores — Paleta  */
+
+    --color-primary:           #003418;
+    --color-primary-container: #004d26;
+    --color-primary-light:     #296b40;
+    --color-secondary:         #755b00;
+    --color-secondary-container: #fed977;
+    --color-secondary-fixed:   #e6c364;
+    --color-tertiary:          #3d271f;
+    --color-gold:              #e6c364;
+    --color-gold-dim:          #fed977;
     --color-surface:           #fff8f6;
-    --color-surface-low:       #fff1ec;
-    --color-surface-container: #ffe9e2;
-    --color-on-surface:        #2a170f;
-    --color-on-surface-var:    #40493f;
-    --color-outline:           #717a6f;
-    --color-outline-var:       #c0c9bc;
-    --color-wood-dark:         #2c1810;
+    --color-surface-low:       #f9f2f0;
+    --color-surface-container: #f3ecea;
+    --color-surface-high:      #ede7e5;
+    --color-surface-highest:   #e8e1df;
+    --color-on-surface:        #1d1b1a;
+    --color-on-surface-var:    #404941;
+    --color-outline:           #707970;
+    --color-outline-var:       #c0c9be;
+    --color-wood-dark:         #3d271f;
     --color-error:             #ba1a1a;
+    --color-error-container:   #ffdad6;
 
     /* Sombras cálidas */
-    --shadow-warm:    0 4px 16px rgba(42,23,15,.09);
-    --shadow-warm-lg: 0 20px 48px rgba(42,23,15,.18);
-  }
+    --shadow-warm:    0 4px 16px rgba(29,27,26,.09);
+    --shadow-warm-lg: 0 20px 48px rgba(29,27,26,.18);
 
+    /* Tamaños */
+    --text-xs:   0.625rem;   /* 10px — mono labels, badges */
+    --text-sm:   0.75rem;    /* 12px — captions, notas legales */
+    --text-base: 0.875rem;   /* 14px — body texto normal */
+    --text-md:   1rem;       /* 16px — body destacado */
+    --text-lg:   1.125rem;   /* 18px — subtítulos pequeños */
+    --text-xl:   1.5rem;     /* 24px — subtítulos de sección */
+    --text-2xl:  2rem;       /* 32px — títulos de sección */
+    --text-3xl:  2.5rem;     /* 40px — títulos grandes */
+    --text-4xl:  3rem;       /* 48px — títulos hero */
+    --text-5xl:  4rem;       /* 64px — hero display */
+
+    /* Tracking */
+    --tracking-tight:  -0.02em;
+    --tracking-normal:  0;
+    --tracking-wide:    0.05em;
+    --tracking-wider:   0.1em;
+    --tracking-widest:  0.22em;  /* para labels mono en mayúsculas */
+
+    /* Line height */
+    --leading-tight:  1.1;
+    --leading-snug:   1.3;
+    --leading-normal: 1.5;
+    --leading-relaxed:1.7;
+}
   /* ── Reset base ── */
   *, *::before, *::after {
     box-sizing: border-box;
@@ -55,47 +85,41 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* ── Tipografía base accesible ── */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-headline);
     line-height: 1.1;
   }
 
-  /* ── Focus visible — NUNCA quitar el outline ── */
   :focus-visible {
     outline: 2px solid var(--color-gold);
     outline-offset: 3px;
     border-radius: 2px;
   }
 
-  /* ── Selección de texto ── */
   ::selection {
     background-color: var(--color-gold);
     color: var(--color-wood-dark);
   }
 
-  /* ── Scrollbar custom ── */
   ::-webkit-scrollbar       { width: 5px; height: 5px; }
   ::-webkit-scrollbar-track { background: var(--color-surface-low); }
   ::-webkit-scrollbar-thumb { background: var(--color-gold); border-radius: 3px; }
 
-  /* ── Imágenes responsive por defecto ── */
   img {
     max-width: 100%;
     height: auto;
   }
 
-  /* ── Botones base ── */
   button {
     cursor: pointer;
   }
 
-  /* ── Links ── */
   a {
     color: inherit;
     text-decoration: none;
   }
 }
+
 
 /* ============================================================
    UTILIDADES
@@ -103,7 +127,6 @@
 
 @layer utilities {
 
-  /* Grain texture overlay */
   .grain-overlay {
     position: fixed;
     inset: 0;
@@ -113,15 +136,12 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* Sombras cálidas */
   .shadow-warm    { box-shadow: var(--shadow-warm); }
   .shadow-warm-lg { box-shadow: var(--shadow-warm-lg); }
 
-  /* Ocultar scrollbar visualmente */
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-  /* Drop cap */
   .drop-cap::first-letter {
     font-family: var(--font-headline);
     font-size: 4.8em;
@@ -133,7 +153,6 @@
     color: var(--color-primary);
   }
 
-  /* Polaroid foto */
   .polaroid {
     background: #f5f0e8;
     padding: 10px 10px 32px;
@@ -145,12 +164,10 @@
   .tilt-l { transform: rotate(-1.8deg); }
   .tilt-l:hover { transform: rotate(0); }
 
-  /* Animaciones */
   .animate-fade-in-up {
     animation: fadeInUp 0.6s ease forwards;
   }
 
-  /* Stagger delays */
   .delay-100 { animation-delay: 0.1s; }
   .delay-200 { animation-delay: 0.2s; }
   .delay-300 { animation-delay: 0.3s; }
@@ -186,7 +203,6 @@
    ACCESIBILIDAD
    ============================================================ */
 
-/* Ocultar visualmente pero accesible para lectores de pantalla */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -199,7 +215,6 @@
   border-width: 0;
 }
 
-/* Reducir movimiento si el usuario lo prefiere */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -210,7 +225,6 @@
   .grain-overlay { display: none; }
 }
 
-/* Alto contraste */
 @media (forced-colors: active) {
   .grain-overlay { display: none; }
 }
@@ -221,44 +235,53 @@
 
 @layer components {
 
-  /* Botón primario */
   .btn-primary {
-    @apply bg-[#004317] text-white font-headline font-bold
+    @apply font-headline font-bold
            px-8 py-4 inline-flex items-center gap-2
-           hover:bg-[#1a5c2a] hover:rotate-[-0.5deg]
            active:scale-95 transition-all duration-200
-           focus-visible:ring-2 focus-visible:ring-[#c9a84c]
+           focus-visible:ring-2 focus-visible:ring-[#C9A84C]
            focus-visible:ring-offset-2;
+    background-color: var(--color-primary);
+    color: #fff;
     border-radius: 2px;
   }
+  .btn-primary:hover {
+    background-color: var(--color-primary-container);
+    transform: rotate(-0.5deg);
+  }
 
-  /* Botón dorado */
   .btn-gold {
-    @apply bg-[#c9a84c] text-[#2c1810] font-headline font-bold
+    @apply font-headline font-bold
            px-8 py-4 inline-flex items-center gap-2
-           hover:rotate-[-0.5deg] hover:shadow-xl
            active:scale-95 transition-all duration-200
-           focus-visible:ring-2 focus-visible:ring-[#004317]
+           focus-visible:ring-2 focus-visible:ring-[#004D26]
            focus-visible:ring-offset-2;
+    background-color: var(--color-gold);
+    color: var(--color-wood-dark);
     border-radius: 2px;
   }
+  .btn-gold:hover {
+    transform: rotate(-0.5deg);
+    box-shadow: 0 20px 48px rgba(42,23,15,.18);
+  }
 
-  /* Botón outline */
   .btn-outline {
-    @apply border border-[#c0c9bc]/60 text-[#2a170f]
-           font-headline italic px-8 py-4
+    @apply border font-headline italic px-8 py-4
            inline-flex items-center gap-2
-           hover:border-[#004317] hover:text-[#004317]
-           hover:bg-[#fff1ec] transition-all duration-200
-           focus-visible:ring-2 focus-visible:ring-[#c9a84c];
+           transition-all duration-200
+           focus-visible:ring-2 focus-visible:ring-[#C9A84C];
+    border-color: rgba(192,201,188,0.6);
+    color: var(--color-on-surface);
     border-radius: 2px;
   }
+  .btn-outline:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    background-color: var(--color-surface-low);
+  }
 
-  /* Tarjeta producto */
   .product-card {
-    @apply bg-white overflow-hidden
-           transition-all duration-500
-           hover:-translate-y-1.5;
+    @apply bg-white overflow-hidden transition-all duration-500 hover:-translate-y-1.5;
     box-shadow: var(--shadow-warm);
     border-radius: 2px;
   }
@@ -272,7 +295,6 @@
     transform: scale(1.05);
   }
 
-  /* Badge de categoría */
   .badge {
     @apply text-[8px] font-mono uppercase tracking-tighter px-2 py-0.5;
     border-radius: 2px;
@@ -284,26 +306,30 @@
   .badge-clasico  { @apply bg-[#5c3d1a] text-white; }
   .badge-mundo    { @apply bg-[#1a4a5c] text-white; }
   .badge-cartas   { @apply bg-[#5c1a1a] text-white; }
-  .badge-gold     { @apply bg-[#c9a84c] text-[#2c1810] font-bold; }
+  .badge-gold     { @apply bg-[#C9A84C] text-[#2A170F] font-bold; }
   .badge-error    { @apply bg-[#ba1a1a] text-white; }
 
-  /* Input base */
-.input-base {
-  @apply w-full bg-white border border-[#c0c9bc]/50
-         text-[#2a170f] font-body italic text-sm md:text-sm text-base
-         px-4 py-2.5 focus:outline-none
-         focus:border-[#c9a84c] focus:ring-1
-         focus:ring-[#c9a84c] transition-colors;
+  .input-base {
+    @apply w-full bg-white border
+           font-body italic text-sm
+           px-4 py-2.5 focus:outline-none
+           transition-colors;
+    border-color: rgba(192,201,188,0.5);
+    color: var(--color-on-surface);
     border-radius: 2px;
   }
-
-  /* Sección label */
-  .section-label {
-    @apply font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533];
+  .input-base:focus {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 1px var(--color-gold);
   }
 
-  /* Gold rule */
+  .section-label {
+    @apply font-mono text-[9px] uppercase tracking-[0.22em];
+    color: var(--color-secondary);
+  }
+
   .gold-rule {
-    @apply block w-12 h-0.5 bg-[#c9a84c] mt-3;
+    @apply block w-12 h-0.5 mt-3;
+    background-color: var(--color-gold);
   }
 }

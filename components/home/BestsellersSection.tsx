@@ -14,78 +14,95 @@ type BestsellersSectionProps = {
 
 export default function BestsellersSection({ items, userId, favoriteIds }: BestsellersSectionProps) {
   const t = useTranslations('home')
-  return (
-    <section id="favoritos" className="py-20 bg-[var(--color-surface)]" aria-labelledby="bestsellers-title">
-      <div className="px-6 md:px-10 max-w-7xl mx-auto">
-        <SectionHeading eyebrow={t('bestsellers_label')} title={t('bestsellers_title')} centered />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-end">
+  return (
+    <section
+      id="favoritos"
+      className="py-12 md:py-20 bg-[var(--color-surface-low)]"
+      aria-labelledby="bestsellers-title"
+    >
+      <div className="px-6 md:px-10 max-w-7xl mx-auto">
+        <SectionHeading eyebrow={t('bestsellers_label')} title={t('bestsellers_title')} />
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10 items-start">
           {items.map((product) => (
-            <article
-              key={product.id}
-              className={`group overflow-hidden transition-all duration-500 ${
-                product.featured
-                  ? 'bg-[var(--color-white)] shadow-[0_20px_50px_rgba(0,67,23,0.4)] md:-translate-y-3 md:scale-105 z-10 relative hover:md:-translate-y-5'
-                  : 'bg-[var(--color-surface-low)] shadow-warm hover:shadow-warm-lg hover:-translate-y-1'
-              }`}
-              style={{ borderRadius: '2px' }}
-            >
-              <Link href={`/producto/${product.slug}`} className="block relative aspect-[3/4] overflow-hidden focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]">
+            <article key={product.id} className="group cursor-pointer">
+
+              {/* Imagen con grayscale → color en hover */}
+              <Link
+                href={`/producto/${product.slug}`}
+                className="block relative aspect-[3/4] overflow-hidden mb-5 focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]"
+              >
                 <Image
                   src={product.image}
                   alt={product.name}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                  className="object-contain p-4 bg-[white] grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
                 />
-                {/* Tag + Favorito */}
-                <div className="absolute top-2 right-2 flex flex-col items-end gap-1.5">
-                  {product.tag ? (
-                    <span className="text-white text-[9px] font-mono px-2 py-0.5 uppercase tracking-tight" style={{ background: product.tagBg, borderRadius: '2px' }}>
-                      {product.tag}
-                    </span>
-                  ) : null}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#2a170f]/20 to-transparent pointer-events-none" aria-hidden="true" />
+
+                {/* Botón favorito — solo silueta, sin fondo */}
+                <div className="absolute top-3 right-3">
                   <FavoriteButton
                     productId={product.id}
                     userId={userId ?? null}
                     initialIsFavorite={favoriteIds?.includes(product.id) ?? false}
                     size="sm"
+                    variant="ghost"
                   />
                 </div>
+
+                {/* Tag badge */}
+                {product.tag && (
+                  <div className="absolute top-3 left-3">
+                    <span
+                      className="text-white text-[9px] font-mono px-2 py-0.5 uppercase tracking-tight"
+                      style={{ background: product.tagBg ?? '#c9a84c', borderRadius: '2px' }}
+                    >
+                      {product.tag}
+                    </span>
+                  </div>
+                )}
               </Link>
 
-              <div className="p-4 md:p-5 bg-[var(--color-primary)]">
-                <Link
-                  href={`/producto/${product.slug}`}
-                  className={`font-headline italic text-lg mb-1 block hover:opacity-80 transition-opacity focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] rounded ${
-                    product.featured ? 'text-[var(--color-surface)]' : 'text-[var(--color-on-surface)]'
-                  }`}
-                >
-                  {product.name}
-                </Link>
-                <p className={`font-body italic text-sm mb-4 ${product.featured ? 'text-[var(--color-surface)]'  : 'text-[var(--color-on-surface-var)]'}`}>
-                  {product.description}
-                </p>
-                <div className={`flex justify-between items-center border-t pt-4 ${product.featured ? 'border-[var(--color-gold)]/20' : 'border-[var(--color-outline-var)]/20'}`}>
-                  <span className={`font-mono font-bold ${product.featured ? 'text-white' : 'text-[var(--color-on-surface)]'}`}>
-                    {formatEuro(product.price)}
+              {/* Categoría con borde dorado izquierdo */}
+              {product.category && (
+                <div className="bg-[#c9a84c]/10 w-fit px-3 py-1 mb-3 border-l-2 border-[#c9a84c]">
+                  <span className="font-body italic text-sm text-[#2c1810]/70">
+                    {product.category}
                   </span>
-                  {product.featured ? (
-                    <Link href={`/producto/${product.slug}`} className="bg-[var(--color-gold)] text-[var(--color-wood-dark)] px-4 py-2 font-headline text-xs font-bold hover:rotate-[-1deg] transition-transform focus-visible:ring-2 focus-visible:ring-white" style={{ borderRadius: '2px' }}>
-                      Lo quiero
-                    </Link>
-                  ) : (
-                    <Link href={`/producto/${product.slug}`} aria-label={`Ver ${product.name}`} className="text-[var(--color-primary)] hover:scale-110 transition-transform focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] rounded p-1">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M12 8v8M8 12h8" />
-                      </svg>
-                    </Link>
-                  )}
                 </div>
-              </div>
+              )}
+
+              {/* Nombre */}
+              <Link href={`/producto/${product.slug}`}>
+                <h3 className="font-headline italic text-lg text-[#2a170f] group-hover:text-[#004317] transition-colors leading-snug mb-1">
+                  <span className="border-l-2 border-[#c9a84c] bg-[#2c1810]/5 pl-3 pr-2 py-0.5 rounded-sm">
+                    {product.name}
+                  </span>
+                </h3>
+              </Link>
+
+              {/* Precio */}
+              <p className="font-mono text-md text-[#717a6f] mt-1">
+                {formatEuro(product.price)}
+              </p>
+
             </article>
           ))}
+        </div>
+        {/* Ver más — solo móvil */}
+        <div className="mt-8 text-center md:hidden">
+          <Link
+            href="/catalogo"
+            className="inline-flex items-center gap-2 font-body italic text-sm text-[#004D26] border-b border-[#004D26]/30 pb-0.5"
+          >
+            {t('new_arrivals_link')}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </Link>
         </div>
       </div>
     </section>

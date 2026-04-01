@@ -1,29 +1,42 @@
+import FavoriteButton from '@/components/FavoriteButton'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import type { ProductCardItem } from '@/types/home'
 import { formatEuro } from '@/lib/format'
-import FavoriteButton from '@/components/FavoriteButton'
 
 type ProductCardProps = {
   product: ProductCardItem
   showDescription?: boolean
   compact?: boolean
-  userId?: string | null        // ← nuevo
-  isFavorite?: boolean          // ← nuevo
+  userId?: string | null
+  isFavorite?: boolean
+}
+
+function IconCart() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <path d="M16 10a4 4 0 0 1-8 0" />
+    </svg>
+  )
 }
 
 export default function ProductCard({
   product,
   showDescription = true,
   compact = false,
-  userId = null,                // ← nuevo
-  isFavorite = false,           // ← nuevo
+  userId = null,
+  isFavorite = false,
 }: ProductCardProps) {
   return (
-    <article className="product-card group flex flex-col">
+    <article className="product-card group flex flex-col bg-white">
+
+      {/* ── Imagen ── */}
       <Link
         href={`/producto/${product.slug}`}
-        className={`relative block overflow-hidden focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] ${compact ? 'aspect-[4/5]' : 'aspect-[3/4]'}`}
+        className={`relative block overflow-hidden focus-visible:ring-2 focus-visible:ring-[#C9A84C] ${compact ? 'aspect-[4/5]' : 'aspect-[3/4]'}`}
       >
         <Image
           src={product.image}
@@ -31,32 +44,33 @@ export default function ProductCard({
           fill
           sizes={compact ? '(max-width: 768px) 50vw, 20vw' : '(max-width: 768px) 50vw, 25vw'}
           className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+          style={{ background: 'white' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[rgba(42,23,15,0.20)] to-transparent pointer-events-none" aria-hidden="true" />
-
-        {product.category ? (
+        <div className="absolute inset-0 bg-gradient-to-t from-[#2a170f]/20 to-transparent pointer-events-none" aria-hidden="true"/>
+        {/* Badge categoría */}
+        {product.category && (
           <span
             className="absolute top-3 left-3 text-white text-[9px] font-mono px-2 py-0.5 uppercase tracking-tight"
-            style={{ background: product.badgeBg || 'var(--color-primary)', borderRadius: '2px' }}
+            style={{ background: product.badgeBg || '#004D26', borderRadius: '2px' }}
           >
             {product.category}
           </span>
-        ) : null}
+        )}
 
-        {/* Tag + Favorito conviven en la esquina derecha */}
+        {/* Tag + Favorito */}
         <div className="absolute top-2 right-2 flex flex-col items-end gap-1.5">
-          {product.tag ? (
+          {product.tag && (
             <span
               className={`text-[9px] font-mono px-2 py-0.5 uppercase tracking-tight font-bold ${
-                product.tag === 'Nuevo' ? 'bg-[var(--color-gold)] text-[var(--color-wood-dark)]' : 'bg-[var(--color-error)] text-white'
+                product.tag === 'Nuevo'
+                  ? 'bg-[#C9A84C] text-[#2A170F]'
+                  : 'bg-[#ba1a1a] text-white'
               }`}
               style={{ borderRadius: '2px' }}
             >
               {product.tag}
             </span>
-          ) : null}
-
-          {/* ← Botón corazón */}
+          )}
           <FavoriteButton
             productId={product.id}
             userId={userId}
@@ -66,33 +80,40 @@ export default function ProductCard({
         </div>
       </Link>
 
-      <div className="p-4 border-t border-[var(--color-outline-var)]/20 flex-1 flex flex-col">
-        <Link
-          href={`/producto/${product.slug}`}
-          className="font-headline italic text-base md:text-[1.05rem] leading-snug mb-1 group-hover:text-[var(--color-primary)] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] rounded"
-        >
-          {product.name}
-        </Link>
+      {/* ── Info ── */}
+      <div className="p-4 flex-1 flex flex-col">
 
-        {showDescription ? (
-          <p className="text-xs text-[var(--color-on-surface-var)] italic mb-3 line-clamp-2 flex-1 hidden md:block">
-            {product.description}
-          </p>
-        ) : <div className="flex-1" />}
-
-        <div className="flex justify-between items-center gap-3 mt-auto">
-          <span className="font-mono text-sm md:text-base font-bold text-[var(--color-primary)]">
-            {formatEuro(product.price)}
-          </span>
+        {/* Nombre + precio en la misma línea */}
+        <div className="flex items-start justify-between gap-2 mb-1">
           <Link
             href={`/producto/${product.slug}`}
-            aria-label={`Ver ${product.name}`}
-            className="bg-[var(--color-primary)] text-white p-2 hover:rotate-[-2deg] transition-transform active:scale-90 focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]"
-            style={{ borderRadius: '2px' }}
+            className="font-headline text-sm md:text-base leading-snug text-[#2A170F] group-hover:text-[#004D26] transition-colors focus-visible:ring-2 focus-visible:ring-[#C9A84C] rounded flex-1"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
+            {product.name}
+          </Link>
+          <span className="font-mono text-sm font-bold text-[#C9A84C] whitespace-nowrap shrink-0">
+            {formatEuro(product.price)}
+          </span>
+        </div>
+
+        {/* Descripción */}
+        {showDescription && (
+          <p className="text-[11px] text-[#2A170F]/50 italic mb-4 line-clamp-2 hidden md:block leading-relaxed">
+            {product.description}
+          </p>
+        )}
+
+        <div className="flex-1" />
+
+        {/* Botón COMPRAR */}
+        <div className="border-t border-[#e8e0d8] mt-3 pt-3">
+          <Link
+            href={`/producto/${product.slug}`}
+            aria-label={`Comprar ${product.name}`}
+            className="flex items-center justify-center gap-2 w-full font-mono text-[10px] uppercase tracking-widest text-[#2A170F]/60 hover:text-[#004D26] transition-colors focus-visible:ring-2 focus-visible:ring-[#C9A84C] rounded py-0.5"
+          >
+            Comprar
+            <IconCart />
           </Link>
         </div>
       </div>
