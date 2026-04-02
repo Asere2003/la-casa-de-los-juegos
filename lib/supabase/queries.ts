@@ -1,4 +1,4 @@
-import type { Category, Product} from '@/types'
+import type { Category, Product } from '@/types'
 import type { Favorite, Review } from '@/types/cuentas'
 
 import { createClient } from '@/lib/supabase/client'
@@ -14,7 +14,6 @@ export async function getCategories(): Promise<Category[]> {
     if (error) { console.error('getCategories:', error); return [] }
     return data ?? []
 }
-
 
 // Auxiliar para aplicar filtros y ordenación a queries de productos
 async function applyProductFilters(query: any, filters?: {
@@ -49,7 +48,6 @@ async function applyProductFilters(query: any, filters?: {
     }
     if (filters?.limit) query = query.limit(filters.limit)
 
-    // Ordenación
     switch (filters?.sort) {
         case 'price_asc': query = query.order('price', { ascending: true }); break
         case 'price_desc': query = query.order('price', { ascending: false }); break
@@ -73,7 +71,7 @@ export async function getProducts(filters?: {
 }): Promise<Product[]> {
     const supabase = createClient()
     let query = supabase
-        .from('products')
+        .from('products_with_stats')   // ← cambiado
         .select('*, category:categories(*)')
         .eq('active', true)
     query = await applyProductFilters(query, filters)
@@ -96,7 +94,7 @@ export async function getProductsNewCuriosities(filters?: {
 }): Promise<Product[]> {
     const supabase = createClient()
     let query = supabase
-        .from('products')
+        .from('products_with_stats')   // ← cambiado
         .select('*, category:categories(*)')
         .eq('active', true)
         .gt('stock', 0)
@@ -106,12 +104,11 @@ export async function getProductsNewCuriosities(filters?: {
     return data ?? []
 }
 
-
 // ── PRODUCTO POR SLUG ───────────────────────────────────────
 export async function getProductBySlug(slug: string): Promise<Product | null> {
     const supabase = createClient()
     const { data, error } = await supabase
-        .from('products')
+        .from('products_with_stats')   // ← cambiado
         .select('*, category:categories(*)')
         .eq('slug', slug)
         .eq('active', true)
@@ -123,7 +120,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 
 // ── PRODUCTOS DESTACADOS ────────────────────────────────────
 export async function getFeaturedProducts(limit = 4): Promise<Product[]> {
-    return getProducts({ featured: true, limit })
+    return getProducts({ featured: true, limit })  // hereda products_with_stats
 }
 
 // ── PRODUCTOS RELACIONADOS ──────────────────────────────────
@@ -134,7 +131,7 @@ export async function getRelatedProducts(
 ): Promise<Product[]> {
     const supabase = createClient()
     const { data, error } = await supabase
-        .from('products')
+        .from('products_with_stats')   // ← cambiado
         .select('*, category:categories(*)')
         .eq('active', true)
         .eq('category_id', categoryId)
@@ -146,6 +143,7 @@ export async function getRelatedProducts(
 }
 
 // ── PRODUCTO POR CATEGORÍA ──────────────────────────────────
+// Esta NO necesita stats (no se usa en cards), se deja igual
 export async function getProductsByCategory(
     categorySlug: string,
     limit?: number
@@ -169,8 +167,7 @@ export async function getProductsByCategory(
 // ============================================================
 // FAVORITOS
 // ============================================================
- 
-/** Obtiene los favoritos del usuario con datos del producto */
+
 export async function getFavorites(userId: string): Promise<Favorite[]> {
   const supabase = createClient()
   const { data, error } = await supabase
@@ -185,35 +182,32 @@ export async function getFavorites(userId: string): Promise<Favorite[]> {
     `)
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
- 
+
   if (error) { console.error('getFavorites:', error); return [] }
   return (data ?? []) as unknown as Favorite[]
 }
- 
-/** Obtiene solo los IDs de favoritos del usuario (para el botón) */
+
 export async function getFavoriteIds(userId: string): Promise<string[]> {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('favorites')
     .select('product_id')
     .eq('user_id', userId)
- 
+
   if (error) { console.error('getFavoriteIds:', error); return [] }
   return (data ?? []).map(f => f.product_id)
 }
- 
-/** Añade un producto a favoritos */
+
 export async function addFavorite(userId: string, productId: string): Promise<boolean> {
   const supabase = createClient()
   const { error } = await supabase
     .from('favorites')
     .insert({ user_id: userId, product_id: productId })
- 
+
   if (error) { console.error('addFavorite:', error); return false }
   return true
 }
- 
-/** Elimina un producto de favoritos */
+
 export async function removeFavorite(userId: string, productId: string): Promise<boolean> {
   const supabase = createClient()
   const { error } = await supabase
@@ -221,16 +215,15 @@ export async function removeFavorite(userId: string, productId: string): Promise
     .delete()
     .eq('user_id', userId)
     .eq('product_id', productId)
- 
+
   if (error) { console.error('removeFavorite:', error); return false }
   return true
 }
- 
+
 // ============================================================
 // RESEÑAS
 // ============================================================
- 
-/** Obtiene las reseñas del usuario con datos del producto */
+
 export async function getUserReviews(userId: string): Promise<Review[]> {
   const supabase = createClient()
   const { data, error } = await supabase
@@ -241,12 +234,11 @@ export async function getUserReviews(userId: string): Promise<Review[]> {
     `)
     .eq('user_id', userId)
     .order('updated_at', { ascending: false })
- 
+
   if (error) { console.error('getUserReviews:', error); return [] }
   return (data ?? []) as unknown as Review[]
 }
- 
-/** Obtiene las reseñas públicas de un producto */
+
 export async function getProductReviews(productId: string): Promise<Review[]> {
   const supabase = createClient()
   const { data, error } = await supabase
@@ -257,12 +249,11 @@ export async function getProductReviews(productId: string): Promise<Review[]> {
     `)
     .eq('product_id', productId)
     .order('created_at', { ascending: false })
- 
+
   if (error) { console.error('getProductReviews:', error); return [] }
   return (data ?? []) as unknown as Review[]
 }
- 
-/** Crea o actualiza una reseña */
+
 export async function upsertReview(review: {
   user_id: string
   product_id: string
@@ -276,12 +267,11 @@ export async function upsertReview(review: {
     .upsert(review, { onConflict: 'user_id,product_id' })
     .select()
     .single()
- 
+
   if (error) { console.error('upsertReview:', error); return null }
   return data as Review
 }
- 
-/** Elimina una reseña */
+
 export async function deleteReview(userId: string, reviewId: string): Promise<boolean> {
   const supabase = createClient()
   const { error } = await supabase
@@ -289,12 +279,11 @@ export async function deleteReview(userId: string, reviewId: string): Promise<bo
     .delete()
     .eq('id', reviewId)
     .eq('user_id', userId)
- 
+
   if (error) { console.error('deleteReview:', error); return false }
   return true
 }
- 
-/** Comprueba si el usuario ha comprado un producto (para verified_purchase) */
+
 export async function hasPurchasedProduct(userId: string, productId: string): Promise<boolean> {
   const supabase = createClient()
   const { data, error } = await supabase
@@ -304,7 +293,7 @@ export async function hasPurchasedProduct(userId: string, productId: string): Pr
     .eq('order.user_id', userId)
     .in('order.status', ['entregado', 'enviado'])
     .limit(1)
- 
+
   if (error) { console.error('hasPurchasedProduct:', error); return false }
   return (data ?? []).length > 0
 }

@@ -44,6 +44,8 @@ export interface Product {
   active: boolean
   created_at: string
   updated_at: string
+  avg_rating?: number
+  review_count?: number
 }
 
 // ── Perfil de usuario ──

@@ -23,8 +23,6 @@ interface Profile {
   pais: string | null
 }
 
-
-
 interface Props {
   user: User
   profile: Profile | null
@@ -32,10 +30,10 @@ interface Props {
   favorites: Favorite[]
   reviews: Review[]
   purchasedProductIds: string[]
-  reviewedProductIds: string[]
+  // ← reviewedProductIds eliminado
 }
 
-export default function CuentaDashboard({ user, profile, orders, favorites, reviews, purchasedProductIds, reviewedProductIds }: Props) {
+export default function CuentaDashboard({ user, profile, orders, favorites, reviews, purchasedProductIds }: Props) {
   const searchParams = useSearchParams()
   const [activeTab, setActiveTab] = useState(searchParams.get('tab') ?? 'pedidos')
   const t = useTranslations('cuenta')
@@ -80,10 +78,10 @@ export default function CuentaDashboard({ user, profile, orders, favorites, revi
     ? profile.nombre.split(' ')[0]
     : user.email?.split('@')[0] ?? ''
 
-    useEffect(() => {
-      const tab = searchParams.get('tab')
-      if (tab) setActiveTab(tab)
-    }, [searchParams])
+  useEffect(() => {
+    const tab = searchParams.get('tab')
+    if (tab) setActiveTab(tab)
+  }, [searchParams])
 
   return (
     <div className="min-h-screen bg-[#fff8f6]">
@@ -110,7 +108,7 @@ export default function CuentaDashboard({ user, profile, orders, favorites, revi
 
         {/* ── Layout desktop: sidebar + contenido ── */}
         <div className="flex flex-col md:flex-row gap-8">
-          
+
           {/* Sidebar desktop */}
           <aside className="hidden md:block w-52 flex-shrink-0">
             <nav className="space-y-1 sticky top-24">
@@ -164,7 +162,9 @@ export default function CuentaDashboard({ user, profile, orders, favorites, revi
 
           {/* Contenido */}
           <main className="flex-1 min-w-0">
-            {activeTab === 'pedidos' && <PedidosTab orders={orders} />}
+            {activeTab === 'pedidos' && (
+              <PedidosTab orders={orders} userId={user.id} />  // ← solo orders y userId
+            )}
             {activeTab === 'favoritos' && (
               <FavoritosTab userId={user.id} initialFavorites={favorites} />
             )}
@@ -179,4 +179,3 @@ export default function CuentaDashboard({ user, profile, orders, favorites, revi
     </div>
   )
 }
-

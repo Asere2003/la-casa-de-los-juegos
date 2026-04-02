@@ -115,6 +115,26 @@ function ProductCard({ product, index, userId, isFavorite }: CardProps) {
           {product.name}
         </Link>
 
+        {/* Estrellas — solo si hay reseñas */}
+        {(product.review_count ?? 0) > 0 && (
+          <div className="flex items-center gap-1 mb-2">
+            <div className="flex items-center gap-0.5">
+              {[1, 2, 3, 4, 5].map(star => (
+                <svg
+                  key={star}
+                  width="10" height="10" viewBox="0 0 24 24"
+                  fill={star <= Math.round(product.avg_rating ?? 0) ? '#c9a84c' : 'none'}
+                  stroke="#c9a84c" strokeWidth="1.6"
+                  strokeLinecap="round" strokeLinejoin="round"
+                >
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+              ))}
+            </div>
+            <span className="font-mono text-[9px] text-[#717a6f]">({product.review_count})</span>
+          </div>
+        )}
+
         {/* Descripción — solo desktop */}
         {product.description && (
           <p className="text-xs text-[#40493f] italic mb-3 line-clamp-2 hidden md:block">

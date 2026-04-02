@@ -123,14 +123,16 @@ export default function BottomNav() {
           >
             <span className="relative">
               {link.icon}
-              {count > 0 && (
-                <span
-                  aria-hidden="true"
-                  className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#004D26] text-[#FFFBF6] text-[8px] font-bold rounded-full flex items-center justify-center font-mono leading-none"
-                >
-                  {count > 9 ? '9+' : count}
-                </span>
-              )}
+{count > 0 && (
+  <span
+    aria-hidden="true"
+    className={`absolute -top-1.5 -right-1.5 w-4 h-4 
+      ${active ? 'bg-[#C9A84C]' : 'bg-[#004D26]'}
+      text-[#FFFBF6] text-[8px] font-bold rounded-full flex items-center justify-center font-mono leading-none`}
+  >
+    {count > 9 ? '9+' : count}
+  </span>
+)}
               {link.key === 'account' && isLoggedIn && (
                 <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#004D26] border-2 border-[#FFFBF6] rounded-full" />
               )}

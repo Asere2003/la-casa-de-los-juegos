@@ -49,6 +49,8 @@ export default async function HomePage() {
     tag:         getBadgeLabel(p.badge),
     description: p.description ?? '',
     image:       p.images?.[0] ?? '',
+    avg_rating:   p.avg_rating ?? 0,
+    review_count: p.review_count ?? 0,
   }))
 
   const bestsellers = bestsellersRaw.map(p => ({
@@ -61,6 +63,8 @@ export default async function HomePage() {
     tagBg:       p.badge === 'ultimas-unidades' ? '#ba1a1a' : undefined,
     featured:    p.featured,
     image:       p.images?.[0] ?? '',
+    avg_rating:   p.avg_rating ?? 0,
+    review_count: p.review_count ?? 0,
   }))
 
   const audienceGroups = [

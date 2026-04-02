@@ -23,6 +23,27 @@ function IconCart() {
   )
 }
 
+function StarsMini({ rating, count }: { rating: number; count: number }) {
+  return (
+    <div className="flex items-center gap-1 mb-2">
+      <div className="flex items-center gap-0.5">
+        {[1, 2, 3, 4, 5].map(star => (
+          <svg
+            key={star}
+            width="10" height="10" viewBox="0 0 24 24"
+            fill={star <= Math.round(rating) ? '#c9a84c' : 'none'}
+            stroke="#c9a84c" strokeWidth="1.6"
+            strokeLinecap="round" strokeLinejoin="round"
+          >
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          </svg>
+        ))}
+      </div>
+      <span className="font-mono text-[9px] text-[#717a6f]">({count})</span>
+    </div>
+  )
+}
+
 export default function ProductCard({
   product,
   showDescription = true,
@@ -47,6 +68,7 @@ export default function ProductCard({
           style={{ background: 'white' }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#2a170f]/20 to-transparent pointer-events-none" aria-hidden="true"/>
+
         {/* Badge categoría */}
         {product.category && (
           <span
@@ -83,7 +105,7 @@ export default function ProductCard({
       {/* ── Info ── */}
       <div className="p-4 flex-1 flex flex-col">
 
-        {/* Nombre + precio en la misma línea */}
+        {/* Nombre + precio */}
         <div className="flex items-start justify-between gap-2 mb-1">
           <Link
             href={`/producto/${product.slug}`}
@@ -95,6 +117,11 @@ export default function ProductCard({
             {formatEuro(product.price)}
           </span>
         </div>
+
+        {/* Estrellas — solo si hay reseñas */}
+        {(product.review_count ?? 0) > 0 && (
+          <StarsMini rating={product.avg_rating ?? 0} count={product.review_count ?? 0} />
+        )}
 
         {/* Descripción */}
         {showDescription && (

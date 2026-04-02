@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState, useTransition } from 'react'
-import useSWR from 'swr'
 
 import Image from 'next/image'
 import Link from 'next/link'
@@ -9,10 +8,10 @@ import type { Review } from '@/types/cuentas'
 import ReviewForm from './ReviewForm'
 import StarRating from './Starrating'
 import { createClient } from '@/lib/supabase/client'
-import { useUserReviews } from '@/lib/useUserReviews'
 import { deleteReview } from '@/lib/supabase/queries'
 import { useLocale } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
+import { useUserReviews } from '@/lib/useUserReviews'
 
 interface PendingProduct {
   id: string

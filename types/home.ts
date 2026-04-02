@@ -17,6 +17,8 @@ export type ProductCardItem = {
   tag?: string | null
   tagBg?: string
   featured?: boolean
+  avg_rating?: number
+  review_count?: number
 }
 
 export type AudienceGroupItem = {

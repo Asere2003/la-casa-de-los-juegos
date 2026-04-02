@@ -1,16 +1,16 @@
 'use client'
 
+import { useLocale, useTranslations } from 'next-intl'
 import { useState, useTransition } from 'react'
 
-import { solicitarDevolucion } from '@/actions/cuenta'
-import { useLocale } from 'next-intl'
-import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
 import type { Order } from '@/types/orders'
+import { solicitarDevolucion } from '@/actions/cuenta'
+import { useReviewedProductIds } from '@/lib/useReviewedProductIds'
+import { useRouter } from 'next/navigation'
 
 interface Props {
     orders: Order[]
-    reviewedProductIds?: string[] // IDs de productos ya reseñados
+    userId: string
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -26,10 +26,13 @@ const STATUS_COLORS: Record<string, string> = {
 
 const CAN_REVIEW_STATUSES = ['shipped', 'delivered']
 
-export default function PedidosTab({ orders, reviewedProductIds = [] }: Props) {
+export default function PedidosTab({ orders, userId }: Props) {
     const t = useTranslations('cuenta.pedidos')
     const router = useRouter()
     const locale = useLocale()
+
+    // ← SWR: se revalida automáticamente al volver a esta pestaña
+    const { data: reviewedProductIds = [] } = useReviewedProductIds(userId)
 
     const getStatusLabel = (status: string): string => {
         const labels: Record<string, string> = {

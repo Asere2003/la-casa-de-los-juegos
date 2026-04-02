@@ -15,14 +15,12 @@ export default async function CuentaPage({
 
   if (!user) redirect(`/${locale}/login`)
 
-  // Carga el perfil de la BD
   const { data: profile } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.id)
     .single()
 
-  // Carga los pedidos de la BD
   const { data: orders } = await supabase
     .from('orders')
     .select(`
@@ -44,7 +42,6 @@ export default async function CuentaPage({
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
-  // Carga favoritos
   const { data: favorites } = await supabase
     .from('favorites')
     .select(`
@@ -58,7 +55,6 @@ export default async function CuentaPage({
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
-  // Carga reseñas
   const { data: reviews } = await supabase
     .from('reviews')
     .select(`
@@ -68,12 +64,12 @@ export default async function CuentaPage({
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
-  // IDs de productos comprados (para verified_purchase y reseñas)
+  // IDs de productos comprados (para verified_purchase)
   const purchasedProductIds = (orders ?? [])
     .filter(o => ['shipped', 'delivered'].includes(o.status))
     .flatMap(o => o.order_items.map((i: { product_id: string }) => i.product_id))
 
-  const reviewedProductIds = (reviews ?? []).map(r => r.product_id)
+  // ← reviewedProductIds eliminado, lo gestiona SWR en el cliente
 
   return (
     <main className="min-h-screen bg-[#fff8f6] pt-20 pb-32">
@@ -84,7 +80,7 @@ export default async function CuentaPage({
         favorites={(favorites ?? []) as any}
         reviews={(reviews ?? []) as any}
         purchasedProductIds={purchasedProductIds}
-        reviewedProductIds={reviewedProductIds}
+        // ← reviewedProductIds eliminado
       />
     </main>
   )

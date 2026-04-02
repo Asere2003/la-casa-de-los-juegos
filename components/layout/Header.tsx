@@ -438,14 +438,16 @@ export default function Header() {
             `}
           >
             <IconCart />
-            {totalItems > 0 && (
-              <span
-                aria-hidden="true"
-                className="absolute -top-0.5 -right-0.5 w-[18px] h-[18px] bg-[var(--color-primary)] text-[var(--color-surface)] text-[9px] font-bold font-mono rounded-full flex items-center justify-center leading-none"
-              >
-                {totalItems > 9 ? '9+' : totalItems}
-              </span>
-            )}
+{totalItems > 0 && (
+  <span
+    aria-hidden="true"
+    className={`absolute -top-0.5 -right-0.5 w-[18px] h-[18px] 
+      ${isCartActive ? 'bg-[#755b00]' : 'bg-[#004317]'}
+      text-[var(--color-surface)] text-[9px] font-bold font-mono rounded-full flex items-center justify-center leading-none`}
+  >
+    {totalItems > 9 ? '9+' : totalItems}
+  </span>
+)}
           </button>
         </div>
       </header>

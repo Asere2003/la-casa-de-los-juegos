@@ -7,6 +7,7 @@ import ProductDescription from '@/components/producto/ProductDescription'
 import ProductGallery from '@/components/producto/ProductGallery'
 import ProductInfo from '@/components/producto/ProductInfo'
 import ProductMeta from '@/components/producto/ProductMeta'
+import ProductReviews from '@/components/producto/ProductReviews'
 import RelatedProducts from '@/components/producto/RelatedProducts'
 import { createClient } from '@/lib/supabase/server'
 import { getTranslations } from 'next-intl/server'
@@ -109,6 +110,7 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
           </div>
         </div>
         <RelatedProducts products={related} currentSlug={slug} />
+        <ProductReviews productId={product.id} />
       </div>
       <div className="h-20 md:h-0" aria-hidden="true" />
     </div>
