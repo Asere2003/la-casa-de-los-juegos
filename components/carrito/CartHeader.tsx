@@ -12,7 +12,7 @@ export default function CartHeader({ totalItems }: Props) {
   const tNav = useTranslations('nav')
 
   return (
-    <div className="bg-[#fff1ec] border-b border-[#c0c9bc]/20">
+    <div >
       <div className="max-w-6xl mx-auto px-5 md:px-10 py-8">
 
         {/* Breadcrumbs */}
@@ -28,10 +28,10 @@ export default function CartHeader({ totalItems }: Props) {
 
         <div className="flex items-end justify-between">
           <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533] mb-2">
+            <p className="font-mono text-[9px] section-label uppercase tracking-[0.22em] text-[#805533] mb-2 mt-2">
               {t('items_selected', { count: totalItems })}
             </p>
-            <h1 className="font-headline text-3xl md:text-4xl text-[#2a170f] italic">
+            <h1 className="text-2xl text-primary font-bold font-headline md:text-4xl">
               {t('your_collection')}
             </h1>
           </div>

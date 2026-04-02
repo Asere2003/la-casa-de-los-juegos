@@ -29,10 +29,10 @@ export default function HeroSection({ image }: HeroSectionProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-[#002108]/70 via-transparent to-transparent" />
       </div>
 
-      <div className="relative z-10 px-6 md:px-16 max-w-7xl mx-auto w-full pt-24 pb-16">
+      <div className="relative z-10 px-6 md:px-16 max-w-7xl mx-auto w-full pb-16">
         <div className="max-w-xl">
           <p className="font-mono text-[var(--color-gold)]/80 text-xs uppercase tracking-[0.3em] mb-5">Granada · Est. 2024</p>
-          <h1 className="font-headline text-5xl md:text-7xl md:font-bold text-white leading-[1.05] tracking-tight mb-6 whitespace-pre-line">
+          <h1 className="font-headline text-4xl md:text-6xl md:font-bold text-white leading-[1.05] tracking-tight mb-6 whitespace-pre-line">
             {t.rich('hero_title', {
               highlight: (chunks) => <HighlightGold>{chunks}</HighlightGold>
             })}
@@ -76,10 +76,17 @@ export default function HeroSection({ image }: HeroSectionProps) {
             </a>
           </div>
         </div>
+         {/* Marca de agua */}
+        <img
+          src="/images/icons/logo_bw.svg"
+          alt="Marca de agua"
+          className="absolute inset-0 w-full h-[200px] md:h-full object-contain opacity-10 pointer-events-none select-none top-[404px] md:top-[200px] "
+          aria-hidden="true"
+        />
       </div>
 
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[var(--color-gold)]/50 z-10" aria-hidden="true">
-        <div className="w-px h-8 bg-[var(--color-gold)]/30 animate-pulse" />
+        <div className="w-px h-8 bg-[var(--color-gold)]/30 animate-pulse " />
         <span className="font-mono text-[9px] uppercase tracking-widest">{t('hero_cta')}</span>
       </div>
     </section>
