@@ -219,5 +219,70 @@
     "format": "png",
     "bytes": 129758,
     "localFallback": "public/images/categorias-productos/world.png"
+  },
+  {
+    "localPath": "public/images/icons/logo_bw.svg",
+    "cloudinaryId": "icons/logo_bw",
+    "description": "logo_bw (icons)",
+    "status": "success",
+    "cloudinaryUrl": "https://res.cloudinary.com/db3v04xc1/image/upload/v1775129759/icons/logo_bw.svg",
+    "publicId": "icons/logo_bw",
+    "width": 300,
+    "height": 300,
+    "format": "svg",
+    "bytes": 140896,
+    "localFallback": "public/images/icons/logo_bw.svg"
+  },
+  {
+    "localPath": "public/images/icons/logo_color.svg",
+    "cloudinaryId": "icons/logo_color",
+    "description": "logo_color (icons)",
+    "status": "success",
+    "cloudinaryUrl": "https://res.cloudinary.com/db3v04xc1/image/upload/v1775129763/icons/logo_color.svg",
+    "publicId": "icons/logo_color",
+    "width": 300,
+    "height": 300,
+    "format": "svg",
+    "bytes": 769441,
+    "localFallback": "public/images/icons/logo_color.svg"
+  },
+  {
+    "localPath": "public/images/icons/logo_wb.svg",
+    "cloudinaryId": "icons/logo_wb",
+    "description": "logo_wb (icons)",
+    "status": "success",
+    "cloudinaryUrl": "https://res.cloudinary.com/db3v04xc1/image/upload/v1775129765/icons/logo_wb.svg",
+    "publicId": "icons/logo_wb",
+    "width": 300,
+    "height": 300,
+    "format": "svg",
+    "bytes": 46229,
+    "localFallback": "public/images/icons/logo_wb.svg"
+  },
+  {
+    "localPath": "public/images/icons/logo_wr.svg",
+    "cloudinaryId": "icons/logo_wr",
+    "description": "logo_wr (icons)",
+    "status": "success",
+    "cloudinaryUrl": "https://res.cloudinary.com/db3v04xc1/image/upload/v1775129768/icons/logo_wr.svg",
+    "publicId": "icons/logo_wr",
+    "width": 300,
+    "height": 300,
+    "format": "svg",
+    "bytes": 115593,
+    "localFallback": "public/images/icons/logo_wr.svg"
+  },
+  {
+    "localPath": "public/images/inicio/fondo_new.png",
+    "cloudinaryId": "inicio/fondo_new",
+    "description": "fondo_new (inicio)",
+    "status": "success",
+    "cloudinaryUrl": "https://res.cloudinary.com/db3v04xc1/image/upload/v1775129771/inicio/fondo_new.png",
+    "publicId": "inicio/fondo_new",
+    "width": 512,
+    "height": 512,
+    "format": "png",
+    "bytes": 360063,
+    "localFallback": "public/images/inicio/fondo_new.png"
   }
 ]

@@ -18,7 +18,7 @@ export default function BestsellersSection({ items, userId, favoriteIds }: Bests
   return (
     <section
       id="favoritos"
-      className="py-12 md:py-20 bg-[var(--color-surface-low)]"
+      className="bg-[var(--color-surface-low)] pt-12 md:pt-16"
       aria-labelledby="bestsellers-title"
     >
       <div className="px-6 md:px-10 max-w-7xl mx-auto">

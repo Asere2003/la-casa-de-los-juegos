@@ -32,7 +32,7 @@ export default function HeroSection({ image }: HeroSectionProps) {
       <div className="relative z-10 px-6 md:px-16 max-w-7xl mx-auto w-full pt-24 pb-16">
         <div className="max-w-xl">
           <p className="font-mono text-[var(--color-gold)]/80 text-xs uppercase tracking-[0.3em] mb-5">Granada · Est. 2024</p>
-          <h1 className="font-headline text-5xl md:text-7xl text-white leading-[1.05] tracking-tight mb-6 whitespace-pre-line">
+          <h1 className="font-headline text-5xl md:text-7xl md:font-bold text-white leading-[1.05] tracking-tight mb-6 whitespace-pre-line">
             {t.rich('hero_title', {
               highlight: (chunks) => <HighlightGold>{chunks}</HighlightGold>
             })}

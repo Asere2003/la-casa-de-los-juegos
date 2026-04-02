@@ -76,11 +76,11 @@ export default function CartDrawer() {
         className={`fixed inset-y-0 right-0 z-[70] flex flex-col w-full max-w-sm bg-[#fff8f6] shadow-2xl shadow-[#2a170f]/40 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 bg-gradient-to-b from-[#1a5c2a] to-[#004317]">
+        <div className="flex items-center justify-between px-6 py-5 ">
           <div>
-            <h2 className="font-headline italic text-xl text-[#c9a84c]">{t('title')}</h2>
+            <h2 className="font-headline italic text-xl text-[#004317]">{t('title')}</h2>
             {totalItems > 0 && (
-              <p className="font-mono text-[9px] uppercase tracking-widest text-[#c9a84c]/60 mt-0.5">
+              <p className="font-mono text-[9px] uppercase tracking-widest text-[#004317]/60 mt-0.5">
                 {t('items', { count: totalItems })}
               </p>
             )}
@@ -89,7 +89,7 @@ export default function CartDrawer() {
             ref={closeRef}
             onClick={closeCart}
             aria-label={tA11y('close_menu')}
-            className="text-[#c9a84c]/70 hover:text-[#c9a84c] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
+            className="text-[#004317]/70 hover:text-[#004317] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[#004317]"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <path d="M18 6 6 18M6 6l12 12"/>

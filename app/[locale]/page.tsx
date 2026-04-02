@@ -72,7 +72,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <HeroSection image="inicio/hero-fondo-tienda-1" />
+      <HeroSection image="inicio/fondo_new" />
       <CategoryScroller items={categories} />
       <NewArrivalsSection
         items={newArrivals}

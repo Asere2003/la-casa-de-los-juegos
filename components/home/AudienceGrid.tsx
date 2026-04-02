@@ -10,7 +10,13 @@ type AudienceGridProps = {
 export default function AudienceGrid({ items }: AudienceGridProps) {
   const t = useTranslations('home')
   return (
-    <section className="py-16 bg-[var(--color-surface-low)]" aria-labelledby="ages-title">
+    <section className="py-12 md:py-16 bg-[var(--color-surface-low)]" aria-labelledby="ages-title">
+      {/* Logo SVG */}
+      <img
+        src="/images/icons/logo_color.svg"
+        alt="Logo La Casa de los Juegos"
+        className="h-12 md:h-14 w-auto object-contain flex-shrink-0 flex items-center justify-center mx-auto"
+      />
       <div className="px-6 max-w-7xl mx-auto">
         <SectionHeading eyebrow={t('ages_label')} title={t('ages_title')} centered className="mb-10" />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">

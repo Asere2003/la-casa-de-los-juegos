@@ -42,6 +42,18 @@ function IconHeart({ className }: { className?: string }) {
   )
 }
 
+function IconLanguage({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="22" height="22" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="9"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <path d="M12 3 C8 7 8 17 12 21"/>
+      <path d="M12 3 C16 7 16 17 12 21"/>
+    </svg>
+  )
+}
+
 function IconMenu({ className }: { className?: string }) {
   return (
     <svg className={className} width="22" height="22" viewBox="0 0 24 24" fill="none"
@@ -76,6 +88,7 @@ function IconSearch({ className }: { className?: string }) {
 const navLinks = [
   { href: '/' as const,         key: 'home'      },
   { href: '/catalogo' as const, key: 'catalogue' },
+  { href: '/carrito' as const,  key: 'cart'      },
   { href: '/historia' as const, key: 'history'   },
 ]
 
@@ -218,7 +231,7 @@ export default function Header() {
         `}
       >
         {/* Izquierda: hamburguesa + logo */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center">
           <button
             onClick={() => setDrawerOpen(true)}
             aria-label={tA11y('open_menu')}
@@ -228,6 +241,13 @@ export default function Header() {
           >
             <IconMenu />
           </button>
+
+            {/* Logo SVG */}
+          <img
+            src="/images/icons/logo_wr.svg"
+            alt="Logo La Casa de los Juegos"
+            className="h-12 md:h-14 w-auto object-contain flex-shrink-0"
+          />
 
           <Link
             href="/"
@@ -256,14 +276,14 @@ export default function Header() {
                   relative font-body text-sm pb-0.5 transition-colors
                   focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] rounded
                   ${isActive
-                    ? 'text-[var(--color-gold)] font-semibold'
-                    : 'text-[var(--color-on-surface)]/55 hover:text-[var(--color-gold)]'
+                    ? 'text-[#755b00] font-semibold'
+                    : 'text-[#004317] hover:text-[#755b00] focus:text-[#755b00] active:text-[#755b00]'
                   }
                 `}
               >
                 {t(link.key)}
                 {isActive && (
-                  <span className="absolute -bottom-0.5 left-0 w-full h-[2px] bg-[var(--color-gold)]" />
+                  <span className="absolute -bottom-0.5 left-0 w-full h-[2px] bg-[#755b00]" />
                 )}
               </Link>
             )
@@ -296,7 +316,7 @@ export default function Header() {
             onClick={() => setSearchOpen(v => !v)}
             aria-label={tA11y('search')}
             aria-expanded={searchOpen}
-            className="hidden md:flex text-[var(--color-on-surface)]/50 hover:text-[var(--color-primary)] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]"
+            className="hidden md:flex text-[#004317] hover:text-[#755b00] focus:text-[#755b00] active:text-[#755b00] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]"
           >
             <IconSearch />
           </button>
@@ -305,7 +325,7 @@ export default function Header() {
           <Link
             href="/cuenta?tab=favoritos"
             aria-label="Mis favoritos"
-            className="hidden md:flex text-[var(--color-on-surface)]/50 hover:text-[var(--color-primary)] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]"
+            className="hidden md:flex text-[#004317] hover:text-[#755b00] focus:text-[#755b00] active:text-[#755b00] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]"
           >
             <IconHeart />
           </Link>
@@ -319,13 +339,18 @@ export default function Header() {
                 relative hidden md:flex p-2 rounded transition-colors
                 focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]
                 ${isUserActive
-                  ? 'text-[var(--color-primary)]'
-                  : 'text-[var(--color-on-surface)]/50 hover:text-[var(--color-primary)]'
+                  ? 'text-[#755b00]'
+                  : 'text-[#004317] hover:text-[#755b00] focus:text-[#755b00] active:text-[#755b00]'
                 }
               `}
             >
               <IconUser />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[var(--color-primary)] border-2 border-[var(--color-surface)] rounded-full" />
+              <span
+                className={`
+                  absolute top-1.5 right-1.5 w-2 h-2 border-2 border-[var(--color-surface)] rounded-full
+                  ${isUserActive ? 'bg-[#755b00]' : 'bg-[#004317]'}
+                `}
+              />
             </Link>
           ) : (
             <Link
@@ -334,10 +359,7 @@ export default function Header() {
               className={`
                 hidden md:flex p-2 rounded transition-colors
                 focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]
-                ${isUserActive
-                  ? 'text-[var(--color-primary)]'
-                  : 'text-[var(--color-on-surface)]/50 hover:text-[var(--color-primary)]'
-                }
+                text-[#004317] hover:text-[#755b00] focus:text-[#755b00] active:text-[#755b00]'
               `}
             >
               <IconUser />
@@ -353,8 +375,8 @@ export default function Header() {
                 relative md:hidden p-2 rounded transition-colors
                 focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]
                 ${isUserActive
-                  ? 'text-[var(--color-primary)]'
-                  : 'text-[var(--color-on-surface)]/50'
+                  ? 'text-[#755b00]'
+                  : 'text-[#004317] hover:text-[#755b00] focus:text-[#755b00] active:text-[#755b00]'
                 }
               `}
             >
@@ -365,14 +387,7 @@ export default function Header() {
             <Link
               href="/login"
               aria-label="Iniciar sesión"
-              className={`
-                md:hidden p-2 rounded transition-colors
-                focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]
-                ${isUserActive
-                  ? 'text-[var(--color-primary)]'
-                  : 'text-[var(--color-on-surface)]/50'
-                }
-              `}
+              className="md:hidden p-2 rounded transition-colors focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] text-[#004317] hover:text-[#755b00] focus:text-[#755b00] active:text-[#755b00]"
             >
               <IconUser />
             </Link>
@@ -384,9 +399,9 @@ export default function Header() {
               onClick={() => setLangOpen(v => !v)}
               aria-label={tA11y('change_language')}
               aria-expanded={langOpen}
-              className="font-mono text-[11px] text-[var(--color-on-surface)]/40 hover:text-[var(--color-primary)] transition-colors px-2 py-2 rounded focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] tracking-wider"
+              className="font-mono text-[11px] text-[#004317] hover:text-[#755b00] focus:text-[#755b00] active:text-[#755b00] transition-colors px-2 py-2 rounded focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] tracking-wider"
             >
-              {localeLabels[locale] || locale.toUpperCase()}
+              <IconLanguage className="inline-block mr-1" />
             </button>
             {langOpen && (
               <div className="absolute right-0 top-full mt-1 bg-[var(--color-surface)] border border-[var(--color-outline-var)] shadow-[var(--shadow-warm)] rounded-sm overflow-hidden z-50 min-w-[60px]">
@@ -417,8 +432,8 @@ export default function Header() {
               relative p-2 rounded transition-colors
               focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]
               ${isCartActive
-                ? 'text-[var(--color-primary)]'
-                : 'text-[var(--color-on-surface)]/50 hover:text-[var(--color-primary)]'
+                ? 'text-[#755b00]'
+                : 'text-[#004317] hover:text-[#755b00] focus:text-[#755b00] active:text-[#755b00]'
               }
             `}
           >
