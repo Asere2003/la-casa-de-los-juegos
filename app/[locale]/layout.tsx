@@ -97,7 +97,7 @@ export default async function RootLayout({
       </head>
       <body
           suppressHydrationWarning 
-          className="bg-[var(--color-surface)] text-[var(--color-on-surface)] font-body antialiased">
+          className="bg-[var(--color-surface)] text-[var(--color-on-surface)] font-body antialiased overflow-x-hidden">
         <NextIntlClientProvider messages={messages}>
 
           {/* Skip link accesibilidad */}

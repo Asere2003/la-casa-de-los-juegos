@@ -284,5 +284,31 @@
     "format": "png",
     "bytes": 360063,
     "localFallback": "public/images/inicio/fondo_new.png"
+  },
+  {
+    "localPath": "public/images/icons/logo_new.svg",
+    "cloudinaryId": "icons/logo_new",
+    "description": "logo_new (icons)",
+    "status": "success",
+    "cloudinaryUrl": "https://res.cloudinary.com/db3v04xc1/image/upload/v1775222426/icons/logo_new.svg",
+    "publicId": "icons/logo_new",
+    "width": 300,
+    "height": 300,
+    "format": "svg",
+    "bytes": 76123,
+    "localFallback": "public/images/icons/logo_new.svg"
+  },
+  {
+    "localPath": "public/images/icons/logo_new_sn.svg",
+    "cloudinaryId": "icons/logo_new_sn",
+    "description": "logo_new_sn (icons)",
+    "status": "success",
+    "cloudinaryUrl": "https://res.cloudinary.com/db3v04xc1/image/upload/v1775222428/icons/logo_new_sn.svg",
+    "publicId": "icons/logo_new_sn",
+    "width": 300,
+    "height": 300,
+    "format": "svg",
+    "bytes": 71255,
+    "localFallback": "public/images/icons/logo_new_sn.svg"
   }
 ]

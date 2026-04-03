@@ -1,5 +1,6 @@
 import { getProductBySlug, getRelatedProducts } from '@/lib/supabase/queries'
 
+import BackButton from '@/components/producto/BackButton'
 import type { Metadata } from 'next'
 import ProductActions from '@/components/producto/ProductActions'
 import ProductBadges from '@/components/producto/ProductBadges'
@@ -91,9 +92,10 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
     : []
 
   return (
-    <div className="min-h-screen bg-[#fff8f6]">
+    <div className="min-h-screen bg-[#fff8f6] overflow-x-hidden">
       <ProductMeta product={product} />
       <div className="max-w-7xl mx-auto px-5 md:px-10 py-10">
+        <BackButton />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
           <div className="lg:col-span-7">
             <ProductGallery images={product.images} name={product.name} />
