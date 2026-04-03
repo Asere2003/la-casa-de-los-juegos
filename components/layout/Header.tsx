@@ -4,11 +4,11 @@ import { Link, usePathname, useRouter } from '@/i18n/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 
+import Logo from '../Logo'
 import type { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 import { getCategories } from '@/lib/supabase/queries'
 import { useCartStore } from '@/store/cartStore'
-import Logo from '@/components/Logo'
 
 const localeLabels: Record<string, string> = { es: 'ES', en: 'EN', cat: 'CAT' }
 
@@ -231,8 +231,7 @@ export default function Header() {
           ${scrolled ? 'shadow-[var(--shadow-warm)]' : ''}
         `}
       >
-        {/* Izquierda: hamburguesa + logo */}
-        <div className="flex items-center">
+          <div className="flex items-center">
           <button
             onClick={() => setDrawerOpen(true)}
             aria-label={tA11y('open_menu')}
@@ -244,7 +243,11 @@ export default function Header() {
           </button>
 
             {/* Logo SVG */}
-          <Logo className="h-12 md:h-14 w-auto object-contain flex-shrink-0" />
+            <Logo
+              src="/images/icons/logo_new_sn.svg"
+              className="h-12 md:h-14 w-auto object-contain flex-shrink-0"
+              ariaLabel="Logo La Casa de los Juegos"
+            />
 
           <Link
             href="/"

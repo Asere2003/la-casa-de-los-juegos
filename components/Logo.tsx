@@ -1,20 +1,28 @@
 // Logo.tsx generado automáticamente desde el SVG
 // Puedes ajustar el tamaño con las props className, width, height, etc.
 
-export default function Logo(props: React.SVGProps<SVGSVGElement>) {
+interface LogoProps extends React.SVGProps<SVGSVGElement> {
+  src: string;
+  width?: number | string;
+  height?: number | string;
+  ariaLabel?: string;
+}
+
+export default function Logo({ src, width = 224.88, height = 225, ariaLabel = 'Logo', ...props }: LogoProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 224.88 225"
+      viewBox={`0 0 ${width} ${height}`}
       fill="none"
-      aria-label="Logo La Casa de los Juegos"
+      aria-label={ariaLabel}
+      width={width}
+      height={height}
       {...props}
     >
-      {/* El contenido real del logo es una imagen rasterizada incrustada en el SVG original. */}
       <image
-        href="/images/icons/logo_new_sn.svg"
-        width="224.88"
-        height="225"
+        href={src}
+        width={width}
+        height={height}
         x="0"
         y="0"
         preserveAspectRatio="xMidYMid meet"
