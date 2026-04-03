@@ -244,7 +244,7 @@ export default function Header() {
 
             {/* Logo SVG */}
           <img
-            src="/images/icons/logo_color.svg"
+            src="/images/icons/logo_new_sn.svg"
             alt="Logo La Casa de los Juegos"
             className="h-12 md:h-14 w-auto object-contain flex-shrink-0"
           />

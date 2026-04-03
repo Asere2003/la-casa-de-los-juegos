@@ -13,7 +13,7 @@ export default function AudienceGrid({ items }: AudienceGridProps) {
     <section className="py-12 md:py-16 bg-[var(--color-surface-low)]" aria-labelledby="ages-title">
       {/* Logo SVG */}
       <img
-        src="/images/icons/logo_color.svg"
+        src="/images/icons/logo_new.svg"
         alt="Logo La Casa de los Juegos"
         className="h-12 md:h-14 w-auto object-contain flex-shrink-0 flex items-center justify-center mx-auto"
       />
