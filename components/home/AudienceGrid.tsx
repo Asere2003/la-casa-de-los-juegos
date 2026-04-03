@@ -1,5 +1,6 @@
 import type { AudienceGroupItem } from '@/types/home'
 import { Link } from '@/i18n/navigation'
+import Logo from '@/components/Logo'
 import SectionHeading from '@/components/home/SectionHeading'
 import { useTranslations } from 'next-intl'
 
@@ -12,10 +13,10 @@ export default function AudienceGrid({ items }: AudienceGridProps) {
   return (
     <section className="py-12 md:py-16 bg-[var(--color-surface-low)]" aria-labelledby="ages-title">
       {/* Logo SVG */}
-      <img
+      <Logo
         src="/images/icons/logo_new.svg"
-        alt="Logo La Casa de los Juegos"
-        className="h-12 md:h-14 w-auto object-contain flex-shrink-0 flex items-center justify-center mx-auto"
+        className=" w-auto object-contain flex-shrink-0 flex items-center justify-center mx-auto"
+        ariaLabel="Logo La Casa de los Juegos"
       />
       <div className="px-6 max-w-7xl mx-auto">
         <SectionHeading eyebrow={t('ages_label')} title={t('ages_title')} centered className="mb-10" />
