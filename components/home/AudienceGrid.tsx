@@ -11,7 +11,7 @@ type AudienceGridProps = {
 export default function AudienceGrid({ items }: AudienceGridProps) {
   const t = useTranslations('home')
   return (
-    <section className="py-12 md:py-16 bg-[var(--color-surface-low)]" aria-labelledby="ages-title">
+    <section className="pb-12 pb-0 md:py-16 bg-[var(--color-surface-low)]" aria-labelledby="ages-title">
       {/* Logo SVG */}
       <Logo
         src="/images/icons/logo_new.svg"
