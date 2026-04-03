@@ -8,6 +8,7 @@ import type { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 import { getCategories } from '@/lib/supabase/queries'
 import { useCartStore } from '@/store/cartStore'
+import Logo from '@/components/Logo'
 
 const localeLabels: Record<string, string> = { es: 'ES', en: 'EN', cat: 'CAT' }
 
@@ -243,11 +244,7 @@ export default function Header() {
           </button>
 
             {/* Logo SVG */}
-          <img
-            src="/images/icons/logo_new_sn.svg"
-            alt="Logo La Casa de los Juegos"
-            className="h-12 md:h-14 w-auto object-contain flex-shrink-0"
-          />
+          <Logo className="h-12 md:h-14 w-auto object-contain flex-shrink-0" />
 
           <Link
             href="/"
