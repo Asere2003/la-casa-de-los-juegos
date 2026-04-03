@@ -37,10 +37,16 @@ export default async function AdminPage({
             <p className="text-sm text-[#2c1810]/50">Gestionar pedidos y devoluciones</p>
           </Link>
 
+          <Link href={`/${locale}/admin/usuarios`} className="group border border-[#004317]/20 rounded p-6 bg-white hover:border-[#004317] hover:shadow-md transition-all">
+            <div className="text-3xl mb-3">👥</div>
+            <h2 className="font-['Noto_Serif'] text-lg text-[#2c1810] mb-1">Usuarios</h2>
+            <p className="text-sm text-[#2c1810]/50">Gestionar usuarios y roles</p>
+          </Link>
+
           <Link href={`/${locale}/admin/analytics`} className="group border border-[#004317]/20 rounded p-6 bg-white hover:border-[#004317] hover:shadow-md transition-all">
             <div className="text-3xl mb-3">📊</div>
             <h2 className="font-['Noto_Serif'] text-lg text-[#2c1810] mb-1">Analytics</h2>
-            <p className="text-sm text-[#2c1810]/50">Próximamente</p>
+            <p className="text-sm text-[#2c1810]/50">Ver estadísticas y métricas</p>
           </Link>
 
         </div>

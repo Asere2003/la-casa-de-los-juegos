@@ -11,6 +11,7 @@ const navItems = [
   { href: '/admin', label: 'Dashboard' },
   { href: '/admin/productos', label: 'Productos' },
   { href: '/admin/pedidos', label: 'Pedidos' },
+  { href: '/admin/usuarios', label: 'Usuarios' },
   { href: '/admin/analytics',  label: 'Analytics'  },
 ]
 

@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createServiceClient } from '@supabase/supabase-js'
 import { revalidatePath } from 'next/cache'
 
 // ── Crear producto ──────────────────────────────────────────
@@ -161,5 +162,39 @@ export async function actualizarEstadoPedido(id: string, status: string) {
   }
 
   revalidatePath('/[locale]/admin/pedidos', 'page')
+  return { success: true }
+}
+
+export async function cambiarRolUsuario(userId: string, nuevoRol: 'admin' | 'user') {
+  // Verificar que quien llama es admin
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'No autenticado' }
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+
+  if (profile?.role !== 'admin') return { error: 'No autorizado' }
+
+  // No permitir que el admin se quite su propio rol
+  if (userId === user.id) return { error: 'No puedes cambiar tu propio rol' }
+
+  // Actualizar con service role
+  const supabaseAdmin = createServiceClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+
+  const { error } = await supabaseAdmin
+    .from('profiles')
+    .update({ role: nuevoRol })
+    .eq('id', userId)
+
+  if (error) return { error: error.message }
+
+  revalidatePath('/admin/usuarios')
   return { success: true }
 }
