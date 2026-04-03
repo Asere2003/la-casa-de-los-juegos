@@ -11,6 +11,7 @@ const navItems = [
   { href: '/admin', label: 'Dashboard' },
   { href: '/admin/productos', label: 'Productos' },
   { href: '/admin/pedidos', label: 'Pedidos' },
+  { href: '/admin/analytics',  label: 'Analytics'  },
 ]
 
 export default function AdminMobileNav({ locale }: Props) {
