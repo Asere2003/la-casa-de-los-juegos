@@ -37,11 +37,11 @@ export default async function AdminPage({
             <p className="text-sm text-[#2c1810]/50">Gestionar pedidos y devoluciones</p>
           </Link>
 
-          <div className="border border-[#2c1810]/10 rounded p-6 bg-white opacity-40 cursor-not-allowed">
+          <Link href={`/${locale}/admin/analytics`} className="group border border-[#004317]/20 rounded p-6 bg-white hover:border-[#004317] hover:shadow-md transition-all">
             <div className="text-3xl mb-3">📊</div>
             <h2 className="font-['Noto_Serif'] text-lg text-[#2c1810] mb-1">Analytics</h2>
             <p className="text-sm text-[#2c1810]/50">Próximamente</p>
-          </div>
+          </Link>
 
         </div>
       </div>

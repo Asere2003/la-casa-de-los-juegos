@@ -295,8 +295,8 @@ export default function Header() {
                 relative font-body text-sm pb-0.5 transition-colors
                 focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] rounded
                 ${pathname.startsWith('/admin')
-                  ? 'text-[var(--color-primary)] font-semibold'
-                  : 'text-[var(--color-on-surface)]/55 hover:text-[var(--color-primary)]'
+                  ? 'text-[#755b00] font-semibold'
+                  : 'text-[#004317] hover:text-[#755b00] focus:text-[#755b00] active:text-[#755b00]'
                 }
               `}
             >
