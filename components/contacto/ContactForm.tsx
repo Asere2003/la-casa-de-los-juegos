@@ -89,7 +89,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={status === 'sending'}
-        className="btn-primary w-full"
+        className="btn-primary w-full align-middle justify-center"
       >
         {status === 'sending' ? 'Enviando...' : 'Enviar mensaje'}
       </button>
