@@ -8,6 +8,7 @@ const initialState = { success: false, error: null }
 
 export default function FooterNewsletter() {
   const t = useTranslations('footer')
+  const tExt = useTranslations('footer_extended')
   const [state, formAction, isPending] = useActionState(suscribirNewsletter, initialState)
 
   return (
@@ -21,13 +22,13 @@ export default function FooterNewsletter() {
 
       {state.success ? (
         <p className="text-[#c9a84c] font-body italic text-sm" role="status" aria-live="polite">
-          ✓ ¡Suscrito! Gracias.
+          {tExt('subscribe_success')}
         </p>
       ) : (
         <form action={formAction} noValidate>
           <div className="relative">
             <label htmlFor="newsletter-email" className="sr-only">
-              Suscribirse al newsletter
+              {tExt('subscribe_label')}
             </label>
             <input
               id="newsletter-email"
@@ -41,7 +42,7 @@ export default function FooterNewsletter() {
             <button
               type="submit"
               disabled={isPending}
-              aria-label="Suscribirse"
+              aria-label={tExt('subscribe_btn_label')}
               className="absolute right-2 bottom-2 text-[#c9a84c] hover:text-[#fff1ec] transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded disabled:opacity-50"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"

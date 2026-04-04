@@ -100,7 +100,7 @@ export default function CartItem({ item }: Props) {
             </button>
             <span
               aria-live="polite"
-              aria-label={`Cantidad: ${quantity}`}
+              aria-label={tA11y('quantity_value', { count: quantity })}
               className="w-10 h-9 flex items-center justify-center font-mono text-sm font-bold border-x border-[#c0c9bc]/40"
             >
               {String(quantity).padStart(2, '0')}
@@ -127,7 +127,7 @@ export default function CartItem({ item }: Props) {
             </span>
             {quantity > 1 && (
               <p className="font-mono text-[9px] text-[#717a6f]">
-                {product.price.toFixed(2).replace('.', ',')}€ / ud.
+                {t('unit_price', { price: product.price.toFixed(2).replace('.', ',') })}
               </p>
             )}
           </div>

@@ -1,7 +1,10 @@
 import { Link } from '@/i18n/navigation'
 import Logo from '@/components/Logo'
+import { getTranslations } from 'next-intl/server'
 
-export default function FooterBrand() {
+export default async function FooterBrand() {
+    const t = await getTranslations('footer')
+
     return (
         <div className="md:col-span-2">
             <Link href="/" className="inline-block mb-5 hover:opacity-80 transition-opacity">
@@ -14,8 +17,7 @@ export default function FooterBrand() {
             </Link>
 
             <p className="font-body text-sm leading-relaxed text-[#c9a84c]/55 max-w-xs mb-6">
-                Curadores de asombro y guardianes del juego. La tienda más especial de Granada,
-                ahora en tu hogar.
+                {t('description')}
             </p>
 
             <ul className="space-y-3 mb-6">

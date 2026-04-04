@@ -157,7 +157,7 @@ export default function ProductGallery({ images, name }: Props) {
               >
                 <CloudinaryImage
                   src={img}
-                  alt={`${name} — miniatura ${i + 1}`}
+                  alt={t('thumbnail_n', { name, n: i + 1 })}
                   fill
                   sizes="15vw"
                   className="object-contain p-2"

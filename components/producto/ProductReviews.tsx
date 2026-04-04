@@ -1,5 +1,6 @@
 import StarDisplay from './StarDisplay'
 import { getProductReviews } from '@/lib/supabase/queries'
+import { getTranslations } from 'next-intl/server'
 
 interface Props {
   productId: string
@@ -7,15 +8,16 @@ interface Props {
 
 export default async function ProductReviews({ productId }: Props) {
   const reviews = await getProductReviews(productId)
+  const t = await getTranslations('product_reviews')
 
   if (reviews.length === 0) {
     return (
       <div className="mt-16 border-t border-[#c0c9bc]/30 pt-10">
         <h2 className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#805533] mb-6">
-          Reseñas
+          {t('heading')}
         </h2>
         <p className="font-body italic text-sm text-[#717a6f]">
-          Aún no hay reseñas para este producto. ¡Sé el primero!
+          {t('no_reviews')}
         </p>
       </div>
     )
@@ -33,7 +35,7 @@ export default async function ProductReviews({ productId }: Props) {
   return (
     <div className="mt-16 border-t border-[#c0c9bc]/30 pt-10">
       <h2 className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#805533] mb-8">
-        Reseñas
+        {t('heading')}
       </h2>
 
       {/* Resumen */}
@@ -46,7 +48,7 @@ export default async function ProductReviews({ productId }: Props) {
           </span>
           <StarDisplay rating={avg} size="md" />
           <span className="font-mono text-[10px] text-[#717a6f] mt-1 uppercase tracking-wider">
-            {reviews.length} {reviews.length === 1 ? 'reseña' : 'reseñas'}
+            {reviews.length === 1 ? t('review_count_one', { count: reviews.length }) : t('review_count_other', { count: reviews.length })}
           </span>
         </div>
 
@@ -78,11 +80,11 @@ export default async function ProductReviews({ productId }: Props) {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-xs font-bold text-[#2a170f]">
-                    {review.profile?.nombre ?? 'Cliente'}
+                    {review.profile?.nombre ?? t('anonymous')}
                   </span>
                   {review.verified_purchase && (
                     <span className="font-mono text-[8px] uppercase tracking-wide text-[#004317] bg-[#004317]/10 px-1.5 py-0.5">
-                      ✓ Compra verificada
+                      {t('verified_purchase')}
                     </span>
                   )}
                 </div>

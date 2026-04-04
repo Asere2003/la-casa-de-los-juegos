@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Logo from '@/components/Logo'
+import { getTranslations } from 'next-intl/server'
 
 export const metadata = {
   title: 'Verifica tu email — La Casa de los Juegos',
@@ -11,6 +12,7 @@ export default async function VerificarEmailPage({
   searchParams: Promise<{ email?: string }>
 }) {
   const { email } = await searchParams
+  const t = await getTranslations('verificar_email')
 
   return (
     <main className="min-h-screen bg-[#fff8f6] flex items-center justify-center px-4 py-16">
@@ -40,7 +42,7 @@ export default async function VerificarEmailPage({
 
         {/* Texto */}
         <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533]">
-          Casi listo
+          {t('almost_ready')}
         </span>
         <span className="block w-10 h-0.5 bg-[#c9a84c] mt-2 mb-4 mx-auto" />
 
@@ -48,26 +50,25 @@ export default async function VerificarEmailPage({
           className="text-2xl text-[#2a170f] mb-4"
           style={{ fontFamily: 'Noto Serif, serif' }}
         >
-          Revisa tu email
+          {t('title')}
         </h1>
 
         <p
           className="text-sm text-[#717a6f] leading-relaxed mb-2"
           style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic' }}
         >
-          Te hemos enviado un enlace de confirmación
           {email ? (
-            <> a <strong className="text-[#2a170f] not-italic">{email}</strong></>
+            <>{t('sent_to')} <strong className="text-[#2a170f] not-italic">{email}</strong>.</>
           ) : (
-            ' a tu email'
-          )}.
+            t('sent_generic')
+          )}
         </p>
 
         <p
           className="text-sm text-[#717a6f] leading-relaxed mb-8"
           style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic' }}
         >
-          Haz clic en el enlace para activar tu cuenta y empezar a jugar.
+          {t('click_to_activate')}
         </p>
 
         {/* Aviso spam */}
@@ -76,12 +77,12 @@ export default async function VerificarEmailPage({
           style={{ borderRadius: '2px' }}
         >
           <p className="text-xs text-[#717a6f]" style={{ fontFamily: 'Newsreader, serif' }}>
-            💡 Si no ves el email, revisa la carpeta de <strong>spam</strong> o correo no deseado.
+            💡 {t('spam_tip')}
           </p>
         </div>
 
         <Link href="/" className="btn-outline inline-flex">
-          ← Volver al inicio
+          {t('back_home')}
         </Link>
       </div>
     </main>

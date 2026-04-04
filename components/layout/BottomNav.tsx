@@ -70,6 +70,7 @@ export default function BottomNav() {
   const items = useCartStore(s => s.items)
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
   const t = useTranslations('nav')
+  const tNav = useTranslations('nav_extended')
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/'
@@ -100,7 +101,7 @@ export default function BottomNav() {
   return (
     <nav
       role="navigation"
-      aria-label="Navegación móvil"
+      aria-label={tNav('nav_mobile')}
       className="lg:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-1 pb-2 pt-1.5 bg-[#FFFBF6] border-t border-[#e8e0d8] shadow-[0_-4px_16px_rgba(42,23,15,0.08)]"
       style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 8px)' }}
     >

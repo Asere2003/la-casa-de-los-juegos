@@ -114,7 +114,7 @@ export default async function ConfirmacionPage({
               href={`/${locale}/registro`}
               className="btn-primary px-8 py-3 text-center"
             >
-              Crear cuenta para ver tus pedidos
+              {t('create_account')}
             </Link>
           )}
           <Link

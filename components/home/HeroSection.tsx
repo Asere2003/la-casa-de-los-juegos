@@ -17,7 +17,7 @@ export default function HeroSection({ image }: HeroSectionProps) {
       <div className="absolute inset-0 z-0" aria-hidden="true">
         <CldImage
           src={image}
-          alt="Imagen de fondo del hero"
+          alt={t('hero_bg_alt')}
           width={2560}
           height={1440}
           className="w-full h-full object-cover"
@@ -53,7 +53,7 @@ export default function HeroSection({ image }: HeroSectionProps) {
           </div>
 
           {/* Accesos rápidos */}
-          <div className="flex flex-wrap gap-2 mt-6" aria-label="Accesos rápidos a secciones">
+          <div className="flex flex-wrap gap-2 mt-6" aria-label={t('hero_quick_links')}>
             <a
               href="#curiosidades"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--color-gold)]/75 border border-[var(--color-gold)]/25 bg-[#002108]/50 hover:bg-[#002108]/80 hover:text-[var(--color-gold)] hover:border-[var(--color-gold)]/50 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]"
@@ -62,7 +62,7 @@ export default function HeroSection({ image }: HeroSectionProps) {
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
               </svg>
-              Curiosidades
+              {t('quick_curiosities')}
             </a>
             <a
               href="#favoritos"
@@ -72,14 +72,14 @@ export default function HeroSection({ image }: HeroSectionProps) {
               <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
               </svg>
-              Favoritos de la casa
+              {t('quick_favorites')}
             </a>
           </div>
         </div>
          {/* Marca de agua */}
         <img
           src="/images/icons/logo_bw.svg"
-          alt="Marca de agua"
+          alt={t('hero_watermark_alt')}
           className="absolute inset-0 w-full h-[200px] md:h-full object-contain opacity-10 pointer-events-none select-none top-[404px] md:top-[200px] "
           aria-hidden="true"
         />

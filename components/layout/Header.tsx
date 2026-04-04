@@ -120,6 +120,7 @@ export default function Header() {
   const t = useTranslations('nav')
   const tCat = useTranslations('categories')
   const tA11y = useTranslations('accessibility')
+  const tNav = useTranslations('nav_extended')
 
   const items = useCartStore(s => s.items)
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
@@ -276,7 +277,7 @@ export default function Header() {
         {/* Centro: nav desktop */}
         <nav
           role="navigation"
-          aria-label="Navegación principal"
+          aria-label={tNav('nav_main')}
           className="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2"
         >
           {navLinks.map(link => {
@@ -339,7 +340,7 @@ export default function Header() {
           {/* Favoritos — solo desktop */}
           <Link
             href="/cuenta?tab=favoritos"
-            aria-label="Mis favoritos"
+            aria-label={tNav('my_favorites')}
             className="hidden md:flex text-[#004317] hover:text-[#755b00] focus:text-[#755b00] active:text-[#755b00] transition-colors p-2 rounded focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]"
           >
             <IconHeart />
@@ -350,7 +351,7 @@ export default function Header() {
             <div ref={userMenuRef} className="relative hidden md:flex">
               <button
                 onClick={() => setUserMenuOpen(v => !v)}
-                aria-label="Mi cuenta"
+                aria-label={tNav('my_account_link')}
                 aria-expanded={userMenuOpen}
                 className={`
         relative p-2 rounded transition-colors
@@ -378,7 +379,7 @@ export default function Header() {
                     className="flex items-center gap-2 px-4 py-3 font-body text-sm text-[var(--color-on-surface)] hover:bg-[var(--color-surface-low)] hover:text-[var(--color-primary)] transition-colors"
                   >
                     <IconUser className="w-4 h-4 opacity-60" />
-                    Mi cuenta
+                    {tNav('my_account')}
                   </Link>
                   <div className="h-px bg-[var(--color-outline-var)]" />
                   <button
@@ -390,7 +391,7 @@ export default function Header() {
                       <polyline points="16 17 21 12 16 7" />
                       <line x1="21" y1="12" x2="9" y2="12" />
                     </svg>
-                    Cerrar sesión
+                    {tNav('logout')}
                   </button>
                 </div>
               )}
@@ -398,7 +399,7 @@ export default function Header() {
           ) : (
             <Link
               href="/login"
-              aria-label="Iniciar sesión"
+              aria-label={tNav('my_account_link')}
               className="hidden md:flex p-2 rounded transition-colors focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] text-[#004317] hover:text-[#755b00]"
             >
               <IconUser />
@@ -409,7 +410,7 @@ export default function Header() {
           {user ? (
             <Link
               href="/cuenta"
-              aria-label="Mi cuenta"
+              aria-label={tNav('my_account_link')}
               className={`
                 relative md:hidden p-2 rounded transition-colors
                 focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]
@@ -425,7 +426,7 @@ export default function Header() {
           ) : (
             <Link
               href="/login"
-              aria-label="Iniciar sesión"
+              aria-label={tNav('my_account_link')}
               className="md:hidden p-2 rounded transition-colors focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] text-[#004317] hover:text-[#755b00] focus:text-[#755b00] active:text-[#755b00]"
             >
               <IconUser />
@@ -541,7 +542,7 @@ export default function Header() {
       <nav
         id="nav-drawer"
         role="navigation"
-        aria-label="Menú principal"
+        aria-label={tNav('nav_drawer')}
         aria-hidden={!drawerOpen}
         className={`
           fixed inset-y-0 left-0 z-[60] flex flex-col h-full w-72
@@ -595,7 +596,7 @@ export default function Header() {
                 onClick={() => setDrawerOpen(false)}
                 className={`${drawerLinkBase} ${pathname.startsWith('/cuenta') ? drawerLinkActive : drawerLinkInactive}`}
               >
-                Mi cuenta
+                {tNav('my_account')}
                 {pathname.startsWith('/cuenta') && (
                   <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-6 bg-[var(--color-gold)] rounded-r-full" />
                 )}
@@ -609,7 +610,7 @@ export default function Header() {
                 onClick={() => setDrawerOpen(false)}
                 className={`${drawerLinkBase} ${pathname.startsWith('/admin') ? drawerLinkActive : drawerLinkInactive}`}
               >
-                Panel de administración
+                {tNav('admin_panel')}
                 {pathname.startsWith('/admin') && (
                   <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-6 bg-[var(--color-gold)] rounded-r-full" />
                 )}
@@ -622,14 +623,14 @@ export default function Header() {
                 onClick={handleLogout}
                 className={`${drawerLinkBase} w-full ${drawerLinkInactive}`}
               >
-                Cerrar sesión
+                {tNav('logout')}
               </button>
             )}
           </div>
 
           {/* Categorías */}
           <div className="px-6 py-4 border-t border-[var(--color-outline-var)]">
-            <p className="section-label mb-3">Categorías</p>
+            <p className="section-label mb-3">{tNav('categories')}</p>
             <div className="grid grid-cols-2 gap-1">
               {categories.map(cat => (
                 <Link
@@ -646,7 +647,7 @@ export default function Header() {
 
          {/* Idioma */}
           <div className="px-6 py-4 border-t border-[var(--color-outline-var)]">
-            <p className="section-label mb-3">Idioma</p>
+            <p className="section-label mb-3">{tNav('language')}</p>
             <div className="flex gap-2">
               {([
                 { locale: 'es',  code: 'es',    label: 'ES'  },
@@ -675,10 +676,10 @@ export default function Header() {
         {/* Footer drawer */}
         <div className="p-5 border-t border-[var(--color-outline-var)]">
           <p className="font-body italic text-sm text-[var(--color-on-surface)]/50 leading-relaxed">
-            "Un juego no termina cuando se cierra la caja, solo se guarda para la próxima sesión."
+            {tNav('drawer_quote')}
           </p>
           <p className="font-mono text-[9px] text-[var(--color-on-surface)]/30 mt-2 uppercase tracking-wider">
-            — La Casa de los Juegos
+            {tNav('drawer_quote_author')}
           </p>
         </div>
       </nav>

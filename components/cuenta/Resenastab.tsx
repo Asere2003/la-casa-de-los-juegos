@@ -9,7 +9,7 @@ import ReviewForm from './ReviewForm'
 import StarRating from './Starrating'
 import { createClient } from '@/lib/supabase/client'
 import { deleteReview } from '@/lib/supabase/queries'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 import { useUserReviews } from '@/lib/useUserReviews'
 
@@ -33,6 +33,7 @@ export default function ResenasTab({ userId, initialReviews, purchasedProductIds
   const [pendingProducts, setPendingProducts] = useState<PendingProduct[] | null>(null)
   const [loadingPending, setLoadingPending] = useState(false)
   const locale = useLocale()
+  const t = useTranslations('resenas')
   const searchParams = useSearchParams()
   const productFromUrl = searchParams.get('product')
 
@@ -112,12 +113,12 @@ export default function ResenasTab({ userId, initialReviews, purchasedProductIds
           <div className="flex items-center justify-between mb-4">
             <div>
               <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533]">
-                Pendientes de reseñar
+                {t('pending_heading')}
               </span>
               <span className="block w-8 h-0.5 bg-[#c9a84c] mt-1.5" />
             </div>
             <span className="font-mono text-[10px] text-[#717a6f]">
-              {pendingIds.length} {pendingIds.length === 1 ? 'producto' : 'productos'}
+              {pendingIds.length === 1 ? t('pending_count_one', { count: pendingIds.length }) : t('pending_count_other', { count: pendingIds.length })}
             </span>
           </div>
 
@@ -127,7 +128,7 @@ export default function ResenasTab({ userId, initialReviews, purchasedProductIds
               disabled={loadingPending}
               className="btn-outline text-xs py-2 px-4"
             >
-              {loadingPending ? 'Cargando...' : 'Ver productos pendientes'}
+              {loadingPending ? t('loading') : t('load_pending')}
             </button>
           ) : (
             <div className="space-y-3">
@@ -163,7 +164,7 @@ export default function ResenasTab({ userId, initialReviews, purchasedProductIds
                         >
                           {product.name}
                         </Link>
-                        <span className="font-mono text-[8px] text-[#717a6f]">Sin reseña</span>
+                        <span className="font-mono text-[8px] text-[#717a6f]">{t('no_review')}</span>
                       </div>
 
                       {/* Botón */}
@@ -171,7 +172,7 @@ export default function ResenasTab({ userId, initialReviews, purchasedProductIds
                         onClick={() => setWritingFor(writingFor === product.id ? null : product.id)}
                         className="btn-primary text-xs py-1.5 px-3 shrink-0"
                       >
-                        {writingFor === product.id ? 'Cancelar' : 'Escribir reseña'}
+                        {writingFor === product.id ? t('cancel') : t('write_review')}
                       </button>
                     </div>
 
@@ -208,12 +209,12 @@ export default function ResenasTab({ userId, initialReviews, purchasedProductIds
           <div className="flex items-center justify-between mb-4">
             <div>
               <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533]">
-                Mis reseñas
+                {t('my_reviews_heading')}
               </span>
               <span className="block w-8 h-0.5 bg-[#c9a84c] mt-1.5" />
             </div>
             <span className="font-mono text-[10px] text-[#717a6f]">
-              {reviews.length} {reviews.length === 1 ? 'reseña' : 'reseñas'}
+              {reviews.length === 1 ? t('review_count_one', { count: reviews.length }) : t('review_count_other', { count: reviews.length })}
             </span>
           </div>
 
@@ -256,6 +257,7 @@ interface ReviewCardProps {
 function ReviewCard({
   review, userId, locale, isEditing, isVerified, onEdit, onCancelEdit, onSave, onDelete
 }: ReviewCardProps) {
+  const t = useTranslations('resenas')
   const [isPending, startTransition] = useTransition()
   const [confirmDelete, setConfirmDelete] = useState(false)
 
@@ -298,7 +300,7 @@ function ReviewCard({
             </p>
             {isVerified && (
               <span className="font-mono text-[8px] uppercase tracking-[0.12em] text-[#004317]">
-                ✓ Compra verificada
+                {t('verified_purchase')}
               </span>
             )}
           </div>
@@ -339,7 +341,7 @@ function ReviewCard({
 
             {!review.titulo && !review.contenido && (
               <p className="text-sm text-[#c0c9bc] italic" style={{ fontFamily: 'Newsreader, serif' }}>
-                Sin comentario escrito
+                {t('no_comment')}
               </p>
             )}
 
@@ -349,7 +351,7 @@ function ReviewCard({
                 onClick={onEdit}
                 className="font-mono text-[9px] uppercase tracking-[0.15em] text-[#004317] hover:text-[#1a5c2a] transition-colors"
               >
-                Editar
+                {t('edit')}
               </button>
               <span className="text-[#c0c9bc]">·</span>
               <button
@@ -359,14 +361,14 @@ function ReviewCard({
                   confirmDelete ? 'text-red-500' : 'text-[#717a6f] hover:text-red-400'
                 }`}
               >
-                {confirmDelete ? '¿Confirmar?' : 'Eliminar'}
+                {confirmDelete ? t('confirm_delete') : t('delete')}
               </button>
               {confirmDelete && (
                 <button
                   onClick={() => setConfirmDelete(false)}
                   className="font-mono text-[9px] uppercase tracking-[0.15em] text-[#717a6f] hover:text-[#2a170f] transition-colors"
                 >
-                  Cancelar
+                  {t('cancel')}
                 </button>
               )}
             </div>
@@ -380,6 +382,7 @@ function ReviewCard({
 // ── ResenasEmpty ──────────────────────────────────────────────
 
 function ResenasEmpty({ locale }: { locale: string }) {
+  const t = useTranslations('resenas')
   return (
     <div className="text-center py-16 px-4">
       <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#c9a84c]/10 mb-5">
@@ -389,13 +392,13 @@ function ResenasEmpty({ locale }: { locale: string }) {
       </div>
       <span className="block w-8 h-0.5 bg-[#c9a84c] mx-auto mb-4" />
       <p className="text-[#2a170f] mb-1" style={{ fontFamily: 'Noto Serif, serif' }}>
-        Aún no has dejado ninguna reseña
+        {t('empty_title')}
       </p>
       <p className="text-sm text-[#717a6f] mb-6" style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic' }}>
-        Comparte tu experiencia con otros jugadores después de recibir tu pedido
+        {t('empty_desc')}
       </p>
       <Link href={`/${locale}/catalogo`} className="btn-primary inline-block">
-        Explorar catálogo
+        {t('explore_catalogue')}
       </Link>
     </div>
   )

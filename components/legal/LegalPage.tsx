@@ -1,6 +1,7 @@
 // components/legal/LegalPage.tsx
 
 import { ReactNode } from 'react'
+import { getTranslations } from 'next-intl/server'
 
 interface LegalPageProps {
   title: string
@@ -8,17 +9,19 @@ interface LegalPageProps {
   children: ReactNode
 }
 
-export function LegalPage({ title, lastUpdated, children }: LegalPageProps) {
+export async function LegalPage({ title, lastUpdated, children }: LegalPageProps) {
+  const t = await getTranslations('legal')
+
   return (
     <main className="min-h-screen bg-[#fff8f6] py-16 px-4">
       <div className="max-w-3xl mx-auto">
         <div className="mb-10">
-          <span className="section-label">Legal</span>
+          <span className="section-label">{t('label')}</span>
           <h1 className="font-serif text-3xl md:text-4xl text-[#2c1810] mt-3 mb-2">
             {title}
           </h1>
           <p className="text-sm text-[#2c1810]/50">
-            Última actualización: {lastUpdated}
+            {t('last_updated', { date: lastUpdated })}
           </p>
           <div className="gold-rule mt-4" />
         </div>

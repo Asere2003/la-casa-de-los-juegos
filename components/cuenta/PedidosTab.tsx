@@ -51,7 +51,7 @@ export default function PedidosTab({ orders, userId }: Props) {
     const [devoluciones, setDevoluciones] = useState<Record<string, string>>({})
 
     function handleDevolucion(orderId: string) {
-        if (!confirm('¿Confirmas que quieres solicitar la devolución de este pedido?')) return
+        if (!confirm(t('confirm_return'))) return
         setLoadingId(orderId)
         startTransition(async () => {
             const result = await solicitarDevolucion(orderId)
@@ -162,14 +162,14 @@ export default function PedidosTab({ orders, userId }: Props) {
                                                 {canReview && item.product_id && (
                                                     alreadyReviewed ? (
                                                         <span className="font-mono text-[8px] uppercase tracking-wide text-[#004317]">
-                                                            ✓ Reseñado
+                                                            ✓ {t('reviewed')}
                                                         </span>
                                                     ) : (
                                                         <button
                                                             onClick={() => handleDejarResena(item.product_id!)}
                                                             className="font-mono text-[8px] uppercase tracking-wide text-[#c9a84c] hover:text-[#004317] transition-colors underline"
                                                         >
-                                                            Dejar reseña
+                                                            {t('leave_review')}
                                                         </button>
                                                     )
                                                 )}
@@ -201,7 +201,7 @@ export default function PedidosTab({ orders, userId }: Props) {
                                     disabled={loadingId === order.id}
                                     className="text-xs text-[#717a6f] underline hover:text-red-600 transition-colors disabled:opacity-50"
                                 >
-                                    {loadingId === order.id ? 'Procesando...' : 'Solicitar devolución'}
+                                    {loadingId === order.id ? t('processing') : t('request_return')}
                                 </button>
                             </div>
                         )}

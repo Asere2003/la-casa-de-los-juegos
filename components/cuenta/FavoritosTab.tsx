@@ -7,7 +7,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { removeFavorite } from '@/lib/supabase/queries'
 import { useCartStore } from '@/store/cartStore'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 interface FavoritosTabProps {
   userId: string
@@ -17,6 +17,7 @@ interface FavoritosTabProps {
 export default function FavoritosTab({ userId, initialFavorites }: FavoritosTabProps) {
   const [favorites, setFavorites] = useState(initialFavorites)
   const locale = useLocale()
+  const t = useTranslations('favoritos')
 
   const handleRemove = (productId: string) => {
     setFavorites(prev => prev.filter(f => f.product_id !== productId))
@@ -32,12 +33,12 @@ export default function FavoritosTab({ userId, initialFavorites }: FavoritosTabP
       <div className="flex items-center justify-between mb-6">
         <div>
           <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#805533]">
-            Mis favoritos
+            {t('heading')}
           </span>
           <span className="block w-8 h-0.5 bg-[#c9a84c] mt-1.5" />
         </div>
         <span className="font-mono text-[10px] text-[#717a6f]">
-          {favorites.length} {favorites.length === 1 ? 'producto' : 'productos'}
+          {favorites.length === 1 ? t('product_count_one', { count: favorites.length }) : t('product_count_other', { count: favorites.length })}
         </span>
       </div>
 
@@ -67,6 +68,7 @@ interface FavoriteCardProps {
 }
 
 function FavoriteCard({ favorite, userId, locale, onRemove }: FavoriteCardProps) {
+  const t = useTranslations('favoritos')
   const [isPending, startTransition] = useTransition()
   const [confirmRemove, setConfirmRemove] = useState(false)
   const [added, setAdded] = useState(false)
@@ -121,7 +123,7 @@ const handleAddToCart = (e: React.MouseEvent) => {
         <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
           {isOutOfStock && (
             <span className="bg-[#717a6f] text-white text-[8px] font-mono px-2 py-0.5 uppercase tracking-tighter" style={{ borderRadius: '2px' }}>
-              Agotado
+              {t('out_of_stock')}
             </span>
           )}
           {product.badge && !isOutOfStock && (
@@ -164,14 +166,14 @@ const handleAddToCart = (e: React.MouseEvent) => {
                 confirmRemove ? 'text-red-500' : 'text-[#c0c9bc] hover:text-red-400'
               }`}
             >
-              {confirmRemove ? '¿Confirmar?' : 'Eliminar'}
+              {confirmRemove ? t('confirm_remove') : t('remove')}
             </button>
             {confirmRemove && (
               <button
                 onClick={(e) => { e.preventDefault(); setConfirmRemove(false) }}
                 className="font-mono text-[8px] uppercase tracking-[0.15em] text-[#c0c9bc] hover:text-[#717a6f] transition-colors"
               >
-                No
+                {t('cancel')}
               </button>
             )}
           </div>
@@ -210,6 +212,7 @@ const handleAddToCart = (e: React.MouseEvent) => {
 // ── FavoritosEmpty ────────────────────────────────────────────
 
 function FavoritosEmpty({ locale }: { locale: string }) {
+  const t = useTranslations('favoritos')
   return (
     <div className="text-center py-16 px-4">
       <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#c9a84c]/10 mb-5">
@@ -219,13 +222,13 @@ function FavoritosEmpty({ locale }: { locale: string }) {
       </div>
       <span className="block w-8 h-0.5 bg-[#c9a84c] mx-auto mb-4" />
       <p className="text-[#2a170f] mb-1" style={{ fontFamily: 'Noto Serif, serif' }}>
-        Aún no tienes favoritos guardados
+        {t('empty_title')}
       </p>
       <p className="text-sm text-[#717a6f] mb-6" style={{ fontFamily: 'Newsreader, serif', fontStyle: 'italic' }}>
-        Guarda los juegos que más te gustan para encontrarlos fácilmente
+        {t('empty_desc')}
       </p>
       <Link href={`/${locale}/catalogo`} className="btn-primary inline-block">
-        Explorar catálogo
+        {t('explore_catalogue')}
       </Link>
     </div>
   )

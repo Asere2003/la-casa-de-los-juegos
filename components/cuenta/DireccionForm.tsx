@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 
 import { actualizarDireccion } from '@/actions/cuenta'
+import { useTranslations } from 'next-intl'
 
 interface Profile {
   id: string
@@ -32,6 +33,7 @@ const paises = [
 ]
 
 export default function DireccionForm({ profile }: Props) {
+  const t = useTranslations('direccion')
   const [isPending, startTransition] = useTransition()
   const [success, setSuccess]        = useState(false)
   const [error, setError]            = useState<string | null>(null)
@@ -54,59 +56,63 @@ export default function DireccionForm({ profile }: Props) {
 
       {/* Dirección */}
       <div>
-        <label className="block text-xs font-mono uppercase tracking-wider
+        <label htmlFor="dir-direccion" className="block text-xs font-mono uppercase tracking-wider
                           text-[#2a170f] mb-1.5">
-          Dirección
+          {t('address_label')}
         </label>
         <input
+          id="dir-direccion"
           name="direccion"
           type="text"
           defaultValue={profile?.direccion ?? ''}
           disabled={isPending}
           className="input-base disabled:opacity-50"
-          placeholder="Calle, número, piso..."
+          placeholder={t('address_placeholder')}
         />
       </div>
 
       {/* Ciudad y CP en fila */}
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-mono uppercase tracking-wider
+          <label htmlFor="dir-ciudad" className="block text-xs font-mono uppercase tracking-wider
                             text-[#2a170f] mb-1.5">
-            Ciudad
+            {t('city_label')}
           </label>
           <input
+            id="dir-ciudad"
             name="ciudad"
             type="text"
             defaultValue={profile?.ciudad ?? ''}
             disabled={isPending}
             className="input-base disabled:opacity-50"
-            placeholder="Granada"
+            placeholder={t('city_placeholder')}
           />
         </div>
         <div>
-          <label className="block text-xs font-mono uppercase tracking-wider
+          <label htmlFor="dir-cp" className="block text-xs font-mono uppercase tracking-wider
                             text-[#2a170f] mb-1.5">
-            Código postal
+            {t('postal_code_label')}
           </label>
           <input
+            id="dir-cp"
             name="codigo_postal"
             type="text"
             defaultValue={profile?.codigo_postal ?? ''}
             disabled={isPending}
             className="input-base disabled:opacity-50"
-            placeholder="18001"
+            placeholder={t('postal_code_placeholder')}
           />
         </div>
       </div>
 
       {/* País */}
       <div>
-        <label className="block text-xs font-mono uppercase tracking-wider
+        <label htmlFor="dir-pais" className="block text-xs font-mono uppercase tracking-wider
                           text-[#2a170f] mb-1.5">
-          País
+          {t('country_label')}
         </label>
         <select
+          id="dir-pais"
           name="pais"
           defaultValue={profile?.pais ?? 'ES'}
           disabled={isPending}
@@ -124,7 +130,7 @@ export default function DireccionForm({ profile }: Props) {
       )}
       {success && (
         <p className="text-xs text-[#1a5c2a] font-mono">
-          ✓ Dirección actualizada correctamente
+          {t('success')}
         </p>
       )}
 
@@ -138,10 +144,10 @@ export default function DireccionForm({ profile }: Props) {
           <>
             <span className="inline-block w-4 h-4 border-2 border-white/30
                              border-t-white rounded-full animate-spin" />
-            Guardando…
+            {t('saving')}
           </>
         ) : (
-          'Guardar dirección →'
+          t('save_btn')
         )}
       </button>
     </form>

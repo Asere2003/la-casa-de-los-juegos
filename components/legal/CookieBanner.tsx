@@ -4,8 +4,10 @@
 import { useEffect, useState } from 'react'
 
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 
 export function CookieBanner() {
+  const t = useTranslations('cookies_banner')
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -34,10 +36,9 @@ export function CookieBanner() {
         items-start sm:items-center gap-4 justify-between">
         <div className="flex-1">
           <p className="text-[#fff8f6] text-sm leading-relaxed">
-            Usamos cookies propias (necesarias para el funcionamiento) y de terceros
-            con tu consentimiento (Google Analytics). Puedes{' '}
+            {t('text')}{' '}
             <Link href="/privacidad" className="text-[#c9a84c] underline">
-              leer nuestra política de privacidad
+              {t('privacy_link')}
             </Link>
             .
           </p>
@@ -49,13 +50,13 @@ export function CookieBanner() {
               !border-[#c9a84c]/40 !text-[#fff8f6]/70
               hover:!text-[#fff8f6]"
           >
-            Solo necesarias
+            {t('reject_btn')}
           </button>
           <button
             onClick={accept}
             className="btn-gold text-sm px-4 py-2"
           >
-            Aceptar todas
+            {t('accept_btn')}
           </button>
         </div>
       </div>

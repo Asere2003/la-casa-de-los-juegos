@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import StarRating from './Starrating'
 import { upsertReview } from '@/lib/supabase/queries'
 import type { Review } from '@/types/cuentas'
+import { useTranslations } from 'next-intl'
 
 interface ReviewFormProps {
   userId: string
@@ -14,6 +15,7 @@ interface ReviewFormProps {
 }
 
 export default function ReviewForm({ userId, productId, existing, onSave, onCancel }: ReviewFormProps) {
+  const t = useTranslations('resenas')
   const [rating, setRating] = useState(existing?.rating ?? 0)
   const [titulo, setTitulo] = useState(existing?.titulo ?? '')
   const [contenido, setContenido] = useState(existing?.contenido ?? '')
@@ -23,7 +25,7 @@ export default function ReviewForm({ userId, productId, existing, onSave, onCanc
   const isEditing = !!existing
 
   const handleSubmit = () => {
-    if (rating === 0) { setError('Por favor, selecciona una valoración'); return }
+    if (rating === 0) { setError(t('form_error_rating')); return }
     setError('')
 
     startTransition(async () => {
@@ -31,32 +33,36 @@ export default function ReviewForm({ userId, productId, existing, onSave, onCanc
       if (result) {
         onSave(result)
       } else {
-        setError('No se pudo guardar la reseña. Inténtalo de nuevo.')
+        setError(t('form_error_save'))
       }
     })
   }
+
+  let submitLabel = isEditing ? t('form_update') : t('form_publish')
+  if (isPending) submitLabel = t('form_saving')
 
   return (
     <div className="bg-[#f9f6f1] border border-[#c0c9bc]/40 rounded-sm p-4 space-y-4">
       {/* Valoración */}
       <div>
-        <label className="block font-mono text-[9px] uppercase tracking-[0.18em] text-[#805533] mb-2">
-          Valoración *
+        <label htmlFor="review-rating" className="block font-mono text-[9px] uppercase tracking-[0.18em] text-[#805533] mb-2">
+          {t('form_rating_label')}
         </label>
         <StarRating value={rating} onChange={setRating} size={22} />
       </div>
 
       {/* Título */}
       <div>
-        <label className="block font-mono text-[9px] uppercase tracking-[0.18em] text-[#717a6f] mb-1.5">
-          Título <span className="normal-case tracking-normal font-sans text-[10px]">(opcional)</span>
+        <label htmlFor="review-titulo" className="block font-mono text-[9px] uppercase tracking-[0.18em] text-[#717a6f] mb-1.5">
+          {t('form_title_label')} <span className="normal-case tracking-normal font-sans text-[10px]">{t('form_title_optional')}</span>
         </label>
         <input
+          id="review-titulo"
           type="text"
           value={titulo}
           onChange={e => setTitulo(e.target.value)}
           maxLength={120}
-          placeholder="Un resumen de tu experiencia"
+          placeholder={t('form_title_placeholder')}
           className="input-base w-full text-sm"
           style={{ fontFamily: 'Newsreader, serif' }}
         />
@@ -64,15 +70,16 @@ export default function ReviewForm({ userId, productId, existing, onSave, onCanc
 
       {/* Contenido */}
       <div>
-        <label className="block font-mono text-[9px] uppercase tracking-[0.18em] text-[#717a6f] mb-1.5">
-          Tu opinión <span className="normal-case tracking-normal font-sans text-[10px]">(opcional)</span>
+        <label htmlFor="review-contenido" className="block font-mono text-[9px] uppercase tracking-[0.18em] text-[#717a6f] mb-1.5">
+          {t('form_content_label')} <span className="normal-case tracking-normal font-sans text-[10px]">{t('form_title_optional')}</span>
         </label>
         <textarea
+          id="review-contenido"
           value={contenido}
           onChange={e => setContenido(e.target.value)}
           rows={3}
           maxLength={1000}
-          placeholder="¿Qué te ha parecido? ¿Para quién lo recomendarías?"
+          placeholder={t('form_content_placeholder')}
           className="input-base w-full text-sm resize-none"
           style={{ fontFamily: 'Newsreader, serif' }}
         />
@@ -93,7 +100,7 @@ export default function ReviewForm({ userId, productId, existing, onSave, onCanc
           disabled={isPending || rating === 0}
           className="btn-primary text-xs py-2 px-4 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isPending ? 'Guardando…' : isEditing ? 'Actualizar reseña' : 'Publicar reseña'}
+          {submitLabel}
         </button>
         {onCancel && (
           <button
@@ -101,7 +108,7 @@ export default function ReviewForm({ userId, productId, existing, onSave, onCanc
             disabled={isPending}
             className="btn-outline text-xs py-2 px-4"
           >
-            Cancelar
+            {t('form_cancel')}
           </button>
         )}
       </div>

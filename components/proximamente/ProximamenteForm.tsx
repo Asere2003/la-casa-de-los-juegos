@@ -2,10 +2,12 @@
 
 import { useActionState } from 'react'
 import { suscribirNewsletter } from '@/app/actions/newsletter'
+import { useTranslations } from 'next-intl'
 
 const initialState = { success: false, error: null }
 
 export default function ProximamenteForm() {
+  const t = useTranslations('proximamente')
   const [state, formAction, isPending] = useActionState(suscribirNewsletter, initialState)
 
   if (state.success) {
@@ -24,10 +26,10 @@ export default function ProximamenteForm() {
           className="text-[#c9a84c] text-base mb-1"
           style={{ fontFamily: 'Noto Serif, serif', fontStyle: 'italic' }}
         >
-          ¡Apuntado!
+          {t('success_title')}
         </p>
         <p className="text-[#fff1ec]/40 text-sm font-body">
-          Te avisaremos cuando haya novedades.
+          {t('success_desc')}
         </p>
       </div>
     )
@@ -38,7 +40,7 @@ export default function ProximamenteForm() {
       <div className="flex gap-0 w-full">
         <div className="flex-1">
           <label htmlFor="proximamente-email" className="sr-only">
-            Tu email
+            {t('email_label')}
           </label>
           <input
             id="proximamente-email"
@@ -57,7 +59,7 @@ export default function ProximamenteForm() {
           className="bg-[#c9a84c] hover:bg-[#b8973b] text-[#2c1810] font-mono text-[11px] uppercase tracking-widest px-6 py-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
           style={{ borderRadius: '0 2px 2px 0' }}
         >
-          {isPending ? '...' : 'Avisamé'}
+          {isPending ? t('notify_loading') : t('notify_btn')}
         </button>
       </div>
 

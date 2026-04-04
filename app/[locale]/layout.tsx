@@ -155,10 +155,10 @@ export default async function RootLayout({
           <Footer />
           <BottomNav />
           <ScrollToTop />
+          <CookieBanner />
 
         </NextIntlClientProvider>
         <DevModeBanner />
-        <CookieBanner />
         <GoogleAnalytics />
       </body>
     </html>

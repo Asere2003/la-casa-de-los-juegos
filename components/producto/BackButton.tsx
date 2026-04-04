@@ -1,9 +1,11 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 export default function BackButton() {
   const router = useRouter()
+  const t = useTranslations('back_button')
 
   return (
     <div className="sticky top-20 z-10 mb-4 pointer-events-none">
@@ -15,7 +17,7 @@ export default function BackButton() {
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M19 12H5M12 5l-7 7 7 7"/>
         </svg>
-        Volver
+        {t('back')}
       </button>
     </div>
   )

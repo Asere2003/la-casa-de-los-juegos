@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import type { ProductCardItem } from '@/types/home'
 import { formatEuro } from '@/lib/format'
+import { getTranslations } from 'next-intl/server'
 
 type ProductCardProps = {
   product: ProductCardItem
@@ -45,13 +46,14 @@ function StarsMini({ rating, count }: { rating: number; count: number }) {
   )
 }
 
-export default function ProductCard({
+export default async function ProductCard({
   product,
   showDescription = true,
   compact = false,
   userId = null,
   isFavorite = false,
 }: ProductCardProps) {
+  const t = await getTranslations('product_card')
   return (
     <article className="product-card group flex flex-col bg-white">
 
@@ -137,10 +139,10 @@ export default function ProductCard({
         <div className="border-t border-[#e8e0d8] mt-3 pt-3">
           <Link
             href={`/producto/${product.slug}`}
-            aria-label={`Comprar ${product.name}`}
+            aria-label={`${t('buy')} ${product.name}`}
             className="flex items-center justify-center gap-2 w-full font-mono text-[10px] uppercase tracking-widest text-[#2A170F]/60 hover:text-[#004D26] transition-colors focus-visible:ring-2 focus-visible:ring-[#C9A84C] rounded py-0.5"
           >
-            Comprar
+            {t('buy')}
             <IconCart />
           </Link>
         </div>

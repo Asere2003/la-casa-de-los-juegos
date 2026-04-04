@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 
 import type { User } from '@supabase/supabase-js'
 import { actualizarPerfil } from '@/actions/cuenta'
+import { useTranslations } from 'next-intl'
 
 interface Profile {
   id: string
@@ -21,6 +22,7 @@ interface Props {
 }
 
 export default function DatosPersonalesForm({ user, profile }: Props) {
+  const t = useTranslations('datos_personales')
   const [isPending, startTransition] = useTransition()
   const [success, setSuccess] = useState(false)
   const [error, setError]     = useState<string | null>(null)
@@ -43,50 +45,53 @@ export default function DatosPersonalesForm({ user, profile }: Props) {
 
       {/* Nombre */}
       <div>
-        <label className="block text-xs font-mono uppercase tracking-wider
+        <label htmlFor="dp-nombre" className="block text-xs font-mono uppercase tracking-wider
                           text-[#2a170f] mb-1.5">
-          Nombre completo
+          {t('full_name_label')}
         </label>
         <input
+          id="dp-nombre"
           name="nombre"
           type="text"
           defaultValue={profile?.nombre ?? ''}
           disabled={isPending}
           className="input-base disabled:opacity-50"
-          placeholder="Tu nombre completo"
+          placeholder={t('full_name_placeholder')}
         />
       </div>
 
       {/* Teléfono */}
       <div>
-        <label className="block text-xs font-mono uppercase tracking-wider
+        <label htmlFor="dp-telefono" className="block text-xs font-mono uppercase tracking-wider
                           text-[#2a170f] mb-1.5">
-          Teléfono
+          {t('phone_label')}
         </label>
         <input
+          id="dp-telefono"
           name="telefono"
           type="tel"
           defaultValue={profile?.telefono ?? ''}
           disabled={isPending}
           className="input-base disabled:opacity-50"
-          placeholder="+34 600 000 000"
+          placeholder={t('phone_placeholder')}
         />
       </div>
 
       {/* Email — solo lectura */}
       <div>
-        <label className="block text-xs font-mono uppercase tracking-wider
+        <label htmlFor="dp-email" className="block text-xs font-mono uppercase tracking-wider
                           text-[#2a170f] mb-1.5">
-          Email
+          {t('email_label')}
         </label>
         <input
+          id="dp-email"
           type="email"
           value={user.email ?? ''}
           disabled
           className="input-base opacity-50 cursor-not-allowed bg-[#fff1ec]"
         />
         <p className="text-[10px] text-[#717a6f] mt-1 font-mono">
-          El email se cambia en la sección Seguridad
+          {t('email_note')}
         </p>
       </div>
 
@@ -96,7 +101,7 @@ export default function DatosPersonalesForm({ user, profile }: Props) {
       )}
       {success && (
         <p className="text-xs text-[#1a5c2a] font-mono">
-          ✓ Datos actualizados correctamente
+          {t('success')}
         </p>
       )}
 
@@ -110,10 +115,10 @@ export default function DatosPersonalesForm({ user, profile }: Props) {
           <>
             <span className="inline-block w-4 h-4 border-2 border-white/30
                              border-t-white rounded-full animate-spin" />
-            Guardando…
+            {t('saving')}
           </>
         ) : (
-          'Guardar cambios →'
+          t('save_btn')
         )}
       </button>
     </form>

@@ -4,6 +4,7 @@ import { useEffect, useState, useTransition } from 'react'
 
 import { toggleFavorite } from '@/app/actions/favorites'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 interface FavoriteButtonProps {
   productId: string
@@ -29,6 +30,7 @@ export default function FavoriteButton({
   className = '',
 }: FavoriteButtonProps) {
   const router = useRouter()
+  const t = useTranslations('product')
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite)
   const [isPending, startTransition] = useTransition()
   const { btn, icon } = sizeMap[size]
@@ -61,8 +63,8 @@ export default function FavoriteButton({
       <button
         onClick={handleClick}
         disabled={isPending}
-        aria-label={isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
-        title={isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+        aria-label={isFavorite ? t('remove_from_wishlist') : t('add_to_wishlist')}
+        title={isFavorite ? t('remove_from_wishlist') : t('add_to_wishlist')}
         className={`
           ${btn} flex items-center justify-center
           transition-all duration-200

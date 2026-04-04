@@ -43,7 +43,12 @@
     "age_adults": "Adults",
     "age_adults_sub": "Estratègia i reflexió",
     "age_expert": "Experts",
-    "age_expert_sub": "Reptes llegendaris"
+    "age_expert_sub": "Reptes llegendaris",
+    "hero_bg_alt": "Imatge de fons del hero",
+    "hero_watermark_alt": "Marca d'aigua",
+    "hero_quick_links": "Accessos ràpids a seccions",
+    "quick_curiosities": "Curiositats",
+    "quick_favorites": "Preferits de la casa"
   },
   "catalogue": {
     "title": "Catàleg de jocs",
@@ -113,6 +118,7 @@
     "select_image": "Seleccionar imatge",
     "image_n": "Imatge {n}",
     "view_image_n": "Veure imatge {n}",
+    "thumbnail_n": "{name} — miniatura {n}",
     "features": "Característiques del producte",
     "breadcrumb": "Ruta de navegació",
     "related_list": "Productes relacionats"
@@ -311,7 +317,14 @@
       "status_processing": "Processant",
       "status_shipped": "Enviat",
       "status_delivered": "Entregat",
-      "status_cancelled": "Cancel·lat"
+      "status_cancelled": "Cancel·lat",
+      "problem_with_order": "Algun problema amb la teva comanda?",
+      "processing": "Processant...",
+      "request_return": "Sol·licitar devolució",
+      "return_requested": "✓ Devolució sol·licitada — ens posarem en contacte amb tu aviat",
+      "confirm_return": "Confirmes que vols sol·licitar la devolució d'aquesta comanda?",
+      "reviewed": "✓ Ressenyat",
+      "leave_review": "Deixar ressenya"
     }
   },
   "confirmacion": {
@@ -323,6 +336,7 @@
     "total_paid": "Total pagat",
     "order_number": "Núm. comanda",
     "view_orders": "Veure les meves comandes",
+    "create_account": "Crear compte per veure les teves comandes",
     "continue_shopping": "Continuar comprant",
     "not_found": "Comanda no trobada.",
     "go_catalogue": "Anar al catàleg"
@@ -345,6 +359,167 @@
     "password_success": "✓ Contrasenya actualitzada correctament",
     "saving": "Desant…",
     "change_password_button": "Canviar contrasenya →"
+  },
+  "contacto": {
+    "label": "Parlem?",
+    "title": "Contacte",
+    "store_name": "La Casa de los Juegos",
+    "store_desc": "Botiga especialitzada en jocs de taula, trencaclosques, escacs i curiositats lúdiques amb arrels a Granada.",
+    "email_label": "Correu",
+    "location_label": "Ubicació",
+    "location_value": "Granada, Andalusia, Espanya",
+    "response_label": "Temps de resposta",
+    "response_value": "En menys de 48 hores laborables",
+    "order_tip": "Tens una comanda?",
+    "order_tip_desc": "Inclou el número de comanda a l'assumpte del correu perquè et puguem ajudar més ràpidament.",
+    "form_name": "Nom",
+    "form_email": "Correu",
+    "form_subject": "Assumpte",
+    "form_subject_placeholder": "Selecciona un assumpte...",
+    "form_subject_order": "Consulta sobre una comanda",
+    "form_subject_return": "Devolució o canvi",
+    "form_subject_product": "Informació sobre un producte",
+    "form_subject_other": "Altre",
+    "form_message": "Missatge",
+    "form_submit": "Enviar missatge",
+    "form_sending": "Enviant...",
+    "form_success_title": "Missatge enviat",
+    "form_success_desc": "Et respondrem en menys de 48 hores laborables.",
+    "form_error": "Error en enviar. Escriu-nos directament a {email}"
+  },
+  "legal": {
+    "label": "Legal",
+    "last_updated": "Darrera actualització: {date}"
+  },
+  "proximamente": {
+    "label": "Granada · Est. 2024",
+    "message": "Alguna cosa especial està a punt d'arribar.",
+    "desc": "Deixa'ns el teu correu i seràs el primer en assabentar-te de novetats, llançaments i curiositats lúdiques.",
+    "email_label": "El teu correu",
+    "notify_btn": "Avisa'm",
+    "notify_loading": "...",
+    "success_title": "Apuntat!",
+    "success_desc": "T'avisarem quan hi hagi novetats.",
+    "contact_link": "Contacte"
+  },
+  "verificar_email": {
+    "almost_ready": "Gairebé llest",
+    "title": "Revisa el teu correu",
+    "sent_to": "T'hem enviat un enllaç de confirmació a",
+    "sent_generic": "T'hem enviat un enllaç de confirmació al teu correu.",
+    "click_to_activate": "Fes clic a l'enllaç per activar el teu compte i començar a jugar.",
+    "spam_tip": "Si no veus el correu, revisa la carpeta de correu brossa.",
+    "back_home": "← Tornar a l'inici"
+  },
+  "favoritos": {
+    "heading": "Els meus preferits",
+    "product_count_one": "{count} producte",
+    "product_count_other": "{count} productes",
+    "out_of_stock": "Esgotat",
+    "confirm_remove": "Confirmar?",
+    "cancel": "No",
+    "remove": "Eliminar",
+    "empty_title": "Encara no tens preferits desats",
+    "empty_desc": "Desa els jocs que més t'agraden per trobar-los fàcilment",
+    "explore_catalogue": "Explorar catàleg"
+  },
+  "resenas": {
+    "pending_heading": "Pendents de ressenya",
+    "pending_count_one": "{count} producte",
+    "pending_count_other": "{count} productes",
+    "no_review": "Sense ressenya",
+    "load_pending": "Veure productes pendents",
+    "loading": "Carregant...",
+    "write_review": "Escriure ressenya",
+    "cancel": "Cancel·lar",
+    "my_reviews_heading": "Les meves ressenyes",
+    "review_count_one": "{count} ressenya",
+    "review_count_other": "{count} ressenyes",
+    "verified_purchase": "✓ Compra verificada",
+    "no_comment": "Sense comentari escrit",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "confirm_delete": "Confirmar?",
+    "empty_title": "Encara no has deixat cap ressenya",
+    "empty_desc": "Comparteix la teva experiència amb altres jugadors després de rebre la teva comanda",
+    "explore_catalogue": "Explorar catàleg",
+    "form_rating_label": "Valoració *",
+    "form_title_label": "Títol",
+    "form_title_optional": "(opcional)",
+    "form_title_placeholder": "Un resum de la teva experiència",
+    "form_content_label": "La teva opinió",
+    "form_content_placeholder": "Què t'ha semblat? A qui ho recomanaries?",
+    "form_error_rating": "Si us plau, selecciona una valoració",
+    "form_error_save": "No s'ha pogut desar la ressenya. Torna-ho a intentar.",
+    "form_saving": "Desant…",
+    "form_update": "Actualitzar ressenya",
+    "form_publish": "Publicar ressenya",
+    "form_cancel": "Cancel·lar"
+  },
+  "datos_personales": {
+    "full_name_label": "Nom complet",
+    "full_name_placeholder": "El teu nom complet",
+    "phone_label": "Telèfon",
+    "phone_placeholder": "+34 600 000 000",
+    "email_label": "Correu",
+    "email_note": "El correu es canvia a la secció Seguretat",
+    "save_btn": "Desar canvis →",
+    "saving": "Desant…",
+    "success": "✓ Dades actualitzades correctament"
+  },
+  "direccion": {
+    "address_label": "Adreça",
+    "address_placeholder": "Carrer, número, pis...",
+    "city_label": "Ciutat",
+    "city_placeholder": "Granada",
+    "postal_code_label": "Codi postal",
+    "postal_code_placeholder": "18001",
+    "country_label": "País",
+    "save_btn": "Desar adreça →",
+    "saving": "Desant…",
+    "success": "✓ Adreça actualitzada correctament"
+  },
+  "cookies_banner": {
+    "text": "Usem cookies pròpies (necessàries per al funcionament) i de tercers amb el teu consentiment (Google Analytics). Pots",
+    "privacy_link": "llegir la nostra política de privacitat",
+    "reject_btn": "Només necessàries",
+    "accept_btn": "Acceptar-les totes"
+  },
+  "nav_extended": {
+    "my_account": "El meu compte",
+    "logout": "Tanca sessió",
+    "admin_panel": "Tauler d'administració",
+    "categories": "Categories",
+    "language": "Idioma",
+    "drawer_quote": "\"Un joc no s'acaba quan es tanca la capsa, només es guarda per a la propera sessió.\"",
+    "drawer_quote_author": "— La Casa de los Juegos",
+    "nav_main": "Navegació principal",
+    "nav_drawer": "Menú principal",
+    "nav_mobile": "Navegació mòbil",
+    "my_favorites": "Els meus preferits",
+    "my_account_link": "El meu compte"
+  },
+  "footer_extended": {
+    "subscribe_label": "Subscriure's al butlletí",
+    "subscribe_btn_label": "Subscriure's",
+    "subscribe_success": "✓ Subscrit! Gràcies."
+  },
+  "product_card": {
+    "buy": "Comprar"
+  },
+  "product_reviews": {
+    "heading": "Ressenyes",
+    "no_reviews": "Encara no hi ha ressenyes per a aquest producte. Sigues el primer!",
+    "review_count_one": "{count} ressenya",
+    "review_count_other": "{count} ressenyes",
+    "verified_purchase": "✓ Compra verificada",
+    "anonymous": "Client"
+  },
+  "back_button": {
+    "back": "Enrere"
+  },
+  "cart_item": {
+    "unit_suffix": "/ ut."
   },
   "timeline": {
     "card_1_title": "Els Inicis",
