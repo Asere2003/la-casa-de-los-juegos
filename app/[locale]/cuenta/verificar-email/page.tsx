@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Logo from '@/components/Logo'
 
 export const metadata = {
   title: 'Verifica tu email — La Casa de los Juegos',
@@ -15,7 +16,17 @@ export default async function VerificarEmailPage({
     <main className="min-h-screen bg-[#fff8f6] flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md text-center">
 
-        {/* Icono */}
+        {/* Logo */}
+        <div className="flex justify-center mb-8">
+          <Logo
+            src="https://res.cloudinary.com/db3v04xc1/image/upload/v1775222426/icons/logo_new.svg"
+            width={96}
+            height={96}
+            ariaLabel="La Casa de los Juegos"
+          />
+        </div>
+
+        {/* Icono sobre */}
         <div
           className="w-16 h-16 bg-[#1a5c2a]/10 flex items-center justify-center mx-auto mb-6"
           style={{ borderRadius: '2px' }}

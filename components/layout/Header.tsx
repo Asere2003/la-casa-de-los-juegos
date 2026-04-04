@@ -47,10 +47,10 @@ function IconLanguage({ className }: { className?: string }) {
   return (
     <svg className={className} width="22" height="22" viewBox="0 0 24 24" fill="none"
       stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="9"/>
-      <line x1="3" y1="12" x2="21" y2="12"/>
-      <path d="M12 3 C8 7 8 17 12 21"/>
-      <path d="M12 3 C16 7 16 17 12 21"/>
+      <circle cx="12" cy="12" r="9" />
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <path d="M12 3 C8 7 8 17 12 21" />
+      <path d="M12 3 C16 7 16 17 12 21" />
     </svg>
   )
 }
@@ -87,10 +87,10 @@ function IconSearch({ className }: { className?: string }) {
 // ─────────────────────────────────────────────────────────────
 
 const navLinks = [
-  { href: '/' as const,         key: 'home'      },
+  { href: '/' as const, key: 'home' },
   { href: '/catalogo' as const, key: 'catalogue' },
-  { href: '/carrito' as const,  key: 'cart'      },
-  { href: '/historia' as const, key: 'history'   },
+  { href: '/carrito' as const, key: 'cart' },
+  { href: '/historia' as const, key: 'history' },
 ]
 
 const drawerLinkBase = `
@@ -98,38 +98,41 @@ const drawerLinkBase = `
   font-headline italic text-base transition-colors
   focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-gold)]
 `
-const drawerLinkActive   = 'text-[var(--color-primary)]'
+const drawerLinkActive = 'text-[var(--color-primary)]'
 const drawerLinkInactive = 'text-[var(--color-on-surface)] hover:bg-[var(--color-surface-low)] hover:text-[var(--color-primary)]'
 
+
 export default function Header() {
-  const [isAdmin,     setIsAdmin]     = useState(false)
-  const [user,        setUser]        = useState<User | null>(null)
-  const [categories,  setCategories]  = useState<Awaited<ReturnType<typeof getCategories>>>([])
-  const [drawerOpen,  setDrawerOpen]  = useState(false)
-  const [searchOpen,  setSearchOpen]  = useState(false)
-  const [scrolled,    setScrolled]    = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const userMenuRef = useRef<HTMLDivElement>(null)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
+  const [categories, setCategories] = useState<Awaited<ReturnType<typeof getCategories>>>([])
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const [langOpen,    setLangOpen]    = useState(false)
+  const [langOpen, setLangOpen] = useState(false)
 
   const pathname = usePathname()
-  const router   = useRouter()
-  const locale   = useLocale()
-  const t        = useTranslations('nav')
-  const tCat     = useTranslations('categories')
-  const tA11y    = useTranslations('accessibility')
+  const router = useRouter()
+  const locale = useLocale()
+  const t = useTranslations('nav')
+  const tCat = useTranslations('categories')
+  const tA11y = useTranslations('accessibility')
 
-  const items      = useCartStore(s => s.items)
+  const items = useCartStore(s => s.items)
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0)
   const toggleCart = useCartStore(s => s.toggleCart)
 
   const searchRef = useRef<HTMLInputElement>(null)
-  const langRef   = useRef<HTMLDivElement>(null)
+  const langRef = useRef<HTMLDivElement>(null)
 
   // ── Activos ───────────────────────────────────────────────
   const isUserActive =
-    pathname.startsWith('/cuenta')    ||
-    pathname.startsWith('/login')     ||
-    pathname.startsWith('/registro')  ||
+    pathname.startsWith('/cuenta') ||
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/registro') ||
     pathname.startsWith('/recuperar') ||
     pathname.startsWith('/auth')
 
@@ -154,6 +157,7 @@ export default function Header() {
         setDrawerOpen(false)
         setSearchOpen(false)
         setLangOpen(false)
+        setUserMenuOpen(false)
       }
     }
     document.addEventListener('keydown', onKey)
@@ -199,6 +203,17 @@ export default function Header() {
     return () => subscription.unsubscribe()
   }, [pathname])
 
+  useEffect(() => {
+    if (!userMenuOpen) return
+    const onClick = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', onClick)
+    return () => document.removeEventListener('mousedown', onClick)
+  }, [userMenuOpen])
+
   // ── Handlers ──────────────────────────────────────────────
   async function handleLogout() {
     const supabase = createClient()
@@ -231,7 +246,7 @@ export default function Header() {
           ${scrolled ? 'shadow-[var(--shadow-warm)]' : ''}
         `}
       >
-          <div className="flex items-center">
+        <div className="flex items-center">
           <button
             onClick={() => setDrawerOpen(true)}
             aria-label={tA11y('open_menu')}
@@ -242,12 +257,12 @@ export default function Header() {
             <IconMenu />
           </button>
 
-            {/* Logo SVG */}
-            <Logo
-              src="/images/icons/logo_new_sn.svg"
-              className="h-12 md:h-14 w-auto object-contain flex-shrink-0"
-              ariaLabel="Logo La Casa de los Juegos"
-            />
+          {/* Logo SVG */}
+          <Logo
+            src="/images/icons/logo_new_sn.svg"
+            className="h-12 md:h-14 w-auto object-contain flex-shrink-0"
+            ariaLabel="Logo La Casa de los Juegos"
+          />
 
           <Link
             href="/"
@@ -332,35 +347,59 @@ export default function Header() {
 
           {/* Usuario — desktop */}
           {user ? (
-            <Link
-              href="/cuenta"
-              aria-label="Mi cuenta"
-              className={`
-                relative hidden md:flex p-2 rounded transition-colors
-                focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]
-                ${isUserActive
-                  ? 'text-[#755b00]'
-                  : 'text-[#004317] hover:text-[#755b00] focus:text-[#755b00] active:text-[#755b00]'
-                }
-              `}
-            >
-              <IconUser />
-              <span
+            <div ref={userMenuRef} className="relative hidden md:flex">
+              <button
+                onClick={() => setUserMenuOpen(v => !v)}
+                aria-label="Mi cuenta"
+                aria-expanded={userMenuOpen}
                 className={`
-                  absolute top-1.5 right-1.5 w-2 h-2 border-2 border-[var(--color-surface)] rounded-full
-                  ${isUserActive ? 'bg-[#755b00]' : 'bg-[#004317]'}
-                `}
-              />
-            </Link>
+        relative p-2 rounded transition-colors
+        focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]
+        ${isUserActive || userMenuOpen
+                    ? 'text-[#755b00]'
+                    : 'text-[#004317] hover:text-[#755b00]'
+                  }
+      `}
+              >
+                <IconUser />
+                <span
+                  className={`
+          absolute top-1.5 right-1.5 w-2 h-2 border-2 border-[var(--color-surface)] rounded-full
+          ${isUserActive || userMenuOpen ? 'bg-[#755b00]' : 'bg-[#004317]'}
+        `}
+                />
+              </button>
+
+              {userMenuOpen && (
+                <div className="absolute right-0 top-full mt-1 bg-[var(--color-surface)] border border-[var(--color-outline-var)] shadow-[var(--shadow-warm)] rounded-sm overflow-hidden z-50 min-w-[160px]">
+                  <Link
+                    href="/cuenta"
+                    onClick={() => setUserMenuOpen(false)}
+                    className="flex items-center gap-2 px-4 py-3 font-body text-sm text-[var(--color-on-surface)] hover:bg-[var(--color-surface-low)] hover:text-[var(--color-primary)] transition-colors"
+                  >
+                    <IconUser className="w-4 h-4 opacity-60" />
+                    Mi cuenta
+                  </Link>
+                  <div className="h-px bg-[var(--color-outline-var)]" />
+                  <button
+                    onClick={() => { setUserMenuOpen(false); handleLogout() }}
+                    className="flex items-center gap-2 w-full text-left px-4 py-3 font-body text-sm text-[var(--color-on-surface)] hover:bg-[var(--color-surface-low)] hover:text-[var(--color-primary)] transition-colors"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="opacity-60" aria-hidden="true">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                      <polyline points="16 17 21 12 16 7" />
+                      <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                    Cerrar sesión
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <Link
               href="/login"
               aria-label="Iniciar sesión"
-              className={`
-                hidden md:flex p-2 rounded transition-colors
-                focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]
-                text-[#004317] hover:text-[#755b00] focus:text-[#755b00] active:text-[#755b00]'
-              `}
+              className="hidden md:flex p-2 rounded transition-colors focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] text-[#004317] hover:text-[#755b00]"
             >
               <IconUser />
             </Link>
@@ -401,25 +440,30 @@ export default function Header() {
               aria-expanded={langOpen}
               className="font-mono text-[11px] text-[#004317] hover:text-[#755b00] focus:text-[#755b00] active:text-[#755b00] transition-colors px-2 py-2 rounded focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] tracking-wider"
             >
-              <IconLanguage className="inline-block mr-1" />
+              <IconLanguage className="inline-block" />
             </button>
             {langOpen && (
-              <div className="absolute right-0 top-full mt-1 bg-[var(--color-surface)] border border-[var(--color-outline-var)] shadow-[var(--shadow-warm)] rounded-sm overflow-hidden z-50 min-w-[60px]">
-                {(['es', 'en', 'cat'] as const).map(l => (
-                  <button
-                    key={l}
-                    onClick={() => { router.replace(pathname, { locale: l }); setLangOpen(false) }}
-                    className={`
-                      block w-full text-left px-4 py-2 font-mono text-[11px] tracking-wider transition-colors
-                      ${locale === l
-                        ? 'bg-[var(--color-primary)] text-[var(--color-surface)] font-bold'
-                        : 'text-[var(--color-on-surface)]/60 hover:bg-[var(--color-surface-low)] hover:text-[var(--color-primary)]'
-                      }
-                    `}
-                  >
-                    {localeLabels[l]}
-                  </button>
-                ))}
+              <div className="absolute right-0 top-full mt-1 bg-[var(--color-surface)] border border-[var(--color-outline-var)] shadow-[var(--shadow-warm)] rounded-sm overflow-hidden z-50 min-w-[90px]">
+              {([
+                { locale: 'es',  code: 'es',  label: 'ES'  },
+                { locale: 'en',  code: 'gb',  label: 'EN'  },
+                { locale: 'cat', code: 'es-ct', label: 'CAT' },
+              ] as const).map(({ locale: l, code, label }) => (
+                <button
+                  key={l}
+                  onClick={() => { router.replace(pathname, { locale: l }); setLangOpen(false) }}
+                  className={`
+                    flex items-center gap-2 w-full text-left px-4 py-2 font-mono text-[11px] tracking-wider transition-colors
+                    ${locale === l
+                      ? 'bg-[var(--color-primary)] text-[var(--color-surface)] font-bold'
+                      : 'text-[var(--color-on-surface)]/60 hover:bg-[var(--color-surface-low)] hover:text-[var(--color-primary)]'
+                    }
+                  `}
+                >
+                  <span className={`fi fi-${code} text-base`} style={{ borderRadius: '2px' }} />
+                  <span>{label}</span>
+                </button>
+              ))}
               </div>
             )}
           </div>
@@ -438,16 +482,16 @@ export default function Header() {
             `}
           >
             <IconCart />
-{totalItems > 0 && (
-  <span
-    aria-hidden="true"
-    className={`absolute -top-0.5 -right-0.5 w-[18px] h-[18px] 
+            {totalItems > 0 && (
+              <span
+                aria-hidden="true"
+                className={`absolute -top-0.5 -right-0.5 w-[18px] h-[18px] 
       ${isCartActive ? 'bg-[#755b00]' : 'bg-[#004317]'}
       text-[var(--color-surface)] text-[9px] font-bold font-mono rounded-full flex items-center justify-center leading-none`}
-  >
-    {totalItems > 9 ? '9+' : totalItems}
-  </span>
-)}
+              >
+                {totalItems > 9 ? '9+' : totalItems}
+              </span>
+            )}
           </button>
         </div>
       </header>
@@ -600,23 +644,28 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Idioma */}
+         {/* Idioma */}
           <div className="px-6 py-4 border-t border-[var(--color-outline-var)]">
             <p className="section-label mb-3">Idioma</p>
             <div className="flex gap-2">
-              {(['es', 'en', 'cat'] as const).map(l => (
+              {([
+                { locale: 'es',  code: 'es',    label: 'ES'  },
+                { locale: 'en',  code: 'gb',    label: 'EN'  },
+                { locale: 'cat', code: 'es-ct', label: 'CAT' },
+              ] as const).map(({ locale: l, code, label }) => (
                 <button
                   key={l}
                   onClick={() => { router.replace(pathname, { locale: l }); setDrawerOpen(false) }}
                   className={`
-                    px-3 py-1.5 font-mono text-[11px] tracking-wider transition-colors rounded-sm
+                    flex items-center gap-1.5 px-3 py-1.5 font-mono text-[11px] tracking-wider transition-colors rounded-sm
                     ${locale === l
                       ? 'bg-[var(--color-primary)] text-[var(--color-surface)] font-bold'
                       : 'border border-[var(--color-outline-var)] text-[var(--color-on-surface)]/50 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]'
                     }
                   `}
                 >
-                  {localeLabels[l]}
+                  <span className={`fi fi-${code}`} style={{ borderRadius: '2px' }} />
+                  <span>{label}</span>
                 </button>
               ))}
             </div>

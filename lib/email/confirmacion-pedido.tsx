@@ -53,15 +53,18 @@ export async function sendConfirmacionPedido({
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body style="margin: 0; padding: 0; background-color: #fff8f6; font-family: Georgia, serif;">
-      
       <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-        
+
         <!-- Header -->
         <div style="text-align: center; margin-bottom: 40px;">
-          <h1 style="font-family: Georgia, serif; font-style: italic; color: #004317; font-size: 28px; margin: 0;">
-            La Casa de los Juegos
-          </h1>
-          <p style="font-family: monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 3px; color: #805533; margin: 8px 0 0;">
+          <img
+            src="https://res.cloudinary.com/db3v04xc1/image/upload/v1775222426/icons/logo_new.svg"
+            alt="La Casa de los Juegos"
+            width="120"
+            height="120"
+            style="display: block; margin: 0 auto 12px;"
+          />
+          <p style="font-family: monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 3px; color: #805533; margin: 0;">
             Granada · Est. 2024
           </p>
           <div style="width: 40px; height: 2px; background: #c9a84c; margin: 16px auto 0;"></div>
@@ -98,7 +101,7 @@ export async function sendConfirmacionPedido({
           <table style="width: 100%; border-collapse: collapse;">
             ${itemsHtml}
           </table>
-          
+
           <!-- Totales -->
           <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
             ${shippingCost > 0 ? `
@@ -215,7 +218,15 @@ export async function sendNuevoPedidoAdmin({
     <body style="margin: 0; padding: 0; background-color: #f5f5f5; font-family: Georgia, serif;">
       <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
 
-        <div style="background: #004317; border-radius: 2px; padding: 20px 24px; margin-bottom: 24px; text-align: center;">
+        <!-- Header admin — fondo verde con logo -->
+        <div style="background: #004317; border-radius: 2px; padding: 24px; margin-bottom: 24px; text-align: center;">
+          <img
+            src="https://res.cloudinary.com/db3v04xc1/image/upload/v1775222426/icons/logo_new.svg"
+            alt="La Casa de los Juegos"
+            width="80"
+            height="80"
+            style="display: block; margin: 0 auto 12px; filter: brightness(0) invert(1);"
+          />
           <p style="font-family: monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 3px; color: #c9a84c; margin: 0 0 6px;">
             Nuevo pedido recibido
           </p>
@@ -224,6 +235,7 @@ export async function sendNuevoPedidoAdmin({
           </h1>
         </div>
 
+        <!-- Cliente -->
         <div style="background: white; border: 1px solid #e0e0e0; border-radius: 2px; padding: 20px 24px; margin-bottom: 16px;">
           <p style="font-family: monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #717a6f; margin: 0 0 12px;">
             Cliente
@@ -234,6 +246,7 @@ export async function sendNuevoPedidoAdmin({
           </p>
         </div>
 
+        <!-- Productos -->
         <div style="background: white; border: 1px solid #e0e0e0; border-radius: 2px; padding: 20px 24px; margin-bottom: 16px;">
           <p style="font-family: monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #717a6f; margin: 0 0 16px;">
             Productos
@@ -255,6 +268,7 @@ export async function sendNuevoPedidoAdmin({
           </table>
         </div>
 
+        <!-- Dirección -->
         ${shippingAddress ? `
         <div style="background: white; border: 1px solid #e0e0e0; border-radius: 2px; padding: 20px 24px; margin-bottom: 16px;">
           <p style="font-family: monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #717a6f; margin: 0 0 12px;">
@@ -268,6 +282,7 @@ export async function sendNuevoPedidoAdmin({
         </div>
         ` : ''}
 
+        <!-- CTA -->
         <div style="text-align: center; margin-top: 24px;">
           <a href="${siteUrl}/es/admin/pedidos/${orderId}"
              style="background-color: #004317; color: white; font-family: Georgia, serif; font-size: 15px; text-decoration: none; padding: 14px 32px; border-radius: 2px; display: inline-block;">

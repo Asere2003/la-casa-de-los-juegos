@@ -55,16 +55,20 @@ export async function sendEstadoPedido({ to, orderNumber, status }: SendEstadoPe
     <body style="margin: 0; padding: 0; background-color: #fff8f6; font-family: Georgia, serif;">
       <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
 
-        <!-- Header -->
-        <div style="text-align: center; margin-bottom: 40px;">
-          <h1 style="font-family: Georgia, serif; font-style: italic; color: #004317; font-size: 28px; margin: 0;">
-            La Casa de los Juegos
-          </h1>
-          <p style="font-family: monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 3px; color: #805533; margin: 8px 0 0;">
-            Granada · Est. 2024
-          </p>
-          <div style="width: 40px; height: 2px; background: #c9a84c; margin: 16px auto 0;"></div>
-        </div>
+      <!-- Header -->
+      <div style="text-align: center; margin-bottom: 40px;">
+        <img
+          src="https://res.cloudinary.com/db3v04xc1/image/upload/v1775222426/icons/logo_new.svg"
+          alt="La Casa de los Juegos"
+          width="140"
+          height="140"
+          style="display: block; margin: 0 auto 8px;"
+        />
+        <p style="font-family: monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 3px; color: #805533; margin: 0;">
+          Granada · Est. 2024
+        </p>
+        <div style="width: 40px; height: 2px; background: #c9a84c; margin: 16px auto 0;"></div>
+      </div>
 
         <!-- Título -->
         <div style="text-align: center; margin-bottom: 32px;">

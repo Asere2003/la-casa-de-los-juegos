@@ -93,6 +93,10 @@ export default async function RootLayout({
   return (
     <html lang={locale} data-scroll-behavior="smooth" className={`${notoSerif.variable} ${newsreader.variable}`}>
       <head>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.3/css/flag-icons.min.css"
+        />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </head>
       <body
