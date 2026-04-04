@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { removeFavorite } from '@/lib/supabase/queries'
 import { useCartStore } from '@/store/cartStore'
 import { useLocale, useTranslations } from 'next-intl'
+import { useProductDrawerStore } from '@/store/productDrawerStore'
 
 interface FavoritosTabProps {
   userId: string
@@ -18,6 +19,7 @@ export default function FavoritosTab({ userId, initialFavorites }: FavoritosTabP
   const [favorites, setFavorites] = useState(initialFavorites)
   const locale = useLocale()
   const t = useTranslations('favoritos')
+  const openProduct = useProductDrawerStore(s => s.openProduct)
 
   const handleRemove = (productId: string) => {
     setFavorites(prev => prev.filter(f => f.product_id !== productId))
@@ -51,6 +53,7 @@ export default function FavoritosTab({ userId, initialFavorites }: FavoritosTabP
             userId={userId}
             locale={locale}
             onRemove={handleRemove}
+            onOpenDrawer={openProduct}
           />
         ))}
       </div>
@@ -65,9 +68,10 @@ interface FavoriteCardProps {
   userId: string
   locale: string
   onRemove: (productId: string) => void
+  onOpenDrawer: (slug: string) => void
 }
 
-function FavoriteCard({ favorite, userId, locale, onRemove }: FavoriteCardProps) {
+function FavoriteCard({ favorite, userId, locale, onRemove, onOpenDrawer }: FavoriteCardProps) {
   const t = useTranslations('favoritos')
   const [isPending, startTransition] = useTransition()
   const [confirmRemove, setConfirmRemove] = useState(false)
@@ -100,8 +104,9 @@ const handleAddToCart = (e: React.MouseEvent) => {
   style={{ borderRadius: '2px' }}
 >
       {/* Imagen */}
-      <Link
+      <a
         href={`/${locale}/producto/${product.slug}`}
+        onClick={(e) => { if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) { e.preventDefault(); onOpenDrawer(product.slug) } }}
         className="relative aspect-[3/4] overflow-hidden block focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
       >
         {imagen ? (
@@ -132,16 +137,17 @@ const handleAddToCart = (e: React.MouseEvent) => {
             </span>
           )}
         </div>
-      </Link>
+      </a>
 
       {/* Info */}
       <div className="p-3 flex flex-col flex-1 border-t border-[#c0c9bc]/15">
-        <Link
+        <a
           href={`/${locale}/producto/${product.slug}`}
+          onClick={(e) => { if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) { e.preventDefault(); onOpenDrawer(product.slug) } }}
           className="font-headline italic text-sm leading-snug mb-1 group-hover:text-[#004317] transition-colors flex-1"
         >
           {product.name}
-        </Link>
+        </a>
 
         {/* Precio */}
         <div className="flex items-baseline gap-2 mb-3">

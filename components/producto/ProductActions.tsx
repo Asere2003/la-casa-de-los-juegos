@@ -7,9 +7,10 @@ import { useTranslations } from 'next-intl'
 
 interface Props {
   product: Product
+  onAddToCart?: () => void
 }
 
-export default function ProductActions({ product }: Props) {
+export default function ProductActions({ product, onAddToCart }: Props) {
   const [qty, setQty]     = useState(1)
   const [added, setAdded] = useState(false)
   const addItem = useCartStore(s => s.addItem)
@@ -24,6 +25,7 @@ export default function ProductActions({ product }: Props) {
     addItem(product, qty)
     setAdded(true)
     setTimeout(() => setAdded(false), 2000)
+    onAddToCart?.()
   }
 
   const decrease = () => setQty(q => Math.max(1, q - 1))

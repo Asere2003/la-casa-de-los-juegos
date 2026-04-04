@@ -2,10 +2,10 @@
 
 import FavoriteButton from '@/components/FavoriteButton'
 import Image from 'next/image'
-import { Link } from '@/i18n/navigation'
 import type { Product } from '@/types'
 import { useCartStore } from '@/store/cartStore'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { useProductDrawerStore } from '@/store/productDrawerStore'
 
 // ── ProductCard ──────────────────────────────────────────
 interface CardProps {
@@ -17,10 +17,18 @@ interface CardProps {
 
 function ProductCard({ product, index, userId, isFavorite }: CardProps) {
   const addItem = useCartStore(s => s.addItem)
+  const openProduct = useProductDrawerStore(s => s.openProduct)
+  const locale = useLocale()
   const t = useTranslations('catalogue')
   const tCommon = useTranslations('common')
   const tProduct = useTranslations('product')
   const tA11y = useTranslations('accessibility')
+
+  const handleProductClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return
+    e.preventDefault()
+    openProduct(product.slug)
+  }
 
   const isLowStock   = product.stock > 0 && product.stock <= 3
   const isOutOfStock = product.stock === 0
@@ -40,11 +48,11 @@ function ProductCard({ product, index, userId, isFavorite }: CardProps) {
       }}
     >
       {/* Imagen */}
-      <Link
-        href={`/producto/${product.slug}`}
+      <a
+        href={`/${locale}/producto/${product.slug}`}
+        onClick={handleProductClick}
         className="relative aspect-[3/4] overflow-hidden block focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
         aria-label={`Ver ${product.name}`}
-        tabIndex={0}
       >
         {product.images?.[0] ? (
           <Image
@@ -97,7 +105,7 @@ function ProductCard({ product, index, userId, isFavorite }: CardProps) {
             </span>
           )}
         </div>
-      </Link>
+      </a>
 
       {/* Info */}
       <div className="p-4 flex flex-col flex-1 border-t border-[#c0c9bc]/15">
@@ -108,12 +116,13 @@ function ProductCard({ product, index, userId, isFavorite }: CardProps) {
         )}
 
         {/* Nombre */}
-        <Link
-          href={`/producto/${product.slug}`}
+        <a
+          href={`/${locale}/producto/${product.slug}`}
+          onClick={handleProductClick}
           className="font-headline italic text-sm md:text-base leading-snug mb-1 group-hover:text-[#004317] transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded flex-1"
         >
           {product.name}
-        </Link>
+        </a>
 
         {/* Estrellas — solo si hay reseñas */}
         {(product.review_count ?? 0) > 0 && (

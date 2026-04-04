@@ -3,7 +3,8 @@
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import type { Product } from '@/types'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { useProductDrawerStore } from '@/store/productDrawerStore'
 
 interface Props {
   products: Product[]
@@ -13,6 +14,8 @@ interface Props {
 export default function RelatedProducts({ products, currentSlug }: Props) {
   const t = useTranslations('product')
   const tCommon = useTranslations('common')
+  const locale = useLocale()
+  const openProduct = useProductDrawerStore(s => s.openProduct)
 
   const filtered = products.filter(p => p.slug !== currentSlug).slice(0, 4)
   if (filtered.length === 0) return null
@@ -43,8 +46,9 @@ export default function RelatedProducts({ products, currentSlug }: Props) {
             className="group bg-white overflow-hidden shadow-warm hover:shadow-warm-lg hover:-translate-y-2 transition-all duration-500"
             style={{ borderRadius: '2px' }}
           >
-            <Link
-              href={`/producto/${product.slug}`}
+            <a
+              href={`/${locale}/producto/${product.slug}`}
+              onClick={(e) => { if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) { e.preventDefault(); openProduct(product.slug) } }}
               className="block relative aspect-[3/4] overflow-hidden focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
               aria-label={product.name}
             >
@@ -68,28 +72,30 @@ export default function RelatedProducts({ products, currentSlug }: Props) {
                   {product.category.emoji} {product.category.name}
                 </span>
               )}
-            </Link>
+            </a>
 
             <div className="p-4">
-              <Link
-                href={`/producto/${product.slug}`}
+              <a
+                href={`/${locale}/producto/${product.slug}`}
+                onClick={(e) => { if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) { e.preventDefault(); openProduct(product.slug) } }}
                 className="font-headline italic text-base leading-snug block mb-2 group-hover:text-[#004317] transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded"
               >
                 {product.name}
-              </Link>
+              </a>
               <div className="flex justify-between items-center">
                 <span className="font-mono text-sm font-bold text-[#c9a84c]">
                   {product.price?.toFixed(2).replace('.', ',')}€
                 </span>
-                <Link
-                  href={`/producto/${product.slug}`}
+                <a
+                  href={`/${locale}/producto/${product.slug}`}
+                  onClick={(e) => { if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) { e.preventDefault(); openProduct(product.slug) } }}
                   aria-label={product.name}
                   className="text-[#004317] hover:scale-110 transition-transform focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded p-1"
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>
-                </Link>
+                </a>
               </div>
             </div>
           </article>

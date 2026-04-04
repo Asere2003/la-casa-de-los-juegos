@@ -537,5 +537,11 @@
     "card_7_title": "Digital Renaissance",
     "card_7_description": "Casa de los Juegos opens its doors in the digital world, bringing the magic of Granada to homes across Spain.",
     "title": "Our Timeline"
+  },
+  "product_drawer": {
+    "title": "Product details",
+    "loading": "Loading product...",
+    "error": "Could not load the product.",
+    "view_full_page": "View full page"
   }
 }

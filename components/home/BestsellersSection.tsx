@@ -1,10 +1,13 @@
+'use client'
+
 import FavoriteButton from '@/components/FavoriteButton'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import type { ProductCardItem } from '@/types/home'
 import SectionHeading from '@/components/home/SectionHeading'
 import { formatEuro } from '@/lib/format'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { useProductDrawerStore } from '@/store/productDrawerStore'
 
 type BestsellersSectionProps = {
   items: ProductCardItem[]
@@ -14,6 +17,14 @@ type BestsellersSectionProps = {
 
 export default function BestsellersSection({ items, userId, favoriteIds }: BestsellersSectionProps) {
   const t = useTranslations('home')
+  const locale = useLocale()
+  const openProduct = useProductDrawerStore(s => s.openProduct)
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, slug: string) => {
+    if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return
+    e.preventDefault()
+    openProduct(slug)
+  }
 
   return (
     <section
@@ -29,8 +40,9 @@ export default function BestsellersSection({ items, userId, favoriteIds }: Bests
             <article key={product.id} className="group cursor-pointer">
 
               {/* Imagen con grayscale → color en hover */}
-              <Link
-                href={`/producto/${product.slug}`}
+              <a
+                href={`/${locale}/producto/${product.slug}`}
+                onClick={(e) => handleClick(e, product.slug)}
                 className="block relative aspect-[3/4] overflow-hidden mb-5 focus-visible:ring-2 focus-visible:ring-[var(--color-gold)]"
               >
                 <Image
@@ -64,7 +76,7 @@ export default function BestsellersSection({ items, userId, favoriteIds }: Bests
                     </span>
                   </div>
                 )}
-              </Link>
+              </a>
 
               {/* Categoría con borde dorado izquierdo */}
               {product.category && (
@@ -76,13 +88,13 @@ export default function BestsellersSection({ items, userId, favoriteIds }: Bests
               )}
 
               {/* Nombre */}
-              <Link href={`/producto/${product.slug}`}>
+              <a href={`/${locale}/producto/${product.slug}`} onClick={(e) => handleClick(e, product.slug)}>
                 <h3 className="font-headline italic text-lg text-[#2a170f] group-hover:text-[#004317] transition-colors leading-snug mb-1">
                   <span className="border-l-2 border-[#c9a84c] bg-[#2c1810]/5 pl-3 pr-2 py-0.5 rounded-sm">
                     {product.name}
                   </span>
                 </h3>
-              </Link>
+              </a>
 
               {/* Precio */}
               <p className="font-mono text-md text-[#717a6f] mt-1">

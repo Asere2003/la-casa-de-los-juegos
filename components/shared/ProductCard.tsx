@@ -1,9 +1,9 @@
 import FavoriteButton from '@/components/FavoriteButton'
 import Image from 'next/image'
-import { Link } from '@/i18n/navigation'
+import { ProductCardLink } from '@/components/shared/ProductCardLink'
 import type { ProductCardItem } from '@/types/home'
 import { formatEuro } from '@/lib/format'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 
 type ProductCardProps = {
   product: ProductCardItem
@@ -53,13 +53,17 @@ export default async function ProductCard({
   userId = null,
   isFavorite = false,
 }: ProductCardProps) {
-  const t = await getTranslations('product_card')
+  const t      = await getTranslations('product_card')
+  const locale = await getLocale()
+  const href   = `/${locale}/producto/${product.slug}`
+
   return (
     <article className="product-card group flex flex-col bg-white">
 
       {/* ── Imagen ── */}
-      <Link
-        href={`/producto/${product.slug}`}
+      <ProductCardLink
+        href={href}
+        slug={product.slug}
         className={`relative block overflow-hidden focus-visible:ring-2 focus-visible:ring-[#C9A84C] ${compact ? 'aspect-[4/5]' : 'aspect-[3/4]'}`}
       >
         <Image
@@ -103,19 +107,20 @@ export default async function ProductCard({
             size="sm"
           />
         </div>
-      </Link>
+      </ProductCardLink>
 
       {/* ── Info ── */}
       <div className="p-4 flex-1 flex flex-col">
 
         {/* Nombre + precio */}
         <div className="flex items-start justify-between gap-2 mb-1">
-          <Link
-            href={`/producto/${product.slug}`}
+          <ProductCardLink
+            href={href}
+            slug={product.slug}
             className="font-headline text-sm md:text-base leading-snug text-[#2A170F] group-hover:text-[#004D26] transition-colors focus-visible:ring-2 focus-visible:ring-[#C9A84C] rounded flex-1"
           >
             {product.name}
-          </Link>
+          </ProductCardLink>
           <span className="font-mono text-sm font-bold text-[#C9A84C] whitespace-nowrap shrink-0">
             {formatEuro(product.price)}
           </span>
@@ -137,14 +142,15 @@ export default async function ProductCard({
 
         {/* Botón COMPRAR */}
         <div className="border-t border-[#e8e0d8] mt-3 pt-3">
-          <Link
-            href={`/producto/${product.slug}`}
-            aria-label={`${t('buy')} ${product.name}`}
+          <ProductCardLink
+            href={href}
+            slug={product.slug}
+            ariaLabel={`${t('buy')} ${product.name}`}
             className="flex items-center justify-center gap-2 w-full font-mono text-[10px] uppercase tracking-widest text-[#2A170F]/60 hover:text-[#004D26] transition-colors focus-visible:ring-2 focus-visible:ring-[#C9A84C] rounded py-0.5"
           >
             {t('buy')}
             <IconCart />
-          </Link>
+          </ProductCardLink>
         </div>
       </div>
     </article>

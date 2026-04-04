@@ -5,6 +5,7 @@ import { getMessages, getTranslations } from 'next-intl/server'
 
 import BottomNav from '@/components/layout/BottomNav'
 import CartDrawer from '@/components/carrito/CartDrawer'
+import ProductDrawer from '@/components/producto/ProductDrawer'
 import { CookieBanner } from '@/components/legal/CookieBanner'
 import { DevModeBanner } from '@/components/layout/DevModeBanner'
 import Footer from '@/components/layout/Footer'
@@ -147,6 +148,7 @@ export default async function RootLayout({
 
           <Header />
           <CartDrawer />
+          <ProductDrawer />
 
           <main id="main-content" tabIndex={-1} className="outline-none">
             {children}

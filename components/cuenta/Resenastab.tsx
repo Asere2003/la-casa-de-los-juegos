@@ -10,6 +10,7 @@ import StarRating from './Starrating'
 import { createClient } from '@/lib/supabase/client'
 import { deleteReview } from '@/lib/supabase/queries'
 import { useLocale, useTranslations } from 'next-intl'
+import { useProductDrawerStore } from '@/store/productDrawerStore'
 import { useSearchParams } from 'next/navigation'
 import { useUserReviews } from '@/lib/useUserReviews'
 
@@ -34,6 +35,7 @@ export default function ResenasTab({ userId, initialReviews, purchasedProductIds
   const [loadingPending, setLoadingPending] = useState(false)
   const locale = useLocale()
   const t = useTranslations('resenas')
+  const openProduct = useProductDrawerStore(s => s.openProduct)
   const searchParams = useSearchParams()
   const productFromUrl = searchParams.get('product')
 
@@ -157,13 +159,14 @@ export default function ResenasTab({ userId, initialReviews, purchasedProductIds
 
                       {/* Nombre */}
                       <div className="flex-1 min-w-0">
-                        <Link
+                        <a
                           href={`/${locale}/producto/${product.slug}`}
+                          onClick={(e) => { if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) { e.preventDefault(); openProduct(product.slug) } }}
                           className="text-xs text-[#2a170f] hover:text-[#004317] transition-colors truncate block"
                           style={{ fontFamily: 'Newsreader, serif' }}
                         >
                           {product.name}
-                        </Link>
+                        </a>
                         <span className="font-mono text-[8px] text-[#717a6f]">{t('no_review')}</span>
                       </div>
 
@@ -258,6 +261,7 @@ function ReviewCard({
   review, userId, locale, isEditing, isVerified, onEdit, onCancelEdit, onSave, onDelete
 }: ReviewCardProps) {
   const t = useTranslations('resenas')
+  const openProduct = useProductDrawerStore(s => s.openProduct)
   const [isPending, startTransition] = useTransition()
   const [confirmDelete, setConfirmDelete] = useState(false)
 
@@ -279,8 +283,9 @@ function ReviewCard({
     <div className={`bg-white border border-[#c0c9bc]/30 rounded-sm overflow-hidden transition-opacity ${isPending ? 'opacity-50' : ''}`}>
       {/* Producto */}
       {product && (
-        <Link
+        <a
           href={`/${locale}/producto/${product.slug}`}
+          onClick={(e) => { if (!e.ctrlKey && !e.metaKey && !e.shiftKey && e.button === 0) { e.preventDefault(); openProduct(product.slug) } }}
           className="flex items-center gap-3 p-3 border-b border-[#c0c9bc]/20 hover:bg-[#f9f6f1] transition-colors"
         >
           <div className="w-10 h-10 flex-shrink-0 bg-[#f5f0eb] rounded-sm overflow-hidden">
@@ -307,7 +312,7 @@ function ReviewCard({
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c0c9bc" strokeWidth="2">
             <path d="M9 18l6-6-6-6" />
           </svg>
-        </Link>
+        </a>
       )}
 
       {/* Contenido reseña o formulario */}

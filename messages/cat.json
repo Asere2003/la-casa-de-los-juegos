@@ -537,5 +537,11 @@
     "card_7_title": "Renaixement Digital",
     "card_7_description": "Casa de los Juegos obre les seves portes en el món digital, portant la màgia de Granada a les llars de tota Espanya.",
     "title": "La nostra línia del temps"
+  },
+  "product_drawer": {
+    "title": "Fitxa del producte",
+    "loading": "Carregant producte...",
+    "error": "No s'ha pogut carregar el producte.",
+    "view_full_page": "Veure fitxa completa"
   }
 }

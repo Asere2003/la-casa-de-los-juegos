@@ -1,10 +1,10 @@
 'use client'
 
 import Image from 'next/image'
-import { Link } from '@/i18n/navigation'
 import type { LocalCartItem } from '@/types'
 import { useCartStore } from '@/store/cartStore'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { useProductDrawerStore } from '@/store/productDrawerStore'
 
 interface Props {
   item: LocalCartItem
@@ -13,8 +13,16 @@ interface Props {
 export default function CartItem({ item }: Props) {
   const removeItem  = useCartStore(s => s.removeItem)
   const updateQty   = useCartStore(s => s.updateQuantity)
+  const openProduct = useProductDrawerStore(s => s.openProduct)
+  const locale = useLocale()
   const t = useTranslations('cart')
   const tA11y = useTranslations('accessibility')
+
+  const handleProductClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return
+    e.preventDefault()
+    openProduct(product.slug)
+  }
   const { product, quantity } = item
 
   const isLowStock = product.stock > 0 && product.stock <= 3
@@ -23,8 +31,9 @@ export default function CartItem({ item }: Props) {
     <div className="flex flex-col sm:flex-row gap-5 bg-white p-5 shadow-warm hover:shadow-warm-lg transition-shadow group" style={{ borderRadius: '2px' }}>
 
       {/* Imagen */}
-      <Link
-        href={`/producto/${product.slug}`}
+      <a
+        href={`/${locale}/producto/${product.slug}`}
+        onClick={handleProductClick}
         className="w-full sm:w-28 h-36 sm:h-28 shrink-0 overflow-hidden bg-[#fff1ec] focus-visible:ring-2 focus-visible:ring-[#c9a84c]"
         style={{ borderRadius: '2px' }}
         aria-label={tA11y('product_image', { name: product.name })}
@@ -40,7 +49,7 @@ export default function CartItem({ item }: Props) {
         ) : (
           <div className="w-full h-full flex items-center justify-center text-3xl" aria-hidden="true">🎲</div>
         )}
-      </Link>
+      </a>
 
       {/* Info */}
       <div className="flex-1 flex flex-col justify-between">
@@ -60,12 +69,13 @@ export default function CartItem({ item }: Props) {
               <p className="font-mono text-[8px] text-[#717a6f] mb-1">{product.sku}</p>
             )}
             {/* Nombre */}
-            <Link
-              href={`/producto/${product.slug}`}
+            <a
+              href={`/${locale}/producto/${product.slug}`}
+              onClick={handleProductClick}
               className="font-headline italic text-lg md:text-xl text-[#2a170f] hover:text-[#004317] transition-colors focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded leading-tight block"
             >
               {product.name}
-            </Link>
+            </a>
           </div>
 
           {/* Botón eliminar */}

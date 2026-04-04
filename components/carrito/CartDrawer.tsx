@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { useCartStore } from '@/store/cartStore'
+import { useProductDrawerStore } from '@/store/productDrawerStore'
 import { useTranslations } from 'next-intl'
 
 export default function CartDrawer() {
@@ -17,6 +18,8 @@ export default function CartDrawer() {
   const totalPrice = useCartStore(s => s.totalPrice)
   const t = useTranslations('cart')
   const tA11y = useTranslations('accessibility')
+
+  const openProduct = useProductDrawerStore(s => s.openProduct)
 
   const closeRef  = useRef<HTMLButtonElement>(null)
   const drawerRef = useRef<HTMLDivElement>(null)
@@ -123,7 +126,8 @@ export default function CartDrawer() {
               {items.map(({ product, quantity }) => (
                 <li key={product.id} className="flex gap-4 py-4">
                   {/* Imagen */}
-                  <Link href={`/producto/${product.slug}`} onClick={closeCart}
+                  <button
+                    onClick={() => { closeCart(); openProduct(product.slug) }}
                     className="shrink-0 focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded"
                     aria-label={tA11y('view_product', { name: product.name })}>
                     <div className="w-20 h-20 bg-[#fff1ec] overflow-hidden rounded-sm">
@@ -134,15 +138,16 @@ export default function CartDrawer() {
                         <div className="w-full h-full flex items-center justify-center text-2xl">🎲</div>
                       )}
                     </div>
-                  </Link>
+                  </button>
 
                   {/* Info */}
                   <div className="flex-1 min-w-0 flex flex-col justify-between">
                     <div className="flex justify-between items-start gap-2">
-                      <Link href={`/producto/${product.slug}`} onClick={closeCart}
-                        className="font-headline italic text-sm text-[#2a170f] hover:text-[#004317] transition-colors leading-tight focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded line-clamp-2">
+                      <button
+                        onClick={() => { closeCart(); openProduct(product.slug) }}
+                        className="font-headline italic text-sm text-[#2a170f] hover:text-[#004317] transition-colors leading-tight focus-visible:ring-2 focus-visible:ring-[#c9a84c] rounded line-clamp-2 text-left">
                         {product.name}
-                      </Link>
+                      </button>
                       <button onClick={() => removeItem(product.id)} aria-label={tA11y('remove_from_cart', { name: product.name })}
                         className="shrink-0 text-[#c0c9bc] hover:text-[#ba1a1a] transition-colors p-1 rounded focus-visible:ring-2 focus-visible:ring-[#c9a84c]">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
