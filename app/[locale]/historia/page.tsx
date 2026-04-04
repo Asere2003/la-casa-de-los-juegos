@@ -5,9 +5,23 @@ import Timeline from '@/components/historia/Timeline'
 import VintagePhoto from '@/components/historia/VintagePhoto'
 import { useTranslations } from 'next-intl'
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://lacasadelosjuegos.com'
+
 export const metadata: Metadata = {
   title: 'Nuestra Historia — La Casa de los Juegos',
   description: 'Desde 1892 en Granada, custodios de juegos de mesa, puzzles y curiosidades lúdicas de todo el mundo. Conoce la historia de la familia Valdivia.',
+  openGraph: {
+    title: 'Nuestra Historia — La Casa de los Juegos',
+    description: 'Desde 1892 en Granada, custodios de juegos de mesa, puzzles y curiosidades lúdicas de todo el mundo. Conoce la historia de la familia Valdivia.',
+    url: `${siteUrl}/es/historia`,
+    images: [{ url: `${siteUrl}/og-image.jpg`, width: 1200, height: 630, alt: 'Historia de La Casa de los Juegos desde 1892' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Nuestra Historia — La Casa de los Juegos',
+    description: 'Desde 1892 en Granada, custodios de juegos de mesa, puzzles y curiosidades lúdicas de todo el mundo.',
+    images: [`${siteUrl}/og-image.jpg`],
+  },
 }
 
 export default function HistoriaPage() {

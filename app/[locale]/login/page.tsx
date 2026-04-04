@@ -4,6 +4,7 @@ import { login } from '@/actions/auth'
 export const metadata = {
   title: 'Iniciar sesión — La Casa de los Juegos',
   description: 'Accede a tu cuenta para gestionar tus pedidos y favoritos.',
+  robots: { index: false, follow: false },
 }
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ redirectTo?: string; error?: string }> }) {

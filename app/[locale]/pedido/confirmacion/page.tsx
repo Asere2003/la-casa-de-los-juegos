@@ -1,6 +1,13 @@
 import ClearCart from '@/components/pedido/ClearCart'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import Stripe from 'stripe'
+
+export const metadata: Metadata = {
+  title: 'Pedido confirmado — La Casa de los Juegos',
+  description: 'Tu pedido ha sido confirmado. Gracias por tu compra.',
+  robots: { index: false, follow: false },
+}
 import { createClient } from '@/lib/supabase/server'
 import { getTranslations } from 'next-intl/server'
 

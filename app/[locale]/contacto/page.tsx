@@ -3,9 +3,23 @@
 import { ContactForm } from '@/components/contacto/ContactForm'
 import { Metadata } from 'next'
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://lacasadelosjuegos.com'
+
 export const metadata: Metadata = {
   title: 'Contacto | La Casa de los Juegos',
-  description: 'Ponte en contacto con La Casa de los Juegos.',
+  description: 'Ponte en contacto con La Casa de los Juegos. Respondemos en menos de 48 horas hábiles.',
+  openGraph: {
+    title: 'Contacto | La Casa de los Juegos',
+    description: 'Ponte en contacto con La Casa de los Juegos. Respondemos en menos de 48 horas hábiles.',
+    url: `${siteUrl}/es/contacto`,
+    images: [{ url: `${siteUrl}/og-image.jpg`, width: 1200, height: 630, alt: 'Contacto La Casa de los Juegos' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Contacto | La Casa de los Juegos',
+    description: 'Ponte en contacto con La Casa de los Juegos. Respondemos en menos de 48 horas hábiles.',
+    images: [`${siteUrl}/og-image.jpg`],
+  },
 }
 
 export default function ContactoPage() {

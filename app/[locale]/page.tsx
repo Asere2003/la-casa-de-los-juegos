@@ -11,9 +11,22 @@ import { getTranslations } from 'next-intl/server'
 
 export async function generateMetadata() {
   const t = await getTranslations('home')
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://lacasadelosjuegos.com'
+  const description = t('hero_subtitle')
   return {
     title: 'La Casa de los Juegos — Granada',
-    description: t('hero_subtitle'),
+    description,
+    openGraph: {
+      title: 'La Casa de los Juegos — Granada',
+      description,
+      images: [{ url: `${siteUrl}/og-image.jpg`, width: 1200, height: 630, alt: 'La Casa de los Juegos' }],
+    },
+    twitter: {
+      card: 'summary_large_image' as const,
+      title: 'La Casa de los Juegos — Granada',
+      description,
+      images: [`${siteUrl}/og-image.jpg`],
+    },
   }
 }
 

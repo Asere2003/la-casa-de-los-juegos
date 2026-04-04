@@ -1,3 +1,22 @@
+## Modo de trabajo autónomo
+
+Antes de empezar:
+1. Ejecuta `find . -name "*.tsx" -o -name "*.ts" | grep -v node_modules | grep -v .next` para listar todos los archivos
+2. Lee `messages/es.json`, `messages/en.json` y `messages/cat.json` completos para conocer las claves existentes
+3. Procesa cada archivo uno por uno en este orden:
+   - app/[locale]/**/page.tsx
+   - components/**/*.tsx
+   - app/[locale]/**/layout.tsx
+4. Por cada archivo: analiza → traduce → modifica → verifica → siguiente
+5. Al terminar cada archivo actualiza los 3 JSON inmediatamente
+6. Genera I18N-REPORT.md con cada archivo procesado y claves añadidas
+
+## Restricción crítica
+NO pares a pedir confirmación entre archivos.
+NO esperes input del usuario.
+Si tienes dudas sobre una clave, elige la opción más semántica y continúa.
+Termina solo cuando hayas procesado todos los archivos encontrados.
+
 Actúa como un desarrollador senior experto en **Next.js, App Router, TypeScript, i18n y refactorización de código**.
 
 Tu tarea es trabajar **únicamente sobre los archivos que tengas en el contexto actual** y hacer una migración completa de textos hardcodeados a sistema de traducciones.

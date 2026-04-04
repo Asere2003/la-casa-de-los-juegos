@@ -4,6 +4,7 @@ import { registro } from '@/actions/auth'
 export const metadata = {
   title: 'Crear cuenta — La Casa de los Juegos',
   description: 'Crea tu cuenta para gestionar pedidos y acceder a ofertas exclusivas.',
+  robots: { index: false, follow: false },
 }
 
 export default function RegistroPage() {

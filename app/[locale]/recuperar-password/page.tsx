@@ -1,6 +1,12 @@
 import SolicitarForm from '@/components/auth/SolicitarRecuperacionForm'
 import { solicitarRecuperacion } from '@/actions/recuperar-password'
 
+export const metadata = {
+  title: 'Recuperar contraseña — La Casa de los Juegos',
+  description: 'Recupera el acceso a tu cuenta.',
+  robots: { index: false, follow: false },
+}
+
 export default async function RecuperarPasswordPage({
   params,
 }: {

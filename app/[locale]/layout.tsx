@@ -69,6 +69,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       url: `${BASE_URL}/${locale}`,
       title: 'La Casa de los Juegos — Granada',
       description: 'Juegos de mesa, puzzles, ajedrez y curiosidades lúdicas de todo el mundo. La tienda más especial de Granada, ahora en tu hogar.',
+      images: [{ url: `${BASE_URL}/og-image.jpg`, width: 1200, height: 630, alt: 'La Casa de los Juegos' }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'La Casa de los Juegos — Granada',
+      description: 'Juegos de mesa, puzzles, ajedrez y curiosidades lúdicas de todo el mundo. La tienda más especial de Granada, ahora en tu hogar.',
+      images: [`${BASE_URL}/og-image.jpg`],
     },
     other: { 'skip-label': t('skip_to_content') },
   }
@@ -98,6 +105,29 @@ export default async function RootLayout({
           href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/7.2.3/css/flag-icons.min.css"
         />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'La Casa de los Juegos',
+              url: BASE_URL,
+              logo: `${BASE_URL}/logo.png`,
+              foundingDate: '1892',
+              description: 'Tienda especializada en juegos de mesa, puzzles, ajedrez y curiosidades lúdicas con raíces en Granada desde 1892.',
+              address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Granada',
+                addressRegion: 'Andalucía',
+                addressCountry: 'ES',
+              },
+              sameAs: [
+                'https://www.instagram.com/lacasadelosjuegos',
+              ],
+            }),
+          }}
+        />
       </head>
       <body
           suppressHydrationWarning 

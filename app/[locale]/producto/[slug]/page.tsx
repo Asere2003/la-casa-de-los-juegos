@@ -63,8 +63,8 @@ export async function generateMetadata(
   }
 }
 
-export default async function ProductoPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
+export default async function ProductoPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
+  const { slug, locale } = await params
   const product = await getProductBySlug(slug)
 
   if (!product) notFound()
@@ -91,8 +91,44 @@ export default async function ProductoPage({ params }: { params: Promise<{ slug:
     ? await getRelatedProducts(product.category_id, product.id, 4)
     : []
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://lacasadelosjuegos.com'
+  const productUrl = `${siteUrl}/${locale}/producto/${slug}`
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.description ?? undefined,
+    image: product.images,
+    sku: product.sku ?? product.id,
+    url: productUrl,
+    brand: { '@type': 'Brand', name: 'La Casa de los Juegos' },
+    offers: {
+      '@type': 'Offer',
+      url: productUrl,
+      priceCurrency: 'EUR',
+      price: product.price,
+      availability: product.stock > 0
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+      seller: { '@type': 'Organization', name: 'La Casa de los Juegos' },
+    },
+    ...(product.avg_rating && product.review_count
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: product.avg_rating,
+            reviewCount: product.review_count,
+          },
+        }
+      : {}),
+  }
+
   return (
     <div className="min-h-screen bg-[#fff8f6] overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <ProductMeta product={product} />
       <div className="max-w-7xl mx-auto px-5 md:px-10 py-10">
         <BackButton />

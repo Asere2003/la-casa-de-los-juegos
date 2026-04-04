@@ -59,6 +59,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.6,
     }),
+    // Contacto
+    ...staticEntry('/contacto', {
+      changeFrequency: 'yearly',
+      priority: 0.5,
+    }),
+    // Devoluciones
+    ...staticEntry('/devoluciones', {
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    }),
+    // Legal
+    ...staticEntry('/legal', {
+      changeFrequency: 'yearly',
+      priority: 0.2,
+    }),
+    // Privacidad
+    ...staticEntry('/privacidad', {
+      changeFrequency: 'yearly',
+      priority: 0.2,
+    }),
+    // Términos
+    ...staticEntry('/terminos', {
+      changeFrequency: 'yearly',
+      priority: 0.2,
+    }),
+    // Cookies
+    ...staticEntry('/cookies', {
+      changeFrequency: 'yearly',
+      priority: 0.2,
+    }),
   ]
 
   // ── Productos dinámicos ────────────────────────────────────
