@@ -1,9 +1,10 @@
+import { getLocale, getTranslations } from 'next-intl/server'
+
 import FavoriteButton from '@/components/FavoriteButton'
 import Image from 'next/image'
-import { ProductCardLink } from '@/components/shared/ProductCardLink'
 import type { ProductCardItem } from '@/types/home'
+import { ProductCardLink } from '@/components/shared/ProductCardLink'
 import { formatEuro } from '@/lib/format'
-import { getLocale, getTranslations } from 'next-intl/server'
 
 type ProductCardProps = {
   product: ProductCardItem
@@ -105,6 +106,7 @@ export default async function ProductCard({
             userId={userId}
             initialIsFavorite={isFavorite}
             size="sm"
+            variant='ghost'
           />
         </div>
       </ProductCardLink>
