@@ -1,8 +1,6 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY, {
-  baseUrl: 'https://api.eu.resend.com',
-})
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 const STATUS_CONTENT: Record<string, { titulo: string; subtitulo: string; mensaje: string; emoji: string }> = {
   processing: {
