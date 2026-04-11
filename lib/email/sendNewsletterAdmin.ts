@@ -1,6 +1,8 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY, {
+  baseUrl: 'https://api.eu.resend.com',
+})
 
 export async function sendNewsletterAdmin(emailSuscriptor: string) {
   const adminEmail = process.env.ADMIN_EMAIL

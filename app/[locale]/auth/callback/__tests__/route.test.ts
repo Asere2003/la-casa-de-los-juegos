@@ -1,11 +1,18 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+import { GET } from '../route'
 import { NextRequest } from 'next/server'
 
 // ─── Supabase mock ────────────────────────────────────────────────────────────
 const mockExchangeCode = vi.hoisted(() => vi.fn())
+const mockSignOut      = vi.hoisted(() => vi.fn())
+const mockGetUser      = vi.hoisted(() => vi.fn())
+
 const mockSupabaseClient = {
   auth: {
     exchangeCodeForSession: mockExchangeCode,
+    signOut:                mockSignOut,
+    getUser:                mockGetUser,
   },
 }
 
@@ -13,7 +20,7 @@ vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn(() => Promise.resolve(mockSupabaseClient)),
 }))
 
-import { GET } from '../route'
+
 
 function makeRequest(params: Record<string, string>) {
   const url = new URL('http://localhost/es/auth/callback')
@@ -27,6 +34,9 @@ describe('GET /[locale]/auth/callback', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockExchangeCode.mockResolvedValue({ data: {}, error: null })
+    mockSignOut.mockResolvedValue({})
+    // Por defecto sin sesión activa
+    mockGetUser.mockResolvedValue({ data: { user: null } })
   })
 
   // ── 1. Error → redirige a login con error ─────────────────────────────────
@@ -68,5 +78,48 @@ describe('GET /[locale]/auth/callback', () => {
     const res = await GET(makeRequest({ error: 'some_error', code: 'some_code' }))
     expect(res.headers.get('location')).toContain('/es/login?error=some_error')
     expect(mockExchangeCode).not.toHaveBeenCalled()
+  })
+
+  // ── 7. Sesión activa → cierra sesión antes de confirmar ───────────────────
+  it('cierra la sesión activa antes de procesar el código si hay usuario logado', async () => {
+    mockGetUser.mockResolvedValue({ data: { user: { id: 'user-123', email: 'otro@test.com' } } })
+
+    await GET(makeRequest({ code: 'auth_code_456' }))
+
+    expect(mockSignOut).toHaveBeenCalledOnce()
+    expect(mockExchangeCode).toHaveBeenCalledOnce()
+    // signOut debe llamarse ANTES que exchangeCode
+    const signOutOrder   = mockSignOut.mock.invocationCallOrder[0]
+    const exchangeOrder  = mockExchangeCode.mock.invocationCallOrder[0]
+    expect(signOutOrder).toBeLessThan(exchangeOrder)
+  })
+
+  // ── 8. Sin sesión activa → no cierra sesión ───────────────────────────────
+  it('no llama a signOut si no hay usuario logado', async () => {
+    mockGetUser.mockResolvedValue({ data: { user: null } })
+
+    await GET(makeRequest({ code: 'auth_code_456' }))
+
+    expect(mockSignOut).not.toHaveBeenCalled()
+    expect(mockExchangeCode).toHaveBeenCalledOnce()
+  })
+
+  // ── 9. Error en exchangeCode → redirige a login ───────────────────────────
+  it('redirige a /es/login con confirmation_failed si exchangeCode falla', async () => {
+    mockExchangeCode.mockResolvedValue({ error: { message: 'invalid token' } })
+
+    const res = await GET(makeRequest({ code: 'bad_code' }))
+
+    expect(res.headers.get('location')).toContain('/es/login?error=confirmation_failed')
+  })
+
+  // ── 10. Error en exchangeCode con sesión activa → cierra sesión igualmente ─
+  it('cierra la sesión activa aunque exchangeCode falle', async () => {
+    mockGetUser.mockResolvedValue({ data: { user: { id: 'user-123' } } })
+    mockExchangeCode.mockResolvedValue({ error: { message: 'invalid token' } })
+
+    await GET(makeRequest({ code: 'bad_code' }))
+
+    expect(mockSignOut).toHaveBeenCalledOnce()
   })
 })

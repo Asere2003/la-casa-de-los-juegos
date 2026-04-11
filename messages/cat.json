@@ -290,7 +290,7 @@
     "final_cta": "Explora el catàleg",
     "final_note": "Enviament gratuït en comandes superiors a 50€"
   },
- "cuenta": {
+  "cuenta": {
     "heading": "El meu compte",
     "greeting": "Hola,",
     "coming_soon": "{label} — pròximament",
@@ -543,5 +543,40 @@
     "loading": "Carregant producte...",
     "error": "No s'ha pogut carregar el producte.",
     "view_full_page": "Veure fitxa completa"
+  },
+  "pago": {
+    "step_label": "Pas final",
+    "title": "Completa la teva comanda",
+    "loading": "Carregant...",
+    "intent_error": "No s'ha pogut iniciar el pagament. Torna-ho a intentar.",
+    "shipping_title": "Dades d'enviament",
+    "payment_title": "Mètode de pagament",
+    "nombre": "Nom complet",
+    "email": "Email",
+    "direccion": "Adreça",
+    "ciudad": "Ciutat",
+    "codigo_postal": "Codi postal",
+    "pais": "País",
+    "save_address": "Desar aquesta adreça al meu perfil",
+    "order_summary": "Resum de la comanda",
+    "subtotal": "Subtotal",
+    "shipping": "Enviament",
+    "free": "Gratuït",
+    "discount": "Descompte",
+    "coupon": "Codi de descompte",
+    "invalid_code": "Codi no vàlid",
+    "discount_applied": "Descompte aplicat",
+    "total": "Total",
+    "pay_now": "Pagar ara",
+    "processing": "Processant...",
+    "payment_error": "Error en processar el pagament. Torna-ho a intentar.",
+    "field_required": "El camp {field} és obligatori.",
+    "trust_note": "Pagament 100% segur. Les teves dades estan protegides amb xifrat SSL.",
+    "secure_payment": "Pagament segur amb Stripe",
+    "processing_msg_1": "Processant el teu pagament…",
+    "processing_msg_2": "Verificant amb el banc…",
+    "processing_msg_3": "Confirmant la teva comanda…",
+    "processing_msg_4": "Gairebé a punt…",
+    "do_not_close": "No tanquis aquesta finestra"
   }
 }

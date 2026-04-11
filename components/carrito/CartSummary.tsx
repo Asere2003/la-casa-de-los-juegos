@@ -1,13 +1,12 @@
 'use client'
 
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 import { useCartStore } from '@/store/cartStore'
 import { useRouter } from '@/i18n/navigation'
 import { useState } from 'react'
 
 export default function CartSummary() {
-  const locale = useLocale()
   const totalPrice = useCartStore(s => s.totalPrice)
   const items = useCartStore(s => s.items)
   const t = useTranslations('cart')
@@ -15,7 +14,6 @@ export default function CartSummary() {
   const [coupon, setCoupon] = useState('')
   const [couponApplied, setCouponApplied] = useState(false)
   const [couponError, setCouponError] = useState('')
-  const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   const subtotal = totalPrice()
@@ -35,36 +33,8 @@ export default function CartSummary() {
     }
   }
 
-  const handleCheckout = async () => {
-    setLoading(true)
-    try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items,
-          shippingCost,
-          discount,
-          locale
-        }),
-      })
-
-      const data = await res.json()
-
-      if (data.error) {
-        alert(data.error)
-        return
-      }
-
-      // Redirigir a Stripe
-      window.location.href = data.url
-
-    } catch (error) {
-      console.error(error)
-      alert(t('payment_error'))
-    } finally {
-      setLoading(false)
-    }
+  const handleCheckout = () => {
+    router.push('/pago')
   }
 
   return (
@@ -162,26 +132,14 @@ export default function CartSummary() {
       {/* Checkout */}
       <button
         onClick={handleCheckout}
-        disabled={loading}
-        className="w-full bg-[#004317] text-white font-headline font-bold py-5 flex items-center justify-center gap-3 hover:bg-[#1a5c2a] hover:rotate-[-0.5deg] active:scale-[0.98] transition-all text-base focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:rotate-0"
+        className="w-full bg-[#004317] text-white font-headline font-bold py-5 flex items-center justify-center gap-3 hover:bg-[#1a5c2a] hover:rotate-[-0.5deg] active:scale-[0.98] transition-all text-base focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2"
         style={{ borderRadius: '2px' }}
       >
-        {loading ? (
-          <>
-            <svg className="animate-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-            </svg>
-            {t('processing')}
-          </>
-        ) : (
-          <>
-            {t('checkout')}
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
-              <polyline points="13 17 18 12 13 7" />
-              <polyline points="6 17 11 12 6 7" />
-            </svg>
-          </>
-        )}
+        {t('checkout')}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+          <polyline points="13 17 18 12 13 7" />
+          <polyline points="6 17 11 12 6 7" />
+        </svg>
       </button>
 
       {/* Métodos de pago */}

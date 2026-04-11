@@ -22,6 +22,37 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
   }
 
+  // ── payment_intent.succeeded — fallback si el cliente se desconectó ─────────
+  if (event.type === 'payment_intent.succeeded') {
+    const paymentIntent = event.data.object as Stripe.PaymentIntent
+
+    try {
+      const supabase = createAdminClient()
+
+      // Idempotencia: si ya existe el pedido (creado por /api/pago/confirmar), no hacer nada
+      const { data: existingOrder } = await supabase
+        .from('orders')
+        .select('id')
+        .eq('stripe_payment_intent', paymentIntent.id)
+        .maybeSingle()
+
+      if (existingOrder) {
+        return NextResponse.json({ received: true })
+      }
+
+      // Sin datos de carrito no podemos reconstruir el pedido desde el webhook.
+      // Registrar para revisión manual.
+      console.warn(
+        '⚠️ payment_intent.succeeded sin pedido previo — revisar manualmente:',
+        paymentIntent.id
+      )
+    } catch (error) {
+      console.error('Error procesando payment_intent.succeeded:', error)
+    }
+
+    return NextResponse.json({ received: true })
+  }
+
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session
 

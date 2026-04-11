@@ -14,8 +14,9 @@ vi.mock('@/store/cartStore', () => ({
     selector({ items: mockItems(), totalPrice: mockTotalPrice }),
 }))
 
+const mockPush = vi.fn()
 vi.mock('@/i18n/navigation', () => ({
-  useRouter: () => ({ push: vi.fn() }),
+  useRouter: () => ({ push: mockPush }),
 }))
 
 vi.mock('next-intl', () => ({
@@ -179,37 +180,20 @@ describe('components/carrito/CartSummary.tsx', () => {
 
   // ── Checkout ───────────────────────────────────────────────────────────────
 
-  it('llama a /api/checkout con los items correctos al hacer checkout', async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
-      json: vi.fn().mockResolvedValue({ url: 'https://checkout.stripe.com/s' }),
-    })
-    vi.stubGlobal('fetch', mockFetch)
-
-    const items = [makeItem(30, 2)]
-    mockItems.mockReturnValue(items)
+  it('navega a /pago al hacer click en el botón de checkout', async () => {
+    mockItems.mockReturnValue([makeItem(60)])
     mockTotalPrice.mockReturnValue(60)
 
     render(<CartSummary />)
 
     await userEvent.click(screen.getByRole('button', { name: /checkout/i }))
 
-    await waitFor(() => expect(mockFetch).toHaveBeenCalledTimes(1))
-
-    const [url, options] = mockFetch.mock.calls[0]
-    expect(url).toBe('/api/checkout')
-    expect(options.method).toBe('POST')
-
-    const body = JSON.parse(options.body)
-    expect(body.items).toHaveLength(1)
-    expect(body.items[0].product.price).toBe(30)
-    expect(body.items[0].quantity).toBe(2)
-    expect(body.locale).toBe('es')
+    expect(mockPush).toHaveBeenCalledOnce()
+    expect(mockPush).toHaveBeenCalledWith('/pago')
   })
 
-  it('redirige a la URL de Stripe si el checkout es exitoso', async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
-      json: vi.fn().mockResolvedValue({ url: 'https://checkout.stripe.com/ok' }),
-    })
+  it('no llama a fetch al hacer checkout', async () => {
+    const mockFetch = vi.fn()
     vi.stubGlobal('fetch', mockFetch)
 
     mockItems.mockReturnValue([makeItem(60)])
@@ -219,18 +203,35 @@ describe('components/carrito/CartSummary.tsx', () => {
 
     await userEvent.click(screen.getByRole('button', { name: /checkout/i }))
 
-    await waitFor(() => {
-      expect(window.location.href).toBe('https://checkout.stripe.com/ok')
-    })
+    expect(mockFetch).not.toHaveBeenCalled()
   })
 
-  it('envía shippingCost correcto según el subtotal', async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
-      json: vi.fn().mockResolvedValue({ url: 'https://checkout.stripe.com/s' }),
-    })
-    vi.stubGlobal('fetch', mockFetch)
+  it('el botón de checkout nunca queda deshabilitado tras el click', async () => {
+    mockItems.mockReturnValue([makeItem(60)])
+    mockTotalPrice.mockReturnValue(60)
 
-    // Subtotal < 50 → shippingCost = 4.95
+    render(<CartSummary />)
+
+    const btn = screen.getByRole('button', { name: /checkout/i })
+    await userEvent.click(btn)
+
+    expect(btn).not.toBeDisabled()
+  })
+
+  it('navega a /pago incluso con cupón aplicado', async () => {
+    mockItems.mockReturnValue([makeItem(60)])
+    mockTotalPrice.mockReturnValue(60)
+
+    render(<CartSummary />)
+
+    await userEvent.type(screen.getByLabelText(/coupon/i), 'JUEGOS10')
+    await userEvent.click(screen.getByRole('button', { name: /^OK$/i }))
+    await userEvent.click(screen.getByRole('button', { name: /checkout/i }))
+
+    expect(mockPush).toHaveBeenCalledWith('/pago')
+  })
+
+  it('navega a /pago con subtotal menor que 50€', async () => {
     mockItems.mockReturnValue([makeItem(30)])
     mockTotalPrice.mockReturnValue(30)
 
@@ -238,51 +239,6 @@ describe('components/carrito/CartSummary.tsx', () => {
 
     await userEvent.click(screen.getByRole('button', { name: /checkout/i }))
 
-    await waitFor(() => expect(mockFetch).toHaveBeenCalled())
-
-    const body = JSON.parse(mockFetch.mock.calls[0][1].body)
-    expect(body.shippingCost).toBe(4.95)
-  })
-
-  it('envía shippingCost 0 cuando el subtotal es ≥ 50€', async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
-      json: vi.fn().mockResolvedValue({ url: 'https://checkout.stripe.com/s' }),
-    })
-    vi.stubGlobal('fetch', mockFetch)
-
-    mockItems.mockReturnValue([makeItem(60)])
-    mockTotalPrice.mockReturnValue(60)
-
-    render(<CartSummary />)
-
-    await userEvent.click(screen.getByRole('button', { name: /checkout/i }))
-
-    await waitFor(() => expect(mockFetch).toHaveBeenCalled())
-
-    const body = JSON.parse(mockFetch.mock.calls[0][1].body)
-    expect(body.shippingCost).toBe(0)
-  })
-
-  it('deshabilita el botón de checkout durante la petición', async () => {
-    let resolveCheckout: (v: unknown) => void
-    const mockFetch = vi.fn().mockReturnValue(
-      new Promise(r => { resolveCheckout = r })
-    )
-    vi.stubGlobal('fetch', mockFetch)
-
-    mockItems.mockReturnValue([makeItem(60)])
-    mockTotalPrice.mockReturnValue(60)
-
-    render(<CartSummary />)
-
-    userEvent.click(screen.getByRole('button', { name: /checkout/i }))
-
-    await waitFor(() => {
-      expect(screen.getByRole('button', { name: /processing/i })).toBeDisabled()
-    })
-
-    resolveCheckout!({
-      json: vi.fn().mockResolvedValue({ url: 'https://checkout.stripe.com/s' }),
-    })
+    expect(mockPush).toHaveBeenCalledWith('/pago')
   })
 })

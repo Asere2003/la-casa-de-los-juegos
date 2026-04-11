@@ -13,7 +13,19 @@ export async function GET(request: NextRequest) {
 
   if (code) {
     const supabase = await createClient()
-    await supabase.auth.exchangeCodeForSession(code)
+
+    // Si hay una sesión activa, cerrarla antes de procesar el nuevo token
+    // Evita que un usuario logado confirme la cuenta de otro usuario
+    const { data: { user: currentUser } } = await supabase.auth.getUser()
+    if (currentUser) {
+      await supabase.auth.signOut()
+    }
+
+    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+
+    if (exchangeError) {
+      return NextResponse.redirect(`${origin}/es/login?error=confirmation_failed`)
+    }
   }
 
   return NextResponse.redirect(`${origin}${next ?? '/es/cuenta'}`)

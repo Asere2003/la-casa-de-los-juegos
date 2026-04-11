@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { render, screen } from '@testing-library/react'
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 const mockRedirect = vi.hoisted(() => vi.fn((url: string) => { throw new Error(`NEXT_REDIRECT:${url}`) }))
@@ -85,8 +86,6 @@ describe('CuentaPage', () => {
   })
 
   it('renderiza el CuentaDashboard si el usuario está autenticado', async () => {
-    const { render, screen } = await import('@testing-library/react')
-
     mockGetUser.mockResolvedValue({ data: { user: loggedUser }, error: null })
 
     // Mock de las distintas llamadas .from()
@@ -110,8 +109,6 @@ describe('CuentaPage', () => {
   })
 
   it('pasa orders vacío si la consulta no devuelve pedidos', async () => {
-    const { render, screen } = await import('@testing-library/react')
-
     mockGetUser.mockResolvedValue({ data: { user: loggedUser }, error: null })
 
     const profileChain = buildChain(null)
