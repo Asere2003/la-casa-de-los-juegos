@@ -24,6 +24,7 @@ export default function ProductDrawer({ userId }: ProductDrawerProps) {
   const slug         = useProductDrawerStore(s => s.slug)
   const closeProduct = useProductDrawerStore(s => s.closeProduct)
 
+
   const pathname = usePathname();
 
   const t      = useTranslations('product_drawer')
@@ -268,6 +269,8 @@ export default function ProductDrawer({ userId }: ProductDrawerProps) {
                       href={`/producto/${slug}`}
                       className="flex items-center justify-center gap-2 w-full border border-[#c0c9bc]/60 text-[#2a170f] font-headline italic py-3 hover:border-[#004317] hover:text-[#004317] hover:bg-white transition-all focus-visible:ring-2 focus-visible:ring-[#c9a84c] text-sm"
                       style={{ borderRadius: '2px' }}
+                      // onClick={() => setLoadingCard(true)}
+                      onClick={() => setLoading(true)}
                     >
                       {t('view_full_page')}
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">

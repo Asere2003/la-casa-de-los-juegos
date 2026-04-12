@@ -259,11 +259,13 @@ export default function Header() {
           </button>
 
           {/* Logo SVG */}
-          <Logo
-            src="/images/icons/logo_new_sn.svg"
-            className="h-12 md:h-14 w-auto object-contain flex-shrink-0"
-            ariaLabel="Logo La Casa de los Juegos"
+          <a href="/">
+            <Logo
+              src="/images/icons/logo_new_sn.svg"
+              className="h-12 md:h-14 w-auto object-contain flex-shrink-0"
+              ariaLabel="Logo La Casa de los Juegos"
           />
+          </a>
 
           <Link
             href="/"
