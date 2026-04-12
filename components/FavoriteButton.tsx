@@ -13,6 +13,7 @@ interface FavoriteButtonProps {
   size?: 'sm' | 'md' | 'lg'
   variant?: 'default' | 'ghost'  // ghost = sin fondo, solo silueta
   className?: string
+  onToggle?: (isFavorite: boolean) => void
 }
 
 const sizeMap = {
@@ -28,6 +29,7 @@ export default function FavoriteButton({
   size = 'md',
   variant = 'default',
   className = '',
+  onToggle,
 }: FavoriteButtonProps) {
   const router = useRouter()
   const t = useTranslations('product')
@@ -50,10 +52,14 @@ export default function FavoriteButton({
 
     const next = !isFavorite
     setIsFavorite(next)
+    if (typeof onToggle === 'function') onToggle(next)
 
     startTransition(async () => {
       const { ok } = await toggleFavorite(productId, next)
-      if (!ok) setIsFavorite(!next)
+      if (!ok) {
+        setIsFavorite(!next)
+        if (typeof onToggle === 'function') onToggle(!next)
+      }
     })
   }
 

@@ -1,11 +1,13 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 
+import type { Product } from '@/types'
 import type { Favorite } from '@/types/cuentas'
 import Image from 'next/image'
 import Link from 'next/link'
 import { removeFavorite } from '@/lib/supabase/queries'
+import FavoriteButton from '@/components/FavoriteButton'
 import { useCartStore } from '@/store/cartStore'
 import { useLocale, useTranslations } from 'next-intl'
 import { useProductDrawerStore } from '@/store/productDrawerStore'
@@ -20,6 +22,11 @@ export default function FavoritosTab({ userId, initialFavorites }: FavoritosTabP
   const locale = useLocale()
   const t = useTranslations('favoritos')
   const openProduct = useProductDrawerStore(s => s.openProduct)
+
+  // Sincroniza el estado local con la prop cada vez que cambie
+  useEffect(() => {
+    setFavorites(initialFavorites)
+  }, [initialFavorites])
 
   const handleRemove = (productId: string) => {
     setFavorites(prev => prev.filter(f => f.product_id !== productId))
@@ -82,6 +89,15 @@ function FavoriteCard({ favorite, userId, locale, onRemove, onOpenDrawer }: Favo
   const hasDiscount = product.compare_price && product.compare_price > product.price
   const isOutOfStock = product.stock === 0
 
+  // Elimina de la lista local instantáneamente al quitar favorito
+  const handleFavoriteToggle = (next: boolean) => {
+    if (!next) {
+      onRemove(product.id)
+      // Llama a la API en segundo plano (fire-and-forget)
+      void removeFavorite(userId, product.id)
+    }
+  }
+
   const handleRemove = (e: React.MouseEvent) => {
     e.preventDefault()
     if (!confirmRemove) { setConfirmRemove(true); return }
@@ -91,12 +107,12 @@ function FavoriteCard({ favorite, userId, locale, onRemove, onOpenDrawer }: Favo
     })
   }
 
-const handleAddToCart = (e: React.MouseEvent) => {
-  e.preventDefault()
-  addItem(product as any, 1)
-  setAdded(true)
-  setTimeout(() => setAdded(false), 1800)
-}
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault()
+    addItem(product as unknown as Product, 1)
+    setAdded(true)
+    setTimeout(() => setAdded(false), 1800)
+  }
 
   return (
 <article
@@ -126,6 +142,16 @@ const handleAddToCart = (e: React.MouseEvent) => {
 
         {/* Badges */}
         <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
+          {/* Botón de favoritos igual que en catálogo */}
+          <FavoriteButton
+            productId={product.id}
+            userId={userId}
+            initialIsFavorite={true}
+            size="sm"
+            variant="ghost"
+            className="z-10"
+            onToggle={handleFavoriteToggle}
+          />
           {isOutOfStock && (
             <span className="bg-[#717a6f] text-white text-[8px] font-mono px-2 py-0.5 uppercase tracking-tighter" style={{ borderRadius: '2px' }}>
               {t('out_of_stock')}
