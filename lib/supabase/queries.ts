@@ -243,10 +243,7 @@ export async function getProductReviews(productId: string): Promise<Review[]> {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('reviews')
-    .select(`
-      *,
-      profile:profiles (nombre)
-    `)
+    .select('*')
     .eq('product_id', productId)
     .order('created_at', { ascending: false })
 

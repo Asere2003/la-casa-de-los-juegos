@@ -7,6 +7,7 @@ import BottomNav from '@/components/layout/BottomNav'
 import CartDrawer from '@/components/carrito/CartDrawer'
 import ProductDrawer from '@/components/producto/ProductDrawer'
 import { CookieBanner } from '@/components/legal/CookieBanner'
+import { createClient } from '@/lib/supabase/server'
 import { DevModeBanner } from '@/components/layout/DevModeBanner'
 import Footer from '@/components/layout/Footer'
 import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics'
@@ -98,6 +99,10 @@ export default async function RootLayout({
   const messages = await getMessages()
   const t = await getTranslations('accessibility')
 
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  const userId = user?.id ?? null
+
   return (
     <html lang={locale} data-scroll-behavior="smooth" className={`${notoSerif.variable} ${newsreader.variable}`}>
       <head>
@@ -148,7 +153,7 @@ export default async function RootLayout({
 
           <Header />
           <CartDrawer />
-          <ProductDrawer />
+          <ProductDrawer userId={userId} />
 
           <main id="main-content" tabIndex={-1} className="outline-none">
             {children}

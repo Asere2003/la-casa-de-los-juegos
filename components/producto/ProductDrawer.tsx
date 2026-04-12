@@ -1,9 +1,8 @@
 'use client'
 
+import { Link, useRouter } from '@/i18n/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useLocale, useTranslations } from 'next-intl'
 
-import { Link } from '@/i18n/navigation'
 import type { Product } from '@/types'
 import ProductActions from '@/components/producto/ProductActions'
 import ProductBadges from '@/components/producto/ProductBadges'
@@ -12,72 +11,75 @@ import ProductGallery from '@/components/producto/ProductGallery'
 import ProductInfo from '@/components/producto/ProductInfo'
 import { createClient } from '@/lib/supabase/client'
 import { getProductBySlug } from '@/lib/supabase/queries'
+import { usePathname } from 'next/navigation'
 import { useProductDrawerStore } from '@/store/productDrawerStore'
+import { useTranslations } from 'next-intl'
 
-export default function ProductDrawer() {
+interface ProductDrawerProps {
+  userId: string | null
+}
+
+export default function ProductDrawer({ userId }: ProductDrawerProps) {
   const isOpen       = useProductDrawerStore(s => s.isOpen)
   const slug         = useProductDrawerStore(s => s.slug)
   const closeProduct = useProductDrawerStore(s => s.closeProduct)
 
-  const locale = useLocale()
+  const pathname = usePathname();
+
   const t      = useTranslations('product_drawer')
   const tA11y  = useTranslations('accessibility')
+  const router = useRouter()
 
-  const [product, setProduct] = useState<Product | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError]     = useState(false)
-  const [userId, setUserId]   = useState<string | null>(null)
+  const [product, setProduct]       = useState<Product | null>(null)
+  const [loading, setLoading]       = useState(false)
+  const [error, setError]           = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
 
   const closeRef   = useRef<HTMLButtonElement>(null)
   const drawerRef  = useRef<HTMLDivElement>(null)
-  const prevUrlRef = useRef('')
 
-  // ── Obtener usuario autenticado ──────────────────────────────
-  useEffect(() => {
-    const supabase = createClient()
-    supabase.auth.getUser().then(({ data }) => {
-      setUserId(data.user?.id ?? null)
-    })
-  }, [])
-
-  // ── Cargar producto cuando cambia el slug ────────────────────
+  // ── Cargar producto e isFavorite cuando cambia el slug ───────
   useEffect(() => {
     if (!slug) return
     setLoading(true)
     setError(false)
     setProduct(null)
+    setIsFavorite(false)
+
     getProductBySlug(slug).then((data) => {
-      if (data) setProduct(data)
-      else setError(true)
+      if (data) {
+        setProduct(data)
+        // Comprobar si es favorito del usuario actual
+        if (userId) {
+          const supabase = createClient()
+          supabase
+            .from('favorites')
+            .select('id')
+            .eq('user_id', userId)
+            .eq('product_id', data.id)
+            .maybeSingle()
+            .then(({ data: fav }) => setIsFavorite(!!fav))
+        }
+      } else {
+        setError(true)
+      }
       setLoading(false)
     })
-  }, [slug])
+  }, [slug, userId])
 
-  // ── Shallow routing ──────────────────────────────────────────
-  useEffect(() => {
-    if (isOpen && slug) {
-      prevUrlRef.current = window.location.pathname + window.location.search
-      window.history.pushState({ productDrawer: slug }, '', `/${locale}/producto/${slug}`)
-    }
-  }, [isOpen, slug]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // ── Cerrar y restaurar URL ────────────────────────────────────
+  // ── Cerrar (con animación) ────────────────────────────────────
   const handleClose = useCallback(() => {
     closeProduct()
-    if (prevUrlRef.current) {
-      window.history.replaceState(null, '', prevUrlRef.current)
-      prevUrlRef.current = ''
-    }
   }, [closeProduct])
 
-  // ── Detectar botón atrás del navegador ───────────────────────
-  useEffect(() => {
-    const onPopState = () => {
-      if (isOpen) { prevUrlRef.current = ''; closeProduct() }
-    }
-    window.addEventListener('popstate', onPopState)
-    return () => window.removeEventListener('popstate', onPopState)
-  }, [isOpen, closeProduct])
+  // ── Navegar a la ficha completa: cierra el drawer y luego navega ──
+  const handleViewFullPage = useCallback((e: React.MouseEvent) => {
+    // Ctrl/Cmd/Shift + clic → abrir en nueva pestaña de forma normal
+    if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return
+    e.preventDefault()
+    closeProduct()
+    setTimeout(() => router.push(`/producto/${slug ?? ''}`), 300)
+  }, [closeProduct, slug, router])
 
   // ── Focus al abrir ───────────────────────────────────────────
   useEffect(() => {
@@ -118,6 +120,15 @@ export default function ProductDrawer() {
     document.addEventListener('keydown', trap)
     return () => document.removeEventListener('keydown', trap)
   }, [isOpen])
+
+    useEffect(() => {
+    // Cierra el drawer si la ruta cambia y está abierto
+    if (isOpen) {
+      closeProduct();
+    }
+    // Solo ejecuta cuando cambia la ruta
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   return (
     <>
@@ -164,6 +175,7 @@ export default function ProductDrawer() {
             {slug && (
               <Link
                 href={`/producto/${slug}`}
+                onClick={handleViewFullPage}
                 className="font-mono text-[9px] uppercase tracking-widest text-[#717a6f] hover:text-[#004317] transition-colors focus-visible:ring-2 focus-visible:ring-[#004317] rounded px-2 py-1 hidden sm:block"
               >
                 {t('view_full_page')} ↗
@@ -200,6 +212,7 @@ export default function ProductDrawer() {
               {slug && (
                 <Link
                   href={`/producto/${slug}`}
+                  onClick={handleViewFullPage}
                   className="font-mono text-[10px] uppercase tracking-widest text-[#004317] border-b border-[#004317]/30 pb-0.5 hover:border-[#004317] transition-colors"
                 >
                   {t('view_full_page')} →
@@ -217,12 +230,13 @@ export default function ProductDrawer() {
                   <ProductGallery images={product.images} name={product.name} />
                 </div>
                 <div className="px-6 pt-6 flex flex-col gap-5">
-                  <ProductInfo product={product} userId={userId} isFavorite={false} />
+                  <ProductInfo product={product} userId={userId} isFavorite={isFavorite} />
                   <ProductBadges product={product} />
                   <ProductDescription description={product.description} />
                   <ProductActions product={product} onAddToCart={handleClose} />
                   <Link
                     href={`/producto/${slug}`}
+                    onClick={handleViewFullPage}
                     className="flex items-center justify-center gap-2 w-full border border-[#c0c9bc]/60 text-[#2a170f] font-headline italic py-3 hover:border-[#004317] hover:text-[#004317] hover:bg-white transition-all focus-visible:ring-2 focus-visible:ring-[#c9a84c] text-sm"
                     style={{ borderRadius: '2px' }}
                   >
@@ -245,7 +259,7 @@ export default function ProductDrawer() {
 
                 {/* Columna derecha — info + acciones */}
                 <div className="overflow-y-auto p-6 flex flex-col gap-5">
-                  <ProductInfo product={product} userId={userId} isFavorite={false} />
+                  <ProductInfo product={product} userId={userId} isFavorite={isFavorite} />
                   <ProductBadges product={product} />
                   <ProductDescription description={product.description} />
                   <div className="mt-auto pt-4 flex flex-col gap-3">

@@ -63,7 +63,7 @@ export async function generateMetadata(
   }
 }
 
-export default async function ProductoPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
+export default async function ProductoPage({ params}: { params: Promise<{ locale: string; slug: string }> }) {
   const { slug, locale } = await params
   const product = await getProductBySlug(slug)
 
@@ -81,7 +81,7 @@ export default async function ProductoPage({ params }: { params: Promise<{ local
       .eq('user_id', user.id)
       .eq('product_id', product.id)
       .maybeSingle()
-    console.log('favorites query:', data, 'user:', user.id, 'product:', product.id) // ← añade esto
+    console.log('favorites query:', data, 'user:', user.id, 'product:', product.id) 
     isFavorite = !!data
 
   }
