@@ -13,6 +13,7 @@ const navItems = [
   { href: '/admin/pedidos', label: 'Pedidos' },
   { href: '/admin/usuarios', label: 'Usuarios' },
   { href: '/admin/analytics',  label: 'Analytics'  },
+  { href: '/admin/galeria',    label: 'Galería'    },
 ]
 
 export default function AdminMobileNav({ locale }: Props) {

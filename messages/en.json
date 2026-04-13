@@ -6,7 +6,8 @@
     "login": "Sign in",
     "account": "My account",
     "search": "Search",
-    "home": "Home"
+    "home": "Home",
+    "gallery": "Gallery"
   },
   "categories": {
     "chess": "Chess",

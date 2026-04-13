@@ -13,6 +13,7 @@ export default function FooterLinks() {
       <ul className="space-y-2.5">
         {[
           { href: '/catalogo' as const, label: tNav('catalogue') },
+          { href: '/galeria' as const,  label: tNav('gallery')   },
           { href: '/historia' as const, label: tNav('history')   },
           { href: '/contacto' as const, label: t('contact')      },
         ].map(link => (

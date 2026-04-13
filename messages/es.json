@@ -6,7 +6,8 @@
     "login": "Entrar",
     "account": "Mi cuenta",
     "search": "Buscar",
-    "home": "Inicio"
+    "home": "Inicio",
+    "gallery": "Galería"
   },
   "categories": {
     "chess": "Ajedrez",

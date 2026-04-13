@@ -6,7 +6,8 @@
     "login": "Inicia sessió",
     "account": "El meu compte",
     "search": "Cercar",
-    "home": "Inici"
+    "home": "Inici",
+    "gallery": "Galeria"
   },
   "categories": {
     "chess": "Escacs",

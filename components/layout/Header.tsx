@@ -89,6 +89,7 @@ function IconSearch({ className }: { className?: string }) {
 const navLinks = [
   { href: '/' as const, key: 'home' },
   { href: '/catalogo' as const, key: 'catalogue' },
+  { href: '/galeria' as const, key: 'gallery' },
   { href: '/carrito' as const, key: 'cart' },
   { href: '/historia' as const, key: 'history' },
 ]
