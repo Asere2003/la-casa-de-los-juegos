@@ -49,6 +49,12 @@ export default async function AdminPage({
             <p className="text-sm text-[#2c1810]/50">Ver estadísticas y métricas</p>
           </Link>
 
+          <Link href={`/${locale}/admin/galeria`} className="group border border-[#004317]/20 rounded p-6 bg-white hover:border-[#004317] hover:shadow-md transition-all">
+            <div className="text-3xl mb-3">🖼️</div>
+            <h2 className="font-['Noto_Serif'] text-lg text-[#004317] mb-1">Galería</h2>
+            <p className="text-sm text-[#2c1810]/50">Gestionar fotos y álbumes de la tienda</p>
+          </Link>
+
         </div>
       </div>
     </main>

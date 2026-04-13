@@ -1,8 +1,10 @@
 import { Resend } from 'resend'
+import { formatearFechaES } from '@/lib/email/utils/formatearFecha'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function sendNewsletterAdmin(emailSuscriptor: string) {
+  const fechaEnvio = formatearFechaES()
   const adminEmail = process.env.ADMIN_EMAIL
   if (!adminEmail) return
 
@@ -39,6 +41,9 @@ export async function sendNewsletterAdmin(emailSuscriptor: string) {
           </p>
           <p style="font-family: monospace; font-size: 18px; font-weight: bold; color: #004317; margin: 0;">
             ${emailSuscriptor}
+          </p>
+          <p style="font-family: monospace; font-size: 11px; color: #b0a090; margin: 4px 0 0; letter-spacing: 0.05em;">
+            ${fechaEnvio}
           </p>
         </div>
 

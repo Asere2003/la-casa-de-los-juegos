@@ -1,4 +1,5 @@
 import { Resend } from 'resend'
+import { formatearFechaES } from '@/lib/email/utils/formatearFecha'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -45,6 +46,8 @@ export async function sendEstadoPedido({ to, orderNumber, status }: SendEstadoPe
   const content = STATUS_CONTENT[status]
   if (!content) return
 
+  const fechaEnvio = formatearFechaES()
+
   const html = `
     <!DOCTYPE html>
     <html>
@@ -79,6 +82,9 @@ export async function sendEstadoPedido({ to, orderNumber, status }: SendEstadoPe
           <h2 style="font-family: Georgia, serif; color: #2a170f; font-size: 24px; margin: 0 0 12px;">
             ${content.titulo}
           </h2>
+          <p style="font-family: monospace; font-size: 11px; color: #b0a090; margin: 4px 0 8px; letter-spacing: 0.05em;">
+            ${fechaEnvio}
+          </p>
           <p style="color: #717a6f; font-style: italic; font-size: 15px; margin: 0;">
             ${content.subtitulo}
           </p>

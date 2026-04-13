@@ -1,4 +1,5 @@
 import { Resend } from 'resend'
+import { formatearFechaES } from '@/lib/email/utils/formatearFecha'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -10,6 +11,7 @@ interface SendContactoProps {
 }
 
 export async function sendContacto({ nombre, email, mensaje, asunto }: SendContactoProps) {
+  const fechaEnvio = formatearFechaES()
   const adminEmail = process.env.ADMIN_EMAIL
   if (!adminEmail) return
 
@@ -47,6 +49,9 @@ export async function sendContacto({ nombre, email, mensaje, asunto }: SendConta
           <p style="color: #2a170f; font-size: 15px; margin: 0;">
             <strong>${nombre}</strong><br/>
             <a href="mailto:${email}" style="color: #004317;">${email}</a>
+          </p>
+          <p style="font-family: monospace; font-size: 11px; color: #b0a090; margin: 4px 0 0; letter-spacing: 0.05em;">
+            ${fechaEnvio}
           </p>
         </div>
 

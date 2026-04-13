@@ -65,7 +65,7 @@ export function GalleryLightbox({ photos, currentIndex, onClose, onPrev, onNext 
       <button
         className="absolute top-4 right-4 z-10 text-white/70 hover:text-white transition-colors"
         style={{ fontSize: '2rem', lineHeight: 1, background: 'none', border: 'none', cursor: 'pointer' }}
-        onClick={onClose}
+        onClick={e => { e.stopPropagation(); onClose() }}
         aria-label="Cerrar"
       >
         ×

@@ -1,4 +1,5 @@
 import { Resend } from 'resend'
+import { formatearFechaES } from '@/lib/email/utils/formatearFecha'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -33,6 +34,7 @@ export async function sendConfirmacionPedido({
   shippingCity,
   shippingPostalCode,
 }: SendConfirmacionPedidoProps) {
+  const fechaEnvio = formatearFechaES()
   const itemsHtml = items.map(item => `
     <tr>
       <td style="padding: 12px 0; border-bottom: 1px solid #f0ebe8;">
@@ -90,6 +92,9 @@ export async function sendConfirmacionPedido({
           </p>
           <p style="font-family: monospace; font-size: 18px; font-weight: bold; color: #004317; margin: 0;">
             #${orderNumber}
+          </p>
+          <p style="font-family: monospace; font-size: 11px; color: #b0a090; margin: 4px 0 0; letter-spacing: 0.05em;">
+            ${fechaEnvio}
           </p>
         </div>
 
@@ -191,6 +196,7 @@ export async function sendNuevoPedidoAdmin({
   shippingCity,
   shippingPostalCode,
 }: SendNuevoPedidoAdminProps) {
+  const fechaEnvio = formatearFechaES()
   const adminEmail = process.env.ADMIN_EMAIL
   if (!adminEmail) return
 
@@ -233,6 +239,9 @@ export async function sendNuevoPedidoAdmin({
           <h1 style="font-family: Georgia, serif; color: white; font-size: 22px; margin: 0;">
             #${orderNumber}
           </h1>
+          <p style="font-family: monospace; font-size: 11px; color: #b0a090; margin: 4px 0 0; letter-spacing: 0.05em;">
+            ${fechaEnvio}
+          </p>
         </div>
 
         <!-- Cliente -->
